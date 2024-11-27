@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_map.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 21:05:39 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/11/25 20:33:55 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/11/27 12:18:25 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,13 +132,13 @@
 // 	}
 // }
 
-void	parse_scene(char *path, t_scene *scene)
-{
-	int		fd;
-	int		i;
-	char	*line;
+// void	parse_scene(char *path, t_scene *scene)
+// {
+// 	int		fd;
+// 	int		i;
+// 	char	*line;
 
-	// fd = open(path, O_RDONLY);
+// 	// fd = open(path, O_RDONLY);
 	// if (fd < 0 || !check_map(fd, scene))
 	// 	return (close(fd), exit_error(NULL, 0, "Map error"));
 	// close(fd);
@@ -158,4 +158,4 @@ void	parse_scene(char *path, t_scene *scene)
 	// 	i++;
 	// }
 	// set_min_max(map);
-}
+// }

@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 13:50:09 by donghank          #+#    #+#             */
-/*   Updated: 2024/11/25 13:50:10 by donghank         ###   ########.fr       */
+/*   Updated: 2024/11/27 14:30:24 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,9 @@
 /*
 	helper function of atod
 	check of the sign (positive and negative)
+	@param
+		str: digit number in char (to save the status of main atod)
+		sign: flag for the negative number and positive number
 */
 static void	check_sign(const char **str, int *sign)
 {
@@ -28,6 +31,10 @@ static void	check_sign(const char **str, int *sign)
 
 /*
 	convert char * to double (aim to stock the info)
+	@param
+		str: string number which want to convert
+	@return
+		res: converted value
 */
 double	ft_atod(const char *str)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:39:54 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/11/25 21:12:56 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/11/27 12:20:40 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,10 +81,11 @@ int	main(int argc, char **argv)
 	void	*mlx_win;
 	t_data	img;
 	t_info	info;
+	t_scene	scene;
 
 	// if (argc != 2)
 	// 	exit_error(NULL, 0, "Wrong arguments. Format: ./miniRT \"path_to_rt_scene\"");
-	// parse_map(argv[1], &map);
+	parse_scene(argv[1], &scene);
 	mlx = mlx_init();
 	mlx_win = mlx_new_window(mlx, SCREEN_WIDTH, SCREEN_HEIGHT, "miniRT");
 	img.img = mlx_new_image(mlx, SCREEN_WIDTH, SCREEN_HEIGHT);
