@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 13:50:09 by donghank          #+#    #+#             */
-/*   Updated: 2024/11/27 14:30:24 by donghank         ###   ########.fr       */
+/*   Updated: 2024/11/27 22:05:16 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static void	check_sign(const char **str, int *sign)
 	{
 		if (**str == '-')
 			*sign = -1;
-		*str++;
+		(*str)++;
 	}
 }
 
@@ -47,6 +47,8 @@ double	ft_atod(const char *str)
 	res = 0.0;
 	fraction = 0.0;
 	div = 1.0;
+	if (!str)
+		return (0.0);
 	while (*str == ' ')
 		str++;
 	check_sign(&str, &sign);

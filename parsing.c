@@ -6,6 +6,91 @@
 #define COOR_ERR "Fail to coordinate parse"
 #define ORI_ERR "Fail to orientation parse"
 
+void	handle_error(char *msg);
+
+/*
+	initailze all element of scene
+	@param
+		scene: want to init
+*/
+void	init_scene(t_scene *scene)
+{
+	scene->ambient.a_ratio = 0.0;
+	scene->ambient.color.r = 0;
+	scene->ambient.color.g = 0;
+	scene->ambient.color.b = 0;
+	scene->camera.c_view = 0.0;
+	scene->camera.coordinates.x = 0.0;
+	scene->camera.coordinates.y = 0.0;
+	scene->camera.coordinates.z = 0.0;
+	scene->camera.orientation.x = 0.0;
+	scene->camera.orientation.y = 0.0;
+	scene->camera.orientation.z = 0.0;
+	scene->light.color.r = 0;
+	scene->light.color.g = 0;
+	scene->light.color.b = 0;
+	scene->light.coordinates.x = 0.0;
+	scene->light.coordinates.y = 0.0;
+	scene->light.coordinates.z = 0.0;
+	scene->light.l_brightness = 0.0;
+
+	scene->sphere = malloc(sizeof(t_sphere **));
+	if (!scene->sphere)
+		handle_error("Fail dynamic allocate t_sphere");
+	// (*scene->sphere) = malloc(sizeof(t_sphere *));
+	// if (!*scene->sphere)
+	// 	handle_error("Fail dynamic allocate t_sphere");
+	(*scene->sphere)->color.r = 0;
+	(*scene->sphere)->color.g = 0;
+	(*scene->sphere)->color.b = 0;
+	(*scene->sphere)->coordinates.x = 0.0;
+	(*scene->sphere)->coordinates.y = 0.0;
+	(*scene->sphere)->coordinates.z = 0.0;
+	(*scene->sphere)->sp_diameter = 0;
+
+	scene->plane = malloc(sizeof(t_plane **));
+	if (!scene->plane)
+		handle_error("Fail to dynamic allocate t_plane");
+	// (*scene->plane) = malloc(sizeof(t_plane *));
+	// if (!*scene->plane)
+	// 	handle_error("Fail to dynamic allocate t_plane");
+	(*scene->plane)->color.r = 0;
+	(*scene->plane)->color.g = 0;
+	(*scene->plane)->color.b = 0;
+	(*scene->plane)->coordinates.x = 0.0;
+	(*scene->plane)->coordinates.y = 0.0;
+	(*scene->plane)->coordinates.z = 0.0;
+	(*scene->plane)->normal_vector.x = 0.0;
+
+	scene->cylinder = malloc(sizeof(t_cylinder **));
+	if (!scene->cylinder)
+		handle_error("Fail to dynamic allocate t_cylinder");
+	// (*scene->cylinder) = malloc(sizeof(t_cylinder *));
+	// if (!*scene->cylinder)
+	// 	handle_error("Fail to dynamic allocate t_cylinder");
+	(*scene->cylinder)->axis_vector.y = 0.0;
+	(*scene->cylinder)->axis_vector.z = 0.0;
+	(*scene->cylinder)->color.r = 0;
+	(*scene->cylinder)->color.g = 0;
+	(*scene->cylinder)->color.b = 0;
+	(*scene->cylinder)->coordinates.x = 0.0;
+	(*scene->cylinder)->coordinates.y = 0.0;
+	(*scene->cylinder)->coordinates.z = 0.0;
+	(*scene->cylinder)->cy_diameter = 0.0;
+	(*scene->cylinder)->cy_height = 0.0;
+}
+
+/*
+	free all allocation of the scene
+	@param
+		scene: want to deallocation
+*/
+void	free_scene(t_scene *scene)
+{
+	free(scene->sphere);
+	free(scene->plane);
+	free(scene->cylinder);
+}
 /*
 	@param
 		msg: error msg
@@ -48,11 +133,6 @@ void	free_doub_array(char **strs)
 // 	return (1);
 // }
 
-// int	check_vaild_char(char *info_map)
-// {
-// 	return (0);
-// }
-
 /*
 	@param
 		sep_info:
@@ -65,22 +145,22 @@ int	get_type(char *map_info)
 {
 	char	**sep_info;
 
-	sep_info = ft_split(map_info, " ");
+	sep_info = ft_split(map_info, ' ');
 	if (sep_info == NULL)
 		return (printf("%s\n", PARSE_ERR), 0);
-	if (!sep_info || !ft_isalpha(sep_info[0]))
-		return (0);
-	if ((ft_strncmp("A", sep_info[0], 1) == 0) && !ft_isalpha(sep_info[0]))
+	// if (!sep_info || !ft_isalpha(sep_info[0]))
+	// 	return (0);
+	if ((ft_strncmp("A", sep_info[0], 1) == 0))
 		return (1);
-	else if ((ft_strncmp("C", sep_info[0], 1) == 0) && !ft_isalpha(sep_info[0]))
+	else if ((ft_strncmp("C", sep_info[0], 1) == 0))
 		return (2);
-	else if ((ft_strncmp("L", sep_info[0], 1) == 0) && !ft_isalpha(sep_info[0]))
+	else if ((ft_strncmp("L", sep_info[0], 1) == 0))
 		return (3);
-	else if ((ft_strncmp("pl", sep_info[0], 2) == 0) && !ft_isalpha(sep_info[0]))
+	else if ((ft_strncmp("pl", sep_info[0], 2) == 0))
 		return (4);
-	else if ((ft_strncmp("sp", sep_info[0], 2) == 0) && !ft_isalpha(sep_info[0]))
+	else if ((ft_strncmp("sp", sep_info[0], 2) == 0))
 		return (5);
-	else if ((ft_strncmp("cy", sep_info[0], 2) == 0) && !ft_isalpha(sep_info[0]))
+	else if ((ft_strncmp("cy", sep_info[0], 2) == 0))
 		return (6);
 	return (0);
 }
@@ -102,11 +182,11 @@ int	stock_ambient(t_scene *scene, char *info_map)
 	char	**sep_info;
 	char	**rgb_infos;
 
-	sep_info = ft_split(info_map, " ");
+	sep_info = ft_split(info_map, ' ');
 	if (sep_info == NULL)
 		return (printf("%s\n", PARSE_ERR), 0);
 	scene->ambient.a_ratio = ft_atod(sep_info[1]);
-	rgb_infos = ft_split(sep_info[2], ",");
+	rgb_infos = ft_split((char *)sep_info[2], ',');
 	if (rgb_infos == NULL)
 		return (printf("%s\n", PARSE_RGB_ERR), 0);
 	scene->ambient.color.r = ft_atoi(rgb_infos[0]);
@@ -135,17 +215,17 @@ int	stock_cam(t_scene *scene, char *info_map)
 	char	**coord_info;
 	char	**orient_info;
 
-	sep_info = ft_split(info_map, " ");
+	sep_info = ft_split(info_map, ' ');
 	if (sep_info == NULL)
 		return (printf("%s\n", PARSE_ERR), 0);
-	coord_info = ft_split(sep_info[1], ",");
+	coord_info = ft_split((char *)sep_info[1], ',');
 	if (coord_info == NULL)
 		return (printf("%s\n", COOR_ERR), 0);
 	scene->camera.coordinates.x = ft_atod(coord_info[0]);
 	scene->camera.coordinates.y = ft_atoi(coord_info[1]);
 	scene->camera.coordinates.z = ft_atoi(coord_info[2]);
 	free_doub_array(coord_info);
-	orient_info = ft_split(sep_info[2], ",");
+	orient_info = ft_split((char *)sep_info[2], ',');
 	if (orient_info == NULL)
 		return (printf("%s\n", ORI_ERR), 0);
 	scene->camera.orientation.x = ft_atod(orient_info[0]);
@@ -175,10 +255,10 @@ int	stock_light(t_scene *scene, char *info_map)
 	char	**coord_info;
 	char	**rgb_infos;
 
-	sep_info = ft_split(info_map, " ");
+	sep_info = ft_split(info_map, ' ');
 	if (sep_info == NULL)
 		return (printf("%s\n", PARSE_ERR), 0);
-	coord_info = ft_split(sep_info[1], ",");
+	coord_info = ft_split((char *)sep_info[1], ',');
 	if (coord_info == NULL)
 		return (printf("%s\n", COOR_ERR), 0);
 	scene->light.coordinates.x = ft_atod(coord_info[0]);
@@ -186,7 +266,7 @@ int	stock_light(t_scene *scene, char *info_map)
 	scene->light.coordinates.z = ft_atod(coord_info[2]);
 	free_doub_array(coord_info);
 	scene->light.l_brightness = ft_atod(sep_info[2]);
-	rgb_infos = ft_split(sep_info[3], ",");
+	rgb_infos = ft_split((char *)sep_info[3], ',');
 	if (rgb_infos == NULL)
 		return (printf("%s\n", PARSE_RGB_ERR), 0);
 	scene->light.color.r = ft_atoi(rgb_infos[0]);
@@ -216,22 +296,22 @@ int	stock_plane(t_scene *scene, char *info_map)
 	char	**orient_info;
 	char	**rgb_infos;
 
-	sep_info = ft_split(info_map, ",");
+	sep_info = ft_split(info_map, ' ');
 	if (sep_info == NULL)
 		return (printf("%s\n", PARSE_ERR), 0);
-	coord_info = ft_split(sep_info[1], ",");
+	coord_info = ft_split(sep_info[1], ',');
 	(*scene->plane)->coordinates.x = ft_atod(coord_info[0]);
 	(*scene->plane)->coordinates.y = ft_atod(coord_info[1]);
 	(*scene->plane)->coordinates.z = ft_atod(coord_info[2]);
 	free_doub_array(coord_info);
-	orient_info = ft_split(sep_info[2], ",");
+	orient_info = ft_split(sep_info[2], ',');
 	if (orient_info == NULL)
 		return (printf("%s\n", ORI_ERR), 0);
 	(*scene->plane)->normal_vector.x = ft_atod(orient_info[0]);
 	(*scene->plane)->normal_vector.y = ft_atod(orient_info[1]);
 	(*scene->plane)->normal_vector.z = ft_atod(orient_info[2]);
 	free_doub_array(orient_info);
-	rgb_infos = ft_split(sep_info[3], ",");
+	rgb_infos = ft_split(sep_info[3], ',');
 	(*scene->plane)->color.r = ft_atoi(rgb_infos[0]);
 	(*scene->plane)->color.g = ft_atoi(rgb_infos[1]);
 	(*scene->plane)->color.b = ft_atoi(rgb_infos[2]);
@@ -258,10 +338,10 @@ int	stock_sphere(t_scene *scene, char *info_map)
 	char	**coord_info;
 	char	**rgb_infos;
 
-	sep_info = ft_split(info_map, " ");
+	sep_info = ft_split(info_map, ' ');
 	if (sep_info == NULL)
 		return (printf("%s\n", PARSE_ERR), 0);
-	coord_info = ft_split(sep_info[1], ",");
+	coord_info = ft_split(sep_info[1], ',');
 	if (coord_info == NULL)
 		return (printf("%s\n", COOR_ERR), 0);
 	(*scene->sphere)->coordinates.x = ft_atod(coord_info[0]);
@@ -269,7 +349,7 @@ int	stock_sphere(t_scene *scene, char *info_map)
 	(*scene->sphere)->coordinates.z = ft_atod(coord_info[2]);
 	free_doub_array(coord_info);
 	(*scene->sphere)->sp_diameter = ft_atod(sep_info[2]);
-	rgb_infos = ft_split(sep_info[3], ",");
+	rgb_infos = ft_split(sep_info[3], ',');
 	if (rgb_infos == NULL)
 		return (printf("%s\n", PARSE_RGB_ERR), 0);
 	(*scene->sphere)->color.r = ft_atoi(rgb_infos[0]);
@@ -300,17 +380,17 @@ int	stock_cylinder(t_scene *scene, char *info_map)
 	char	**orient_info;
 	char	**rgb_infos;
 
-	sep_info = ft_split(info_map, " ");
+	sep_info = ft_split(info_map, ' ');
 	if (sep_info == NULL)
 		return (printf("%s\n", PARSE_ERR), 0);
-	coord_info = ft_split(sep_info[1], ",");
+	coord_info = ft_split(sep_info[1], ',');
 	if (coord_info == NULL)
 		return (printf("%s\n", COOR_ERR), 0);
 	(*scene->cylinder)->coordinates.x = ft_atod(coord_info[0]);
 	(*scene->cylinder)->coordinates.y = ft_atod(coord_info[1]);
 	(*scene->cylinder)->coordinates.z = ft_atod(coord_info[2]);
 	free_doub_array(coord_info);
-	orient_info = ft_split(sep_info[2], ",");
+	orient_info = ft_split(sep_info[2], ',');
 	if (orient_info == NULL)
 		return (printf("%s\n", ORI_ERR), 0);
 	(*scene->cylinder)->axis_vector.x = ft_atod(orient_info[0]);
@@ -319,7 +399,7 @@ int	stock_cylinder(t_scene *scene, char *info_map)
 	free_doub_array(orient_info);
 	(*scene->cylinder)->cy_diameter = ft_atod(sep_info[3]);
 	(*scene->cylinder)->cy_height = ft_atod(sep_info[4]);
-	rgb_infos = ft_split(sep_info[5], ",");
+	rgb_infos = ft_split(sep_info[5], ',');
 	if (rgb_infos == NULL)
 		return (printf("%s\n", PARSE_RGB_ERR), 0);
 	(*scene->cylinder)->color.r = ft_atoi(rgb_infos[0]);
@@ -374,15 +454,18 @@ void	parse_scene(char *path, t_scene *scene)
 	i = 0;
 	fd = open(path, O_RDONLY);
 	if (fd < 0)
-	{
-		printf("Fail to open it");
-		return ;
-	}
+		handle_error("Fail to open the file");
+	init_scene(scene);
 	map_line = get_next_line(fd);
-	printf("%s\n", map_line); // for debug --> have to delete it
 	while (map_line != NULL)
 	{
+		printf("Processing line: %s\n", map_line);
 		type = get_type(map_line);
+		if (type == 0)
+		{
+			free(map_line);
+			handle_error("Invalid type number");
+		}
 		if (stock_infos(type, scene, map_line) == 0)
 		{
 			free(map_line);
@@ -390,7 +473,6 @@ void	parse_scene(char *path, t_scene *scene)
 		}
 		free(map_line);
 		map_line = get_next_line(fd);
-		printf("%s\n", map_line); // for debug --> have to delete it
 	}
 	close(fd);
 }

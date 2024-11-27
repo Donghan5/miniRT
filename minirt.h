@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:40:16 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/11/27 12:08:11 by donghank         ###   ########.fr       */
+/*   Updated: 2024/11/27 21:38:54 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,5 +169,6 @@ void	ft_putstr_fd(char *s, int fd);
 void	render_scene(t_info *info);
 int		close_window(t_info *info);
 int		render_next_frame(t_info *info);
+double	ft_atod(const char *str);
 
 #endif
