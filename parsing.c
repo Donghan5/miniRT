@@ -10,11 +10,13 @@ void	handle_error(char *msg);
 
 /*
 	initailze all element of scene
+	have to separate several functions
 	@param
 		scene: want to init
 */
 void	init_scene(t_scene *scene)
 {
+	// default scene --> ambient camera and light
 	scene->ambient.a_ratio = 0.0;
 	scene->ambient.color.r = 0;
 	scene->ambient.color.g = 0;
@@ -34,12 +36,13 @@ void	init_scene(t_scene *scene)
 	scene->light.coordinates.z = 0.0;
 	scene->light.l_brightness = 0.0;
 
-	scene->sphere = malloc(sizeof(t_sphere **));
+	// sphere part
+	scene->sphere = malloc(sizeof(t_sphere *));
 	if (!scene->sphere)
 		handle_error("Fail dynamic allocate t_sphere");
-	// (*scene->sphere) = malloc(sizeof(t_sphere *));
-	// if (!*scene->sphere)
-	// 	handle_error("Fail dynamic allocate t_sphere");
+	*scene->sphere = malloc(sizeof(t_sphere));
+	if (!*scene->sphere)
+		handle_error("Fail dynamic allocate t_sphere");
 	(*scene->sphere)->color.r = 0;
 	(*scene->sphere)->color.g = 0;
 	(*scene->sphere)->color.b = 0;
@@ -48,12 +51,13 @@ void	init_scene(t_scene *scene)
 	(*scene->sphere)->coordinates.z = 0.0;
 	(*scene->sphere)->sp_diameter = 0;
 
-	scene->plane = malloc(sizeof(t_plane **));
+	//plane part
+	scene->plane = malloc(sizeof(t_plane *));
 	if (!scene->plane)
-		handle_error("Fail to dynamic allocate t_plane");
-	// (*scene->plane) = malloc(sizeof(t_plane *));
-	// if (!*scene->plane)
-	// 	handle_error("Fail to dynamic allocate t_plane");
+		handle_error("Fail dynamic allocate t_plane");
+	*scene->plane = malloc(sizeof(t_plane));
+	if (!*scene->plane)
+		handle_error("Fail dynamic allocate t_plane");
 	(*scene->plane)->color.r = 0;
 	(*scene->plane)->color.g = 0;
 	(*scene->plane)->color.b = 0;
@@ -62,12 +66,13 @@ void	init_scene(t_scene *scene)
 	(*scene->plane)->coordinates.z = 0.0;
 	(*scene->plane)->normal_vector.x = 0.0;
 
-	scene->cylinder = malloc(sizeof(t_cylinder **));
+	// cylinder part
+	scene->cylinder = malloc(sizeof(t_cylinder *));
 	if (!scene->cylinder)
 		handle_error("Fail to dynamic allocate t_cylinder");
-	// (*scene->cylinder) = malloc(sizeof(t_cylinder *));
-	// if (!*scene->cylinder)
-	// 	handle_error("Fail to dynamic allocate t_cylinder");
+	*scene->cylinder = malloc(sizeof(t_cylinder));
+	if (!*scene->cylinder)
+		handle_error("Fail dynamic allocate t_cylinder");
 	(*scene->cylinder)->axis_vector.y = 0.0;
 	(*scene->cylinder)->axis_vector.z = 0.0;
 	(*scene->cylinder)->color.r = 0;
@@ -349,7 +354,7 @@ int	stock_sphere(t_scene *scene, char *info_map)
 	(*scene->sphere)->coordinates.z = ft_atod(coord_info[2]);
 	free_doub_array(coord_info);
 	(*scene->sphere)->sp_diameter = ft_atod(sep_info[2]);
-	rgb_infos = ft_split(sep_info[3], ',');
+	rgb_infos = ft_split((char *)sep_info[3], ',');
 	if (rgb_infos == NULL)
 		return (printf("%s\n", PARSE_RGB_ERR), 0);
 	(*scene->sphere)->color.r = ft_atoi(rgb_infos[0]);
@@ -390,7 +395,7 @@ int	stock_cylinder(t_scene *scene, char *info_map)
 	(*scene->cylinder)->coordinates.y = ft_atod(coord_info[1]);
 	(*scene->cylinder)->coordinates.z = ft_atod(coord_info[2]);
 	free_doub_array(coord_info);
-	orient_info = ft_split(sep_info[2], ',');
+	orient_info = ft_split((char *)sep_info[2], ',');
 	if (orient_info == NULL)
 		return (printf("%s\n", ORI_ERR), 0);
 	(*scene->cylinder)->axis_vector.x = ft_atod(orient_info[0]);
@@ -438,11 +443,18 @@ int	stock_infos(int type, t_scene *scene, char *info_map)
 }
 
 /*
-	think more this function
+	parse and stock all informations
 	idea of this function
 	1. parsing the map_line (read by gnl) by separating white-space
 	2. verify element (map_infos[0] is char) the other have just , and num
 	3. separate the case --> stock each structs
+	@param
+		path: path of the file
+		scene: struct information
+		map_line: all of information (separate by) in a single line
+		type: type of information
+		i: index
+		fd: file descriptor of path
 */
 void	parse_scene(char *path, t_scene *scene)
 {
@@ -474,5 +486,6 @@ void	parse_scene(char *path, t_scene *scene)
 		free(map_line);
 		map_line = get_next_line(fd);
 	}
+	printf("Processing ended. Terminate the parsing session\n");
 	close(fd);
 }
