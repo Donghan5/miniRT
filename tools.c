@@ -6,11 +6,18 @@
 /*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:49:17 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/11/25 20:48:58 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/11/28 20:32:05 by pzinurov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
+
+int	isEqual(double a, double b)
+{
+	if(fabs(a - b) <= EPSILON * fabs(a))
+		return (1);
+	return (0);
+}
 
 void	ft_putstr_fd(char *s, int fd)
 {

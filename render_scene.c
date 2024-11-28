@@ -6,7 +6,7 @@
 /*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:51:26 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/11/25 20:59:13 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/11/28 20:31:49 by pzinurov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,7 @@ static double check_shadow(t_info *info, t_vec3 hit_point, t_vec3 light_pos)
     for (int i = 0; i < info->scene.sphere_n; i++) {
         if (info->scene.sphere[i]) {
             double t = intersect_sphere(shadow_ray, info->scene.sphere[i]);
-            if (t > EPSILON && t < dist_to_light) {
+            if (t > EPSILON && t < (dist_to_light) && !isEqual(t, dist_to_light)) {
                 return 0.0;  // Full shadow
             }
         }
@@ -149,7 +149,7 @@ static double check_shadow(t_info *info, t_vec3 hit_point, t_vec3 light_pos)
     for (int i = 0; i < info->scene.plane_n; i++) {
         if (info->scene.plane[i]) {
             double t = intersect_plane(shadow_ray, info->scene.plane[i]);
-            if (t > EPSILON && t < dist_to_light) {
+            if (t > EPSILON && t < (dist_to_light) && !isEqual(t, dist_to_light)) {
                 return 0.0;  // Full shadow
             }
         }
@@ -159,7 +159,7 @@ static double check_shadow(t_info *info, t_vec3 hit_point, t_vec3 light_pos)
     for (int i = 0; i < info->scene.cylinder_n; i++) {
         if (info->scene.cylinder[i]) {
             double t = intersect_cylinder(shadow_ray, info->scene.cylinder[i]);
-            if (t > EPSILON && t < dist_to_light) {
+            if (t > EPSILON && t < (dist_to_light) && !isEqual(t, dist_to_light)) {
                 return 0.0;  // Full shadow
             }
         }
@@ -173,6 +173,23 @@ typedef struct s_hit {
     int type;  // 0=sphere, 1=plane, 2=cylinder
     int index;
 }				t_hit;
+
+
+static t_color multiply_colors(t_color a, t_color b, double factor) {
+    t_color result;
+    result.r = (int)(a.r * b.r * factor / 255.0);
+    result.g = (int)(a.g * b.g * factor / 255.0);
+    result.b = (int)(a.b * b.b * factor / 255.0);
+    return result;
+}
+
+static t_color add_white_component(t_color base, double factor) {
+    t_color result;
+    result.r = base.r + (int)(255.0 * factor);
+    result.g = base.g + (int)(255.0 * factor);
+    result.b = base.b + (int)(255.0 * factor);
+    return result;
+}
 
 // Helper function to trace a ray and get color
 static t_color trace_ray(t_ray ray, t_info *info, int depth) 
@@ -271,7 +288,7 @@ static t_color trace_ray(t_ray ray, t_info *info, int depth)
 			shininess = 30.0;       // Medium shine
 			spec_intensity = 0.3;    // Moderate specular
 			diffuse_strength = 0.7;  // Good diffuse for cylinder
-            reflectivity = 0.3;  // Medium reflection for cylinders
+            reflectivity = 0.5;  // Medium reflection for cylinders
         }
 
         // Calculate direct lighting (existing lighting code)
@@ -281,16 +298,39 @@ static t_color trace_ray(t_ray ray, t_info *info, int depth)
 
         double shadow = check_shadow(info, vec3_add(hit_point, vec3_mul(normal, EPSILON)), light_pos);
 
-        // Calculate base lighting
-        double ambient = amb.a_ratio;
-        double n_dot_l = fmax(0.0, vec3_dot(normal, light_dir));
-        double diffuse = n_dot_l * diffuse_strength * light.l_brightness * shadow;
-        double spec = pow(fmax(0.0, vec3_dot(view_dir, reflect_dir)), shininess) * spec_intensity * shadow;
+        // // Calculate base lighting
+        // double ambient = amb.a_ratio;
+        // double n_dot_l = fmax(0.0, vec3_dot(normal, light_dir));
+        // double diffuse = n_dot_l * diffuse_strength * light.l_brightness * shadow;
+        // double spec = pow(fmax(0.0, vec3_dot(view_dir, reflect_dir)), shininess) * spec_intensity * shadow;
 
-        // Set base color
-        result.r = base_color.r * (ambient + diffuse) + 255.0 * spec;
-        result.g = base_color.g * (ambient + diffuse) + 255.0 * spec;
-        result.b = base_color.b * (ambient + diffuse) + 255.0 * spec;
+        // // Set base color
+        // result.r = base_color.r * (ambient + diffuse) + 255.0 * spec;
+        // result.g = base_color.g * (ambient + diffuse) + 255.0 * spec;
+        // result.b = base_color.b * (ambient + diffuse) + 255.0 * spec;
+
+		// Calculate base lighting
+		double ambient = amb.a_ratio;
+		double n_dot_l = fmax(0.0, vec3_dot(normal, light_dir));
+		double diffuse = n_dot_l * diffuse_strength * light.l_brightness * shadow;
+		double spec = pow(fmax(0.0, vec3_dot(view_dir, reflect_dir)), shininess) * spec_intensity * shadow;
+
+		// Calculate ambient component with ambient light color
+		t_color ambient_color = multiply_colors(base_color, amb.color, ambient);
+
+		// Calculate diffuse component with light color
+		t_color diffuse_color = multiply_colors(base_color, light.color, diffuse);
+
+		// Add specular highlight (white)
+		t_color specular_color = add_white_component(
+			(t_color){0, 0, 0},  // Start with black
+			spec * light.l_brightness
+		);
+
+		// Combine all components
+		result.r = fmin(255, ambient_color.r + diffuse_color.r + specular_color.r);
+		result.g = fmin(255, ambient_color.g + diffuse_color.g + specular_color.g);
+		result.b = fmin(255, ambient_color.b + diffuse_color.b + specular_color.b);
 
         // Add reflection if surface is reflective
         if (reflectivity > 0.0 && depth < MAX_REFLECTION_DEPTH) {
@@ -313,7 +353,7 @@ static t_color trace_ray(t_ray ray, t_info *info, int depth)
 }
 
 //this is not allowed!
- long	get_current_time_ms(void)
+long	get_current_time_ms(void)
 {
 	struct timeval	tv;
 
@@ -321,36 +361,58 @@ static t_color trace_ray(t_ray ray, t_info *info, int depth)
 	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
 }
 
+void put_pixels_to_image(t_info *info, int y, int x, t_color pixel_color)
+{
+	unsigned int	color;
+	int				i;
+	int				j;
+	int				scale;
+
+	i = 0;
+	scale = 1;
+    if (info->render_type == LOW_RENDER)
+        scale = 8;
+	color = (pixel_color.r << 16) | (pixel_color.g << 8) | pixel_color.b;
+	while (i < scale && (y + i) < SCREEN_HEIGHT) {
+		j = 0;
+		while (j < scale && (x + j) < SCREEN_WIDTH) {
+			char *dst = info->img->addr + ((y + i) * info->img->line_length +
+						(x + j) * (info->img->bits_per_pixel / 8));
+			*(unsigned int *)dst = color;
+			j++;
+		}
+		i++;
+	}
+}
+
 void render_scene(t_info *info)
 {
-    int scale;
+    int		scale;
+	t_color pixel_color;
+	int		y;
+	int		x;
+	t_ray	ray;
 
     scale = 1;
     if (info->render_type == LOW_RENDER)
         scale = 8;
-    for (int y = 0; y < SCREEN_HEIGHT; y += scale) {
-        for (int x = 0; x < SCREEN_WIDTH; x += scale) {
-            // Single ray per pixel
-            t_ray ray = get_ray(x + 0.5, y + 0.5, info);
-            t_color pixel_color = trace_ray(ray, info, 0);
+	y = 0;
+	while (y < SCREEN_HEIGHT)
+	{
+		x = 0;
+		while (x < SCREEN_WIDTH)
+		{
+            ray = get_ray(x + 0.5, y + 0.5, info);
+            pixel_color = trace_ray(ray, info, 0);
+            pixel_color.r = (int)fmin(255, fmax(0, pixel_color.r));
+            pixel_color.g = (int)fmin(255, fmax(0, pixel_color.g));
+            pixel_color.b = (int)fmin(255, fmax(0, pixel_color.b));
 
-            // Direct color assignment
-            int final_r = (int)fmin(255, fmax(0, pixel_color.r));
-            int final_g = (int)fmin(255, fmax(0, pixel_color.g));
-            int final_b = (int)fmin(255, fmax(0, pixel_color.b));
-
-            unsigned int color = (final_r << 16) | (final_g << 8) | final_b;
-
-            // Fill the scaled block
-            for (int by = 0; by < scale && (y + by) < SCREEN_HEIGHT; by++) {
-                for (int bx = 0; bx < scale && (x + bx) < SCREEN_WIDTH; bx++) {
-                    char *dst = info->img->addr + ((y + by) * info->img->line_length +
-                               (x + bx) * (info->img->bits_per_pixel / 8));
-                    *(unsigned int *)dst = color;
-                }
-            }
-        }
-    }
+			put_pixels_to_image(info, y, x, pixel_color);
+			x += scale;
+		}
+		y += scale;
+	}
     if (info->render_type == LOW_RENDER)
         info->render_type = FULL_RENDER;
     else if (info->render_type != NO_RENDER)

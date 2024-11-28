@@ -6,12 +6,11 @@
 /*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:48:58 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/11/25 21:14:58 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/11/26 23:04:48 by pzinurov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
-#include <stdio.h>
 
 // Key state tracking
 typedef struct s_key_state {
@@ -51,22 +50,21 @@ static void apply_movement(t_info *info, double forward, double sideways)
 
 static void update_movement(t_info *info)
 {
-    const double MOVE_SPEED = 2.0;
-    double forward = 0;
-    double sideways = 0;
+    double	forward;
+    double	sideways;
 
-    // Calculate total movement based on active keys
+	forward = 0;
+	sideways = 0;
     if (keys.forward)
-        forward += MOVE_SPEED;
+        forward += 2.0;
     if (keys.backward)
-        forward -= MOVE_SPEED;
+        forward -= 2.0;
     if (keys.right)
-        sideways -= MOVE_SPEED;
+        sideways -= 2.0;
     if (keys.left)
-        sideways += MOVE_SPEED;
-
-    // Only apply movement if there's any movement to apply
-    if (forward != 0 || sideways != 0) {
+        sideways += 2.0;
+    if (forward != 0 || sideways != 0)
+	{
         info->is_input = 1;
         apply_movement(info, forward, sideways);
     }
@@ -74,13 +72,13 @@ static void update_movement(t_info *info)
 
 static void simple_key_actions(int keycode, t_info *info)
 {
-    if (keycode == 65361 || keycode == 97)  // Left arrow or A
+    if (keycode == 65361 || keycode == 97)
         keys.left = 1;
-    else if (keycode == 65363 || keycode == 100)  // Right arrow or D
+    else if (keycode == 65363 || keycode == 100)
         keys.right = 1;
-    else if (keycode == 65362 || keycode == 119)  // Up arrow or W
+    else if (keycode == 65362 || keycode == 119)
         keys.forward = 1;
-    else if (keycode == 65364 || keycode == 115)  // Down arrow or S
+    else if (keycode == 65364 || keycode == 115)
         keys.backward = 1;
     update_movement(info);
 }
@@ -96,16 +94,14 @@ int key_pressed(int keycode, t_info *info)
 
 int key_off(int keycode, t_info *info)
 {
-    // Update key states on release
-    if (keycode == 65361 || keycode == 97)  // Left arrow or A
+    if (keycode == 65361 || keycode == 97)
         keys.left = 0;
-    if (keycode == 65363 || keycode == 100)  // Right arrow or D
+    if (keycode == 65363 || keycode == 100)
         keys.right = 0;
-    if (keycode == 65362 || keycode == 119)  // Up arrow or W
+    if (keycode == 65362 || keycode == 119)
         keys.forward = 0;
-    if (keycode == 65364 || keycode == 115)  // Down arrow or S
+    if (keycode == 65364 || keycode == 115)
         keys.backward = 0;
-
 	if (!keys.left && !keys.backward && !keys.forward && !keys.right)
 		info->is_input = 0;
 	else

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:40:16 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/11/27 21:38:54 by donghank         ###   ########.fr       */
+/*   Updated: 2024/11/28 20:32:33 by pzinurov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,6 +155,10 @@ t_vec3 vec3_cross(t_vec3 a, t_vec3 b);
 
 long	get_current_time_ms(void);
 
+double	ft_atod(const char *str);
+
+int		isEqual(double a, double b);
+
 int		mouse_clicks(int keycode, int x, int y, t_info *info);
 int		mouse_off(int keycode, int x, int y, t_info *info);
 int		mouse_moves(int x, int y, t_info *info);
@@ -169,6 +173,5 @@ void	ft_putstr_fd(char *s, int fd);
 void	render_scene(t_info *info);
 int		close_window(t_info *info);
 int		render_next_frame(t_info *info);
-double	ft_atod(const char *str);
 
 #endif
