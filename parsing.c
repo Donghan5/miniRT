@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 17:39:31 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/11/29 13:12:41 by donghank         ###   ########.fr       */
+/*   Updated: 2024/11/29 14:27:09 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,11 @@
 #define COOR_ERR "Fail to coordinate parse"
 #define ORI_ERR "Fail to orientation parse"
 
+int ft_isspace(char c)
+{
+	return (c == ' ' || c == '\t' || c == '\n' || \
+			c == '\v' || c == '\f' || c == '\r');
+}
 /*
 	check the all case of the empty and comment
 	@param
@@ -32,7 +37,7 @@ int is_empty_or_comment(char *line)
 		return (1);
 	while (*line)
 	{
-		if (!isspace(*line))
+		if (!ft_isspace(*line))
 		{
 			if (*line == '#')
 				return (1);
@@ -169,7 +174,7 @@ void	init_scene(char *path, t_scene *scene)
 		handle_error("Fail dynamic allocate t_sphere scope all");
 	while (sp_idx < scene->sphere_n)
 	{
-		scene->sphere[sp_idx] = ft_calloc(1, sizeof(t_sphere *));
+		scene->sphere[sp_idx] = ft_calloc(1, sizeof(t_sphere));
 		if (!scene->sphere[sp_idx])
 			handle_error("Fail dynamic allocate t_sphere scope index");
 		scene->sphere[sp_idx]->color.r = 0;
@@ -190,7 +195,7 @@ void	init_scene(char *path, t_scene *scene)
 		handle_error("Fail dynamic allocate t_plane");
 	while (pl_idx < scene->plane_n)
 	{
-		scene->plane[pl_idx] = ft_calloc(1, sizeof(t_plane *));
+		scene->plane[pl_idx] = ft_calloc(1, sizeof(t_plane));
 		if (!scene->plane[pl_idx])
 			handle_error("Fail dynamic allocate t_plane");
 		scene->plane[pl_idx]->color.r = 0;
