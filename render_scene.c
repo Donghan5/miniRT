@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render_scene.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:51:26 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/11/28 20:31:49 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/11/30 17:37:10 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ static double intersect_sphere(t_ray ray, t_sphere *sphere)
     double discriminant = b*b - 4*a*c;
     if (discriminant < 0)
         return -1.0;
-        
+
     double t = (-b - sqrt(discriminant)) / (2.0*a);
     if (t > EPSILON)
         return t;
@@ -95,17 +95,17 @@ static double intersect_cylinder(t_ray ray, t_cylinder *cyl)
     t_vec3 axis = vec3_normalize(cyl->axis_vector);
     t_vec3 center = cyl->coordinates;
     double radius = cyl->cy_diameter / 2.0;
-    
+
     // Calculate ray-cylinder intersection
     t_vec3 oc = vec3_sub(ray.origin, center);
-    
-    double a = vec3_dot(ray.direction, ray.direction) - 
+
+    double a = vec3_dot(ray.direction, ray.direction) -
                pow(vec3_dot(ray.direction, axis), 2);
-    double b = 2.0 * (vec3_dot(ray.direction, oc) - 
+    double b = 2.0 * (vec3_dot(ray.direction, oc) -
                vec3_dot(ray.direction, axis) * vec3_dot(oc, axis));
-    double c = vec3_dot(oc, oc) - 
+    double c = vec3_dot(oc, oc) -
                pow(vec3_dot(oc, axis), 2) - radius * radius;
-    
+
     double discriminant = b*b - 4*a*c;
     if (discriminant < 0)
         return -1.0;
@@ -118,7 +118,7 @@ static double intersect_cylinder(t_ray ray, t_cylinder *cyl)
     t_vec3 hit_point = vec3_add(ray.origin, vec3_mul(ray.direction, t));
     t_vec3 hit_height = vec3_sub(hit_point, center);
     double height = vec3_dot(hit_height, axis);
-    
+
     if (height < 0 || height > cyl->cy_height)
         return -1.0;
 
@@ -134,7 +134,7 @@ static double check_shadow(t_info *info, t_vec3 hit_point, t_vec3 light_pos)
     // Compute distance to light
     t_vec3 to_light = vec3_sub(light_pos, hit_point);
     double dist_to_light = sqrt(vec3_dot(to_light, to_light));
-    
+
     // Check spheres
     for (int i = 0; i < info->scene.sphere_n; i++) {
         if (info->scene.sphere[i]) {
@@ -192,7 +192,7 @@ static t_color add_white_component(t_color base, double factor) {
 }
 
 // Helper function to trace a ray and get color
-static t_color trace_ray(t_ray ray, t_info *info, int depth) 
+static t_color trace_ray(t_ray ray, t_info *info, int depth)
 {
     t_ambient amb = info->scene.ambient;
     t_light light = info->scene.light;
