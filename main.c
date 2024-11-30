@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:39:54 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/11/30 01:07:01 by donghank         ###   ########.fr       */
+/*   Updated: 2024/11/30 12:05:06 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,6 +145,8 @@ int	main(int argc, char **argv)
 
 	if (argc != 2)
 		exit_error(info.scene, 0, "Wrong arguments. Format: ./miniRT \"path_to_rt_scene\"");
+	// if (!check_map(argv[1]))
+	// 	handle_error("Invaild map name, verify once again");
 	mlx = mlx_init();
 	mlx_win = mlx_new_window(mlx, SCREEN_WIDTH, SCREEN_HEIGHT, "miniRT");
 	img.img = mlx_new_image(mlx, SCREEN_WIDTH, SCREEN_HEIGHT);

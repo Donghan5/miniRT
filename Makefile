@@ -1,4 +1,5 @@
-SRC = main.c frame_render.c key_actions.c mouse_actions.c tools.c render_scene.c parsing.c vector_operations.c ft_atod.c
+SRC = main.c frame_render.c key_actions.c mouse_actions.c tools.c render_scene.c parsing/parsing.c vector_operations.c ft_atod.c \
+	parsing/init.c parsing/parse_tool.c parsing/stock_basic.c parsing/stock_shape.c parsing/init_shape.c parsing/parse_utils.c
 
 OBJ = $(SRC:.c=.o)
 CFLAGS = -g3 #-Wall -Wextra -Werror

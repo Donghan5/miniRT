@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:40:16 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/11/30 00:42:11 by donghank         ###   ########.fr       */
+/*   Updated: 2024/11/30 16:07:56 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,15 @@
 # include <sys/time.h>
 # define SCREEN_HEIGHT 1080
 # define SCREEN_WIDTH 1920
+// # define SCREEN_HEIGHT 500
+// # define SCREEN_WIDTH 700
 # define MAX_REFLECTION_DEPTH 3
 # define EPSILON 0.0001
 # define SCROLL_DELAY 300
+# define PARSE_ERR "Fail to parse"
+# define PARSE_RGB_ERR "Fail to parse RGB"
+# define COOR_ERR "Fail to coordinate parse"
+# define ORI_ERR "Fail to orientation parse"
 
 typedef struct s_vec3 {
     double	x;
@@ -135,6 +141,14 @@ typedef struct s_info
 	int		render_type;
 }				t_info;
 
+// struct of index sphere, plane and cylinder
+typedef struct s_indices
+{
+	int	sp_idx;
+	int	pl_idx;
+	int	cy_idx;
+}			t_indices;
+
 t_vec3 vec3(double x, double y, double z);
 
 t_vec3 vec3_add(t_vec3 a, t_vec3 b);
@@ -173,6 +187,38 @@ void	ft_putstr_fd(char *s, int fd);
 void	render_scene(t_info *info);
 int		close_window(t_info *info);
 int		render_next_frame(t_info *info);
-void	free_scene(t_scene *scene);
 
+// init.c
+void	init_scene(char *path, t_scene *scene);
+void	init_ambient(t_scene *scene);
+void	init_camera(t_scene *scene);
+void	init_light(t_scene *scene);
+void	init_indices(t_indices *indices);
+
+// init_shape.c
+void	init_sphere(t_scene *scene);
+void	init_plane(t_scene *scene);
+void	init_cylinder(t_scene *scene);
+
+void	free_scene(t_scene *scene);
+// int		check_map(char *map_name);
+void	handle_error(char *msg);
+int		ft_isspace(char c);
+int		is_empty_or_comment(char *line);
+void	free_doub_array(char **strs);
+
+// parse_tool.c
+void	count_objs(char *path, t_scene *scene);
+int		get_type(char *map_info);
+
+// stock_basic.c
+void	stock_ambient(t_scene *scene, char *info_map);
+void	stock_cam(t_scene *scene, char *info_map);
+void	stock_light(t_scene *scene, char *info_map);
+void	stock_infos(int type, t_scene *scene, char *info_map);
+
+//stock_shape.c
+void	stock_plane(t_scene *scene, char *info_map, int pl_idx);
+void	stock_sphere(t_scene *scene, char *info_map, int sp_idx);
+void	stock_cylinder(t_scene *scene, char *info_map, int cy_idx);
 #endif
