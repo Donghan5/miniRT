@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 17:39:31 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/11/29 14:27:09 by donghank         ###   ########.fr       */
+/*   Updated: 2024/11/30 01:08:34 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,18 @@ int is_empty_or_comment(char *line)
 	@param
 		scene: want to deallocation
 */
-void	free_scene(t_scene *scene)
+void free_scene(t_scene *scene)
 {
-	free(scene->sphere);
+	for (int i = 0; i < scene->plane_n; i++)
+		free(scene->plane[i]);
 	free(scene->plane);
+
+	for (int i = 0; i < scene->sphere_n; i++)
+		free(scene->sphere[i]);
+	free(scene->sphere);
+
+	for (int i = 0; i < scene->cylinder_n; i++)
+		free(scene->cylinder[i]);
 	free(scene->cylinder);
 }
 /*
@@ -126,11 +134,11 @@ void	count_objs(char *path, t_scene *scene)
 			continue ;
 		}
 		if (ft_strncmp(map_line, "sp", 2) == 0)
-			scene->sphere_n++;
+			scene->sphere_n++, printf("Count sphere_n: %d\n", scene->sphere_n);
 		else if (ft_strncmp(map_line, "pl", 2) == 0)
-			scene->plane_n++;
+			scene->plane_n++, printf("Count plane_n: %d\n", scene->plane_n);
 		else if (ft_strncmp(map_line, "cy", 2) == 0)
-			scene->cylinder_n++;
+			scene->cylinder_n++, printf("Count cylinder_n: %d\n", scene->cylinder_n);
 		free(map_line);
 		map_line = get_next_line(fd);
 	}
@@ -145,6 +153,9 @@ void	count_objs(char *path, t_scene *scene)
 */
 void	init_scene(char *path, t_scene *scene)
 {
+	scene->plane_n = 0;
+	scene->sphere_n = 0;
+	scene->cylinder_n = 0;
 	count_objs(path, scene);
 	// default scene --> ambient camera and light
 	scene->ambient.a_ratio = 0.0;
@@ -169,7 +180,7 @@ void	init_scene(char *path, t_scene *scene)
 	// sphere part
 	int	sp_idx;
 	sp_idx = 0;
-	scene->sphere = ft_calloc(scene->sphere_n, sizeof(t_sphere *));
+	scene->sphere = malloc(scene->sphere_n * sizeof(t_sphere *));
 	if (!scene->sphere)
 		handle_error("Fail dynamic allocate t_sphere scope all");
 	while (sp_idx < scene->sphere_n)
@@ -190,7 +201,7 @@ void	init_scene(char *path, t_scene *scene)
 	//plane part
 	int	pl_idx;
 	pl_idx = 0;
-	scene->plane = ft_calloc(scene->plane_n, sizeof(t_plane *));
+	scene->plane = malloc(scene->plane_n * sizeof(t_plane *));
 	if (!scene->plane)
 		handle_error("Fail dynamic allocate t_plane");
 	while (pl_idx < scene->plane_n)
@@ -211,7 +222,7 @@ void	init_scene(char *path, t_scene *scene)
 	// cylinder part
 	int	cy_idx;
 	cy_idx = 0;
-	scene->cylinder = ft_calloc(scene->cylinder_n, sizeof(t_cylinder *));
+	scene->cylinder = malloc(scene->cylinder_n * sizeof(t_cylinder *));
 	if (!scene->cylinder)
 		handle_error("Fail to dynamic allocate t_cylinder");
 	while (cy_idx < scene->cylinder_n)
@@ -378,7 +389,7 @@ void	stock_light(t_scene *scene, char *info_map)
 		rgb_infos: RGB information of plane
 
 */
-void	stock_plane(t_scene *scene, char *info_map)
+void	stock_plane(t_scene *scene, char *info_map, int pl_idx)
 {
 	char	**sep_info;
 	char	**coord_info;
@@ -391,23 +402,23 @@ void	stock_plane(t_scene *scene, char *info_map)
 	coord_info = ft_split(sep_info[1], ',');
 	if (coord_info == NULL)
 		handle_error(COOR_ERR);
-	(*scene->plane)->coordinates.x = ft_atod(coord_info[0]);
-	(*scene->plane)->coordinates.y = ft_atod(coord_info[1]);
-	(*scene->plane)->coordinates.z = ft_atod(coord_info[2]);
+	scene->plane[pl_idx]->coordinates.x = ft_atod(coord_info[0]);
+	scene->plane[pl_idx]->coordinates.y = ft_atod(coord_info[1]);
+	scene->plane[pl_idx]->coordinates.z = ft_atod(coord_info[2]);
 	free_doub_array(coord_info);
 	orient_info = ft_split(sep_info[2], ',');
 	if (orient_info == NULL)
 		handle_error(ORI_ERR);
-	(*scene->plane)->normal_vector.x = ft_atod(orient_info[0]);
-	(*scene->plane)->normal_vector.y = ft_atod(orient_info[1]);
-	(*scene->plane)->normal_vector.z = ft_atod(orient_info[2]);
+	scene->plane[pl_idx]->normal_vector.x = ft_atod(orient_info[0]);
+	scene->plane[pl_idx]->normal_vector.y = ft_atod(orient_info[1]);
+	scene->plane[pl_idx]->normal_vector.z = ft_atod(orient_info[2]);
 	free_doub_array(orient_info);
 	rgb_infos = ft_split(sep_info[3], ',');
 	if (rgb_infos == NULL)
 		handle_error(PARSE_RGB_ERR);
-	(*scene->plane)->color.r = ft_atoi(rgb_infos[0]);
-	(*scene->plane)->color.g = ft_atoi(rgb_infos[1]);
-	(*scene->plane)->color.b = ft_atoi(rgb_infos[2]);
+	scene->plane[pl_idx]->color.r = ft_atoi(rgb_infos[0]);
+	scene->plane[pl_idx]->color.g = ft_atoi(rgb_infos[1]);
+	scene->plane[pl_idx]->color.b = ft_atoi(rgb_infos[2]);
 	free_doub_array(rgb_infos);
 	free_doub_array(sep_info);
 }
@@ -421,7 +432,7 @@ void	stock_plane(t_scene *scene, char *info_map)
 		coord_info: coordination information of sphere
 		rgb_infos: RGB information of sphere
 */
-void	stock_sphere(t_scene *scene, char *info_map)
+void	stock_sphere(t_scene *scene, char *info_map, int sp_idx)
 {
 	char	**sep_info;
 	char	**coord_info;
@@ -433,17 +444,17 @@ void	stock_sphere(t_scene *scene, char *info_map)
 	coord_info = ft_split(sep_info[1], ',');
 	if (coord_info == NULL)
 		handle_error(COOR_ERR);
-	(*scene->sphere)->coordinates.x = ft_atod(coord_info[0]);
-	(*scene->sphere)->coordinates.y = ft_atod(coord_info[1]);
-	(*scene->sphere)->coordinates.z = ft_atod(coord_info[2]);
+	scene->sphere[sp_idx]->coordinates.x = ft_atod(coord_info[0]);
+	scene->sphere[sp_idx]->coordinates.y = ft_atod(coord_info[1]);
+	scene->sphere[sp_idx]->coordinates.z = ft_atod(coord_info[2]);
 	free_doub_array(coord_info);
-	(*scene->sphere)->sp_diameter = ft_atod(sep_info[2]);
+	scene->sphere[sp_idx]->sp_diameter = ft_atod(sep_info[2]);
 	rgb_infos = ft_split((char *)sep_info[3], ',');
 	if (rgb_infos == NULL)
 		handle_error(PARSE_RGB_ERR);
-	(*scene->sphere)->color.r = ft_atoi(rgb_infos[0]);
-	(*scene->sphere)->color.g = ft_atoi(rgb_infos[1]);
-	(*scene->sphere)->color.b = ft_atoi(rgb_infos[2]);
+	scene->sphere[sp_idx]->color.r = ft_atoi(rgb_infos[0]);
+	scene->sphere[sp_idx]->color.g = ft_atoi(rgb_infos[1]);
+	scene->sphere[sp_idx]->color.b = ft_atoi(rgb_infos[2]);
 	free_doub_array(rgb_infos);
 	free_doub_array(sep_info);
 }
@@ -458,7 +469,7 @@ void	stock_sphere(t_scene *scene, char *info_map)
 		orient_info: normal vector information of cylinder
 		rgb_infos: RGB information of cylinder
 */
-void	stock_cylinder(t_scene *scene, char *info_map)
+void	stock_cylinder(t_scene *scene, char *info_map, int cy_idx)
 {
 	char	**sep_info;
 	char	**coord_info;
@@ -471,25 +482,25 @@ void	stock_cylinder(t_scene *scene, char *info_map)
 	coord_info = ft_split(sep_info[1], ',');
 	if (coord_info == NULL)
 		handle_error(COOR_ERR);
-	(*scene->cylinder)->coordinates.x = ft_atod(coord_info[0]);
-	(*scene->cylinder)->coordinates.y = ft_atod(coord_info[1]);
-	(*scene->cylinder)->coordinates.z = ft_atod(coord_info[2]);
+	scene->cylinder[cy_idx]->coordinates.x = ft_atod(coord_info[0]);
+	scene->cylinder[cy_idx]->coordinates.y = ft_atod(coord_info[1]);
+	scene->cylinder[cy_idx]->coordinates.z = ft_atod(coord_info[2]);
 	free_doub_array(coord_info);
 	orient_info = ft_split((char *)sep_info[2], ',');
 	if (orient_info == NULL)
 		handle_error(ORI_ERR);
-	(*scene->cylinder)->axis_vector.x = ft_atod(orient_info[0]);
-	(*scene->cylinder)->axis_vector.y = ft_atod(orient_info[1]);
-	(*scene->cylinder)->axis_vector.z = ft_atod(orient_info[2]);
+	scene->cylinder[cy_idx]->axis_vector.x = ft_atod(orient_info[0]);
+	scene->cylinder[cy_idx]->axis_vector.y = ft_atod(orient_info[1]);
+	scene->cylinder[cy_idx]->axis_vector.z = ft_atod(orient_info[2]);
 	free_doub_array(orient_info);
-	(*scene->cylinder)->cy_diameter = ft_atod(sep_info[3]);
-	(*scene->cylinder)->cy_height = ft_atod(sep_info[4]);
+	scene->cylinder[cy_idx]->cy_diameter = ft_atod(sep_info[3]);
+	scene->cylinder[cy_idx]->cy_height = ft_atod(sep_info[4]);
 	rgb_infos = ft_split(sep_info[5], ',');
 	if (rgb_infos == NULL)
 		handle_error(PARSE_RGB_ERR);
-	(*scene->cylinder)->color.r = ft_atoi(rgb_infos[0]);
-	(*scene->cylinder)->color.g = ft_atoi(rgb_infos[1]);
-	(*scene->cylinder)->color.b = ft_atoi(rgb_infos[2]);
+	scene->cylinder[cy_idx]->color.r = ft_atoi(rgb_infos[0]);
+	scene->cylinder[cy_idx]->color.g = ft_atoi(rgb_infos[1]);
+	scene->cylinder[cy_idx]->color.b = ft_atoi(rgb_infos[2]);
 	free_doub_array(rgb_infos);
 	free_doub_array(sep_info);
 }
@@ -555,11 +566,23 @@ void	parse_scene(char *path, t_scene *scene)
 		if (type == 1 || type == 2 || type == 3)
 			stock_infos(type, scene, map_line);
 		else if (type == 4)
-			stock_plane(scene->plane[pl_idx++], map_line);
+		{
+			if (pl_idx >= scene->plane_n)
+				handle_error("Index is out of range in plane");
+			stock_plane(scene, map_line, pl_idx++);
+		}
 		else if (type == 5)
-			stock_sphere(scene->sphere[sp_idx++], map_line);
+		{
+			if (sp_idx >= scene->sphere_n)
+				handle_error("Index is out of range in sphere");
+			stock_sphere(scene, map_line, sp_idx++);
+		}
 		else if (type == 6)
-			stock_cylinder(scene->cylinder[cy_idx++], map_line);
+		{
+			if (cy_idx >= scene->cylinder_n)
+				handle_error("Index is out of range in cylinder");
+			stock_cylinder(scene, map_line, cy_idx++);
+		}
 		free(map_line);
 		map_line = get_next_line(fd);
 	}

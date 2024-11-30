@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:40:16 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/11/28 20:32:33 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/11/30 00:42:11 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,5 +173,6 @@ void	ft_putstr_fd(char *s, int fd);
 void	render_scene(t_info *info);
 int		close_window(t_info *info);
 int		render_next_frame(t_info *info);
+void	free_scene(t_scene *scene);
 
 #endif

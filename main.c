@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:39:54 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/11/28 19:33:22 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/11/30 01:07:01 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -270,5 +270,6 @@ int	main(int argc, char **argv)
 	install_hooks(&info);
 	mlx_loop_hook(info.mlx, render_next_frame, &info);
 	mlx_loop(info.mlx);
+	// free_scene(&info.scene);
 	return (0);
 }

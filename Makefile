@@ -1,7 +1,7 @@
 SRC = main.c frame_render.c key_actions.c mouse_actions.c tools.c render_scene.c parsing.c vector_operations.c ft_atod.c
 
 OBJ = $(SRC:.c=.o)
-CFLAGS = #-Wall -Wextra -Werror
+CFLAGS = -g3 #-Wall -Wextra -Werror
 
 DEPS = $(SRC:.c=.d)
 
