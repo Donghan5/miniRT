@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:51:26 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/11/30 17:37:10 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/02 09:22:50 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,8 +195,8 @@ static t_color add_white_component(t_color base, double factor) {
 static t_color trace_ray(t_ray ray, t_info *info, int depth)
 {
     t_ambient amb = info->scene.ambient;
-    t_light light = info->scene.light;
-    t_vec3 light_pos = light.coordinates;
+    // t_light light = info->scene.light;
+    // t_vec3 light_pos = light.coordinates;
     t_color result = {0, 0, 0};
     t_hit closest = {DBL_MAX, -1, -1};
 
@@ -291,46 +291,51 @@ static t_color trace_ray(t_ray ray, t_info *info, int depth)
             reflectivity = 0.5;  // Medium reflection for cylinders
         }
 
-        // Calculate direct lighting (existing lighting code)
-        t_vec3 light_dir = vec3_normalize(vec3_sub(light_pos, hit_point));
-        t_vec3 view_dir = vec3_normalize(vec3_sub(ray.origin, hit_point));
-        t_vec3 reflect_dir = vec3_reflect(vec3_mul(light_dir, -1.0), normal);
+		for (int i = 0; i < info->scene.light_n; i++)
+		{
+			t_light	*light = info->scene.light[i];
+			t_vec3	light_pos = light->coordinates;
+			// Calculate direct lighting (existing lighting code)
+			t_vec3 light_dir = vec3_normalize(vec3_sub(light_pos, hit_point));
+			t_vec3 view_dir = vec3_normalize(vec3_sub(ray.origin, hit_point));
+			t_vec3 reflect_dir = vec3_reflect(vec3_mul(light_dir, -1.0), normal);
 
-        double shadow = check_shadow(info, vec3_add(hit_point, vec3_mul(normal, EPSILON)), light_pos);
+			double shadow = check_shadow(info, vec3_add(hit_point, vec3_mul(normal, EPSILON)), light_pos);
 
-        // // Calculate base lighting
-        // double ambient = amb.a_ratio;
-        // double n_dot_l = fmax(0.0, vec3_dot(normal, light_dir));
-        // double diffuse = n_dot_l * diffuse_strength * light.l_brightness * shadow;
-        // double spec = pow(fmax(0.0, vec3_dot(view_dir, reflect_dir)), shininess) * spec_intensity * shadow;
+			// // Calculate base lighting
+			// double ambient = amb.a_ratio;
+			// double n_dot_l = fmax(0.0, vec3_dot(normal, light_dir));
+			// double diffuse = n_dot_l * diffuse_strength * light.l_brightness * shadow;
+			// double spec = pow(fmax(0.0, vec3_dot(view_dir, reflect_dir)), shininess) * spec_intensity * shadow;
 
-        // // Set base color
-        // result.r = base_color.r * (ambient + diffuse) + 255.0 * spec;
-        // result.g = base_color.g * (ambient + diffuse) + 255.0 * spec;
-        // result.b = base_color.b * (ambient + diffuse) + 255.0 * spec;
+			// // Set base color
+			// result.r = base_color.r * (ambient + diffuse) + 255.0 * spec;
+			// result.g = base_color.g * (ambient + diffuse) + 255.0 * spec;
+			// result.b = base_color.b * (ambient + diffuse) + 255.0 * spec;
 
-		// Calculate base lighting
-		double ambient = amb.a_ratio;
-		double n_dot_l = fmax(0.0, vec3_dot(normal, light_dir));
-		double diffuse = n_dot_l * diffuse_strength * light.l_brightness * shadow;
-		double spec = pow(fmax(0.0, vec3_dot(view_dir, reflect_dir)), shininess) * spec_intensity * shadow;
+			// Calculate base lighting
+			double ambient = amb.a_ratio;
+			double n_dot_l = fmax(0.0, vec3_dot(normal, light_dir));
+			double diffuse = n_dot_l * diffuse_strength * light->l_brightness * shadow;
+			double spec = pow(fmax(0.0, vec3_dot(view_dir, reflect_dir)), shininess) * spec_intensity * shadow;
 
-		// Calculate ambient component with ambient light color
-		t_color ambient_color = multiply_colors(base_color, amb.color, ambient);
+			// Calculate ambient component with ambient light color
+			t_color ambient_color = multiply_colors(base_color, amb.color, ambient);
 
-		// Calculate diffuse component with light color
-		t_color diffuse_color = multiply_colors(base_color, light.color, diffuse);
+			// Calculate diffuse component with light color
+			t_color diffuse_color = multiply_colors(base_color, light->color, diffuse);
 
-		// Add specular highlight (white)
-		t_color specular_color = add_white_component(
-			(t_color){0, 0, 0},  // Start with black
-			spec * light.l_brightness
-		);
+			// Add specular highlight (white)
+			t_color specular_color = add_white_component(
+				(t_color){0, 0, 0},  // Start with black
+				spec * light->l_brightness
+			);
 
-		// Combine all components
-		result.r = fmin(255, ambient_color.r + diffuse_color.r + specular_color.r);
-		result.g = fmin(255, ambient_color.g + diffuse_color.g + specular_color.g);
-		result.b = fmin(255, ambient_color.b + diffuse_color.b + specular_color.b);
+			// Combine all components
+			result.r = fmin(255, ambient_color.r + diffuse_color.r + specular_color.r);
+			result.g = fmin(255, ambient_color.g + diffuse_color.g + specular_color.g);
+			result.b = fmin(255, ambient_color.b + diffuse_color.b + specular_color.b);
+		}
 
         // Add reflection if surface is reflective
         if (reflectivity > 0.0 && depth < MAX_REFLECTION_DEPTH) {

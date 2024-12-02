@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:40:16 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/11/30 17:37:04 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/02 11:51:49 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@
 # include <errno.h>
 # include <float.h>
 # include <sys/time.h>
-# define SCREEN_HEIGHT 1080
-# define SCREEN_WIDTH 1920
-// # define SCREEN_HEIGHT 500
-// # define SCREEN_WIDTH 700
+// # define SCREEN_HEIGHT 1080
+// # define SCREEN_WIDTH 1920
+# define SCREEN_HEIGHT 500
+# define SCREEN_WIDTH 700
 # define MAX_REFLECTION_DEPTH 3
 # define EPSILON 0.0001
 # define SCROLL_DELAY 300
@@ -106,13 +106,14 @@ typedef struct s_scene
 {
 	t_ambient	ambient;
 	t_camera	camera;
-	t_light		light;
+	t_light		**light;
 	t_sphere	**sphere;
 	t_plane		**plane;
 	t_cylinder	**cylinder;
 	int			sphere_n;
 	int			plane_n;
 	int			cylinder_n;
+	int			light_n;
 }				t_scene;
 
 enum e_render_type
@@ -147,6 +148,7 @@ typedef struct s_indices
 	int	sp_idx;
 	int	pl_idx;
 	int	cy_idx;
+	int	l_idx;
 }			t_indices;
 
 t_vec3 vec3(double x, double y, double z);
@@ -214,7 +216,7 @@ int		get_type(char *map_info);
 // stock_basic.c
 void	stock_ambient(t_scene *scene, char *info_map);
 void	stock_cam(t_scene *scene, char *info_map);
-void	stock_light(t_scene *scene, char *info_map);
+void	stock_light(t_scene *scene, char *info_map, int l_idx);
 void	stock_infos(int type, t_scene *scene, char *info_map);
 
 //stock_shape.c

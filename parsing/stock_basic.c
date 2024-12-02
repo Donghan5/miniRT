@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 12:16:25 by donghank          #+#    #+#             */
-/*   Updated: 2024/11/30 12:31:52 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/02 11:51:32 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ void	stock_cam(t_scene *scene, char *info_map)
 		rgb_infos: RGB information of light
 
 */
-void	stock_light(t_scene *scene, char *info_map)
+void	stock_light(t_scene *scene, char *info_map, int l_idx)
 {
 	char	**sep_info;
 	char	**coord_info;
@@ -100,24 +100,24 @@ void	stock_light(t_scene *scene, char *info_map)
 	coord_info = ft_split((char *)sep_info[1], ',');
 	if (coord_info == NULL)
 		handle_error(COOR_ERR);
-	scene->light.coordinates.x = ft_atod(coord_info[0]);
-	scene->light.coordinates.y = ft_atod(coord_info[1]);
-	scene->light.coordinates.z = ft_atod(coord_info[2]);
+	scene->light[l_idx]->coordinates.x = ft_atod(coord_info[0]);
+	scene->light[l_idx]->coordinates.y = ft_atod(coord_info[1]);
+	scene->light[l_idx]->coordinates.z = ft_atod(coord_info[2]);
 	free_doub_array(coord_info);
-	scene->light.l_brightness = ft_atod(sep_info[2]);
+	scene->light[l_idx]->l_brightness = ft_atod(sep_info[2]);
 	rgb_infos = ft_split((char *)sep_info[3], ',');
 	if (rgb_infos == NULL)
 		handle_error(PARSE_RGB_ERR);
-	scene->light.color.r = ft_atoi(rgb_infos[0]);
-	scene->light.color.g = ft_atoi(rgb_infos[1]);
-	scene->light.color.b = ft_atoi(rgb_infos[2]);
+	scene->light[l_idx]->color.r = ft_atoi(rgb_infos[0]);
+	scene->light[l_idx]->color.g = ft_atoi(rgb_infos[1]);
+	scene->light[l_idx]->color.b = ft_atoi(rgb_infos[2]);
 	free_doub_array(rgb_infos);
 	free_doub_array(sep_info);
 }
 
 
 /*
-	part of ambient, camera and light
+	part of ambient, camera
 	@param
 		type: type of the map_infos[1]
 		scene: structure to stock the infos
@@ -129,6 +129,4 @@ void	stock_infos(int type, t_scene *scene, char *info_map)
 		stock_ambient(scene, info_map);
 	else if (type == 2)
 		stock_cam(scene, info_map);
-	else if (type == 3)
-		stock_light(scene, info_map);
 }

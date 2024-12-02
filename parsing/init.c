@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 12:12:42 by donghank          #+#    #+#             */
-/*   Updated: 2024/11/30 15:46:52 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/02 10:33:16 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void	init_scene(char *path, t_scene *scene)
 	scene->plane_n = 0;
 	scene->sphere_n = 0;
 	scene->cylinder_n = 0;
+	scene->light_n = 0;
 	count_objs(path, scene);
 	init_ambient(scene);
 	init_camera(scene);
@@ -67,13 +68,26 @@ void	init_camera(t_scene *scene)
 */
 void	init_light(t_scene *scene)
 {
-	scene->light.color.r = 0;
-	scene->light.color.g = 0;
-	scene->light.color.b = 0;
-	scene->light.coordinates.x = 0.0;
-	scene->light.coordinates.y = 0.0;
-	scene->light.coordinates.z = 0.0;
-	scene->light.l_brightness = 0.0;
+	int	l_idx;
+
+	l_idx = 0;
+	scene->light = malloc(scene->light_n * sizeof(t_light *));
+	if (!scene->light)
+		handle_error("Fail to dynamic allocatie t_light");
+	while (l_idx < scene->light_n)
+	{
+		scene->light[l_idx] = ft_calloc(1, sizeof(t_light));
+		if (!scene->light[l_idx])
+			handle_error("Fail to dynamic allocat t_light");
+		scene->light[l_idx]->color.r = 0;
+		scene->light[l_idx]->color.g = 0;
+		scene->light[l_idx]->color.b = 0;
+		scene->light[l_idx]->coordinates.x = 0.0;
+		scene->light[l_idx]->coordinates.y = 0.0;
+		scene->light[l_idx]->coordinates.z = 0.0;
+		scene->light[l_idx]->l_brightness = 0.0;
+		l_idx++;
+	}
 }
 
 void	init_indices(t_indices *indices)
@@ -81,4 +95,5 @@ void	init_indices(t_indices *indices)
 	indices->cy_idx = 0;
 	indices->pl_idx = 0;
 	indices->sp_idx = 0;
+	indices->l_idx = 0;
 }

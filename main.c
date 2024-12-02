@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:39:54 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/11/30 12:05:06 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/01 22:40:53 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,9 +96,11 @@ void print_scene_info(t_scene *scene) {
 
     // Print Light info
     printf("\n=== Light ===\n");
-    print_vector(scene->light.coordinates, "Position");
-    print_color(scene->light.color, "Color");
-    printf("Brightness: %f\n", scene->light.l_brightness);
+	for (int i = 0; i < scene->light_n; i++) {
+		print_vector(scene->light[i]->coordinates, "Position(light)");
+		print_color(scene->light[i]->color, "Color(light)");
+		printf("Brightness: %f\n", scene->light[i]->l_brightness);
+	}
 
     // Print Sphere info
     printf("\n=== Spheres (%d) ===\n", scene->sphere_n);

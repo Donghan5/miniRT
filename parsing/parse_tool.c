@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 12:13:29 by donghank          #+#    #+#             */
-/*   Updated: 2024/11/30 16:07:35 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/01 21:30:21 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,8 @@ void	count_objs(char *path, t_scene *scene)
 			scene->plane_n++;
 		else if (ft_strncmp(map_line, "cy", 2) == 0)
 			scene->cylinder_n++;
+		else if (ft_strncmp(map_line, "L", 1) == 0)
+			scene->light_n++;
 		free(map_line);
 		map_line = get_next_line(fd);
 	}

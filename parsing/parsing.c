@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 17:39:31 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/11/30 16:31:14 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/02 11:52:07 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,20 +26,26 @@ static void	handle_error_free(char *map_line, char *msg)
 }
 
 /*
-	process of the stock all element in structure
+	process of the stock all element in structure (helper function)
 	@param
 		map_line: information of the map which read by gnl
 		scene: information to render
 		indices: structure which contain all index of sp, pl and cy
-		type: the type of the information
+		type: the type of the information (ambient, cam, light etc)
 */
 static void	process_parse(char *map_line, t_scene *scene, t_indices *indices)
 {
 	int	type;
 
 	type = get_type(map_line);
-	if (type == 1 || type == 2 || type == 3)
+	if (type == 1 || type == 2)
 		stock_infos(type, scene, map_line);
+	else if (type == 3)
+	{
+		if (indices->l_idx >= scene->cylinder_n)
+			handle_error("Index is out of range in light");
+		stock_light(scene, map_line, indices->l_idx++);
+	}
 	else if (type == 4)
 	{
 		if (indices->pl_idx >= scene->plane_n)
@@ -107,7 +113,7 @@ static void	do_stock(int fd, t_scene *scene)
 	idea of this function
 	1. parsing the map_line (read by gnl) by separating white-space
 	2. verify element (map_infos[0] is char) the other have just , and num
-	3. separate the case --> stock each structs
+	3. separate the case --> stock each structures
 	@param
 		path: path of the file
 		scene: struct information
