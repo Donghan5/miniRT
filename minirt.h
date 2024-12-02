@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:40:16 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/02 11:51:49 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/02 15:02:25 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -223,4 +223,7 @@ void	stock_infos(int type, t_scene *scene, char *info_map);
 void	stock_plane(t_scene *scene, char *info_map, int pl_idx);
 void	stock_sphere(t_scene *scene, char *info_map, int sp_idx);
 void	stock_cylinder(t_scene *scene, char *info_map, int cy_idx);
+
+//process_parse.c
+void	handle_map_check(char *map_line, t_scene *scene, t_indices *indices);
 #endif
