@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 17:39:31 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/02 15:02:40 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/02 15:20:52 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /*
 	to stock the all element in the .rt maps
 	@param
-		fd: file discriptor of .rt
+		fd: file discriptor of the map
 		scene: structure which want to stock it
 */
 static void	do_stock(int fd, t_scene *scene)

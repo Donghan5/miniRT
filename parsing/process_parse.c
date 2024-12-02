@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 15:01:06 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/02 15:02:14 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/02 15:20:24 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,10 +90,7 @@ static void	process_parse(char *map_line, t_scene *scene, t_indices *indices)
 void	handle_map_check(char *map_line, t_scene *scene, t_indices *indices)
 {
 	if (is_empty_or_comment(map_line))
-	{
-		// free(map_line); // i'm not sure it free is good place this was the problem
 		return ;
-	}
 	printf("Processing line: %s\n", map_line);
 	process_parse(map_line, scene, indices);
 }
