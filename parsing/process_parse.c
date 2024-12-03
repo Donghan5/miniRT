@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 15:01:06 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/02 15:20:24 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/03 00:15:03 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static void	process_parse_obj(int type, char *map_line, t_scene *scene, t_indice
 {
 	if (type == 3)
 	{
-		if (indices->l_idx >= scene->cylinder_n)
+		if (indices->l_idx >= scene->light_n)
 			handle_error("Index is out of range in light");
 		stock_light(scene, map_line, indices->l_idx++);
 	}
