@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render_scene.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:51:26 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/02 09:22:50 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/03 14:37:00 by pzinurov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,23 +89,24 @@ static double intersect_plane(t_ray ray, t_plane *plane)
     return t > EPSILON ? t : -1.0;
 }
 
-static double intersect_cylinder(t_ray ray, t_cylinder *cyl)
+static double intersect_cylinder_body(t_ray ray, t_cylinder *cyl)
 {
-    // Convert cylinder direction vector to unit vector
+    // Get normalized axis vector
     t_vec3 axis = vec3_normalize(cyl->axis_vector);
     t_vec3 center = cyl->coordinates;
     double radius = cyl->cy_diameter / 2.0;
-
+    
     // Calculate ray-cylinder intersection
     t_vec3 oc = vec3_sub(ray.origin, center);
-
-    double a = vec3_dot(ray.direction, ray.direction) -
+    
+    // Calculate quadratic equation coefficients
+    double a = vec3_dot(ray.direction, ray.direction) - 
                pow(vec3_dot(ray.direction, axis), 2);
-    double b = 2.0 * (vec3_dot(ray.direction, oc) -
+    double b = 2.0 * (vec3_dot(ray.direction, oc) - 
                vec3_dot(ray.direction, axis) * vec3_dot(oc, axis));
-    double c = vec3_dot(oc, oc) -
+    double c = vec3_dot(oc, oc) - 
                pow(vec3_dot(oc, axis), 2) - radius * radius;
-
+    
     double discriminant = b*b - 4*a*c;
     if (discriminant < 0)
         return -1.0;
@@ -114,15 +115,82 @@ static double intersect_cylinder(t_ray ray, t_cylinder *cyl)
     if (t < EPSILON)
         return -1.0;
 
-    // Check if intersection is within cylinder height
+    // Calculate intersection point
     t_vec3 hit_point = vec3_add(ray.origin, vec3_mul(ray.direction, t));
-    t_vec3 hit_height = vec3_sub(hit_point, center);
-    double height = vec3_dot(hit_height, axis);
+    
+    // Calculate height along cylinder axis
+    t_vec3 hit_vec = vec3_sub(hit_point, center);
+    double height = vec3_dot(hit_vec, axis);
 
+    // Check if intersection is within cylinder height
     if (height < 0 || height > cyl->cy_height)
         return -1.0;
 
     return t;
+}
+
+static double intersect_cylinder(t_ray ray, t_cylinder *cyl)
+{
+    t_vec3 axis = vec3_normalize(cyl->axis_vector);
+    t_vec3 center = cyl->coordinates;
+    double radius = cyl->cy_diameter / 2.0;
+    
+    // Check caps first
+    double t_cap = -1.0;
+    double denom = vec3_dot(ray.direction, axis);
+    
+    if (fabs(denom) > EPSILON) // Only check caps if ray isn't parallel to them
+    {
+        // Bottom cap
+        double t = -vec3_dot(vec3_sub(ray.origin, center), axis) / denom;
+        if (t > EPSILON)
+        {
+            t_vec3 p = vec3_add(ray.origin, vec3_mul(ray.direction, t));
+            if (vec3_dot(vec3_sub(p, center), vec3_sub(p, center)) <= radius * radius)
+                t_cap = t;
+        }
+
+        // Top cap
+        t = vec3_dot(vec3_sub(vec3_add(center, vec3_mul(axis, cyl->cy_height)), ray.origin), axis) / denom;
+        if (t > EPSILON && (t_cap < 0 || t < t_cap))
+        {
+            t_vec3 p = vec3_add(ray.origin, vec3_mul(ray.direction, t));
+            if (vec3_dot(vec3_sub(p, vec3_add(center, vec3_mul(axis, cyl->cy_height))), 
+                        vec3_sub(p, vec3_add(center, vec3_mul(axis, cyl->cy_height)))) <= radius * radius)
+                t_cap = t;
+        }
+    }
+
+    // Check cylinder body
+    t_vec3 oc = vec3_sub(ray.origin, center);
+    
+    double a = vec3_dot(ray.direction, ray.direction) - 
+               pow(vec3_dot(ray.direction, axis), 2);
+    double b = 2.0 * (vec3_dot(ray.direction, oc) - 
+               vec3_dot(ray.direction, axis) * vec3_dot(oc, axis));
+    double c = vec3_dot(oc, oc) - 
+               pow(vec3_dot(oc, axis), 2) - radius * radius;
+    
+    double discriminant = b*b - 4*a*c;
+    if (discriminant < 0)
+        return t_cap;  // Return cap intersection if it exists
+
+    double t = (-b - sqrt(discriminant)) / (2.0*a);
+    if (t < EPSILON)
+        return t_cap;  // Return cap intersection if it exists
+
+    // Calculate intersection point
+    t_vec3 hit_point = vec3_add(ray.origin, vec3_mul(ray.direction, t));
+    
+    // Calculate height along cylinder axis
+    double height = vec3_dot(vec3_sub(hit_point, center), axis);
+    
+    // Check if intersection is within cylinder height
+    if (height < 0 || height > cyl->cy_height)
+        return t_cap;  // Return cap intersection if it exists
+
+    // Return the closest intersection
+    return (t_cap < 0 || t < t_cap) ? t : t_cap;
 }
 
 static double check_shadow(t_info *info, t_vec3 hit_point, t_vec3 light_pos)
@@ -189,6 +257,11 @@ static t_color add_white_component(t_color base, double factor) {
     result.g = base.g + (int)(255.0 * factor);
     result.b = base.b + (int)(255.0 * factor);
     return result;
+}
+
+t_color t_color_add(t_color a, t_color b)
+{
+    return ((t_color){a.r + b.r, a.g + b.g, a.b + b.b});
 }
 
 // Helper function to trace a ray and get color
@@ -277,11 +350,30 @@ static t_color trace_ray(t_ray ray, t_info *info, int depth)
         else {  // Cylinder
         	t_cylinder *cyl = info->scene.cylinder[closest.index];
 			t_vec3 axis = vec3_normalize(cyl->axis_vector);
-			t_vec3 center = cyl->coordinates;
-			t_vec3 cp = vec3_sub(hit_point, center);
-			double height = vec3_dot(cp, axis);
-			t_vec3 axis_point = vec3_add(center, vec3_mul(axis, height));
-			normal = vec3_normalize(vec3_sub(hit_point, axis_point));
+
+			t_vec3 hit_point = vec3_add(ray.origin, vec3_mul(ray.direction, closest.t));
+			
+			// Check if we hit a cap
+			double height = vec3_dot(vec3_sub(hit_point, cyl->coordinates), axis);
+			if (fabs(height) < EPSILON || fabs(height - cyl->cy_height) < EPSILON)
+			{
+				// Cap normal points up or down
+				normal = height < EPSILON ? vec3_mul(axis, -1.0) : axis;
+			}
+			else
+			{
+				// Body normal calculation
+				t_vec3 cp = vec3_sub(hit_point, cyl->coordinates);
+				double proj = vec3_dot(cp, axis);
+				t_vec3 axis_point = vec3_add(cyl->coordinates, vec3_mul(axis, proj));
+				normal = vec3_normalize(vec3_sub(hit_point, axis_point));
+			}
+			
+			// t_vec3 center = cyl->coordinates;
+			// t_vec3 cp = vec3_sub(hit_point, center);
+			// double height = vec3_dot(cp, axis);
+			// t_vec3 axis_point = vec3_add(center, vec3_mul(axis, height));
+			// normal = vec3_normalize(vec3_sub(hit_point, axis_point));
 			base_color.r = cyl->color.r;
 			base_color.g = cyl->color.g;
 			base_color.b = cyl->color.b;
@@ -291,6 +383,12 @@ static t_color trace_ray(t_ray ray, t_info *info, int depth)
             reflectivity = 0.5;  // Medium reflection for cylinders
         }
 
+		t_color	total_diffuse = (t_color){0,0,0};
+		t_color	total_specular = (t_color){0,0,0};
+
+		// Calculate ambient component with ambient light color
+		t_color ambient_color = multiply_colors(base_color, amb.color, amb.a_ratio);
+		
 		for (int i = 0; i < info->scene.light_n; i++)
 		{
 			t_light	*light = info->scene.light[i];
@@ -302,25 +400,17 @@ static t_color trace_ray(t_ray ray, t_info *info, int depth)
 
 			double shadow = check_shadow(info, vec3_add(hit_point, vec3_mul(normal, EPSILON)), light_pos);
 
-			// // Calculate base lighting
-			// double ambient = amb.a_ratio;
-			// double n_dot_l = fmax(0.0, vec3_dot(normal, light_dir));
-			// double diffuse = n_dot_l * diffuse_strength * light.l_brightness * shadow;
-			// double spec = pow(fmax(0.0, vec3_dot(view_dir, reflect_dir)), shininess) * spec_intensity * shadow;
-
-			// // Set base color
-			// result.r = base_color.r * (ambient + diffuse) + 255.0 * spec;
-			// result.g = base_color.g * (ambient + diffuse) + 255.0 * spec;
-			// result.b = base_color.b * (ambient + diffuse) + 255.0 * spec;
-
 			// Calculate base lighting
-			double ambient = amb.a_ratio;
 			double n_dot_l = fmax(0.0, vec3_dot(normal, light_dir));
 			double diffuse = n_dot_l * diffuse_strength * light->l_brightness * shadow;
 			double spec = pow(fmax(0.0, vec3_dot(view_dir, reflect_dir)), shininess) * spec_intensity * shadow;
 
-			// Calculate ambient component with ambient light color
-			t_color ambient_color = multiply_colors(base_color, amb.color, ambient);
+			t_vec3 to_light = vec3_sub(light_pos, hit_point);  // Vector from hit point to light
+			double distance = sqrt(vec3_dot(to_light, to_light));  // Length of this vector
+
+			// double attenuation = 1.0 / (1.0 + 0.009 * distance + 0.0009 * distance * distance);
+			// diffuse *= attenuation;
+			// spec *= attenuation;
 
 			// Calculate diffuse component with light color
 			t_color diffuse_color = multiply_colors(base_color, light->color, diffuse);
@@ -330,12 +420,14 @@ static t_color trace_ray(t_ray ray, t_info *info, int depth)
 				(t_color){0, 0, 0},  // Start with black
 				spec * light->l_brightness
 			);
-
-			// Combine all components
-			result.r = fmin(255, ambient_color.r + diffuse_color.r + specular_color.r);
-			result.g = fmin(255, ambient_color.g + diffuse_color.g + specular_color.g);
-			result.b = fmin(255, ambient_color.b + diffuse_color.b + specular_color.b);
+			
+			total_diffuse = t_color_add(total_diffuse, diffuse_color);
+			total_specular = t_color_add(total_specular, specular_color);
 		}
+		
+		result.r = fmin(255, ambient_color.r + total_diffuse.r + total_specular.r);
+		result.g = fmin(255, ambient_color.g + total_diffuse.g + total_specular.g);
+		result.b = fmin(255, ambient_color.b + total_diffuse.b + total_specular.b);
 
         // Add reflection if surface is reflective
         if (reflectivity > 0.0 && depth < MAX_REFLECTION_DEPTH) {
@@ -357,15 +449,6 @@ static t_color trace_ray(t_ray ray, t_info *info, int depth)
     return result;
 }
 
-//this is not allowed!
-long	get_current_time_ms(void)
-{
-	struct timeval	tv;
-
-	gettimeofday(&tv, NULL);
-	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
-}
-
 void put_pixels_to_image(t_info *info, int y, int x, t_color pixel_color)
 {
 	unsigned int	color;
@@ -375,7 +458,7 @@ void put_pixels_to_image(t_info *info, int y, int x, t_color pixel_color)
 
 	i = 0;
 	scale = 1;
-    if (info->render_type == LOW_RENDER)
+    if (info->toggle_mode != TOGGLE_FULL && info->render_type == LOW_RENDER)
         scale = 8;
 	color = (pixel_color.r << 16) | (pixel_color.g << 8) | pixel_color.b;
 	while (i < scale && (y + i) < SCREEN_HEIGHT) {
@@ -399,7 +482,7 @@ void render_scene(t_info *info)
 	t_ray	ray;
 
     scale = 1;
-    if (info->render_type == LOW_RENDER)
+    if (info->toggle_mode != TOGGLE_FULL && info->render_type == LOW_RENDER)
         scale = 8;
 	y = 0;
 	while (y < SCREEN_HEIGHT)
@@ -418,8 +501,8 @@ void render_scene(t_info *info)
 		}
 		y += scale;
 	}
-    if (info->render_type == LOW_RENDER)
+    if (info->render_type == LOW_RENDER && info->toggle_mode == TOGGLE_OFF)
         info->render_type = FULL_RENDER;
-    else if (info->render_type != NO_RENDER)
+    else
         info->render_type = NO_RENDER;
 }

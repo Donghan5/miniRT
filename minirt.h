@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:40:16 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/02 15:02:25 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/03 14:45:21 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,17 +21,22 @@
 # include <errno.h>
 # include <float.h>
 # include <sys/time.h>
-// # define SCREEN_HEIGHT 1080
-// # define SCREEN_WIDTH 1920
-# define SCREEN_HEIGHT 500
-# define SCREEN_WIDTH 700
+# define SCREEN_HEIGHT 500 //1080
+# define SCREEN_WIDTH 700 //1920
 # define MAX_REFLECTION_DEPTH 3
 # define EPSILON 0.0001
-# define SCROLL_DELAY 300
 # define PARSE_ERR "Fail to parse"
 # define PARSE_RGB_ERR "Fail to parse RGB"
 # define COOR_ERR "Fail to coordinate parse"
 # define ORI_ERR "Fail to orientation parse"
+
+typedef struct s_indices
+{
+	int	sp_idx;
+	int	pl_idx;
+	int	cy_idx;
+	int	l_idx;
+}			t_indices;
 
 typedef struct s_vec3 {
     double	x;
@@ -120,36 +125,43 @@ enum e_render_type
 {
 	NO_RENDER,
 	LOW_RENDER,
-	FULL_RENDER
+	FULL_RENDER,
+	TOGGLE_OFF,
+	TOGGLE_LOW,
+	TOGGLE_FULL
 };
 
+typedef struct s_key_state
+{
+	int	forward;
+	int	backward;
+	int	left;
+	int	right;
+}				t_key_state;
+
+/*
+	Rotating camera modes:
+		0 - no rotation
+		1 - just rotation
+		2 - rotation with direction of movement change
+*/
 typedef struct s_info
 {
 	t_data	*img;
 	t_scene	scene;
 	void	*mlx;
 	void	*win;
-	int		moving_map;
-	int		rotating_map;
+	int		rotate_camera;
 	int		moving_text;
 	int		moving_origin_x;
 	int		moving_origin_y;
 	int		text_x;
 	int		text_y;
 	int		is_input;
-	int		latest_key;
 	long	last_scroll_time;
 	int		render_type;
+	int		toggle_mode;
 }				t_info;
-
-// struct of index sphere, plane and cylinder
-typedef struct s_indices
-{
-	int	sp_idx;
-	int	pl_idx;
-	int	cy_idx;
-	int	l_idx;
-}			t_indices;
 
 t_vec3 vec3(double x, double y, double z);
 
@@ -169,8 +181,6 @@ t_vec3 vec3_reflect(t_vec3 v, t_vec3 n);
 
 t_vec3 vec3_cross(t_vec3 a, t_vec3 b);
 
-long	get_current_time_ms(void);
-
 double	ft_atod(const char *str);
 
 int		isEqual(double a, double b);
@@ -189,6 +199,8 @@ void	ft_putstr_fd(char *s, int fd);
 void	render_scene(t_info *info);
 int		close_window(t_info *info);
 int		render_next_frame(t_info *info);
+
+void	handle_map_check(char *map_line, t_scene *scene, t_indices *indices);
 
 // init.c
 void	init_scene(char *path, t_scene *scene);
@@ -224,6 +236,4 @@ void	stock_plane(t_scene *scene, char *info_map, int pl_idx);
 void	stock_sphere(t_scene *scene, char *info_map, int sp_idx);
 void	stock_cylinder(t_scene *scene, char *info_map, int cy_idx);
 
-//process_parse.c
-void	handle_map_check(char *map_line, t_scene *scene, t_indices *indices);
 #endif

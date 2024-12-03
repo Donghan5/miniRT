@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 15:01:06 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/03 00:15:03 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/03 14:44:42 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ static void	process_parse(char *map_line, t_scene *scene, t_indices *indices)
 	else if (type == 0)
 		handle_error_free(map_line, "Invalid type!!");
 }
+
 /*
 	checking validity of the map and contain the process of stock
 	@param

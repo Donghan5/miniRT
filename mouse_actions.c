@@ -6,7 +6,7 @@
 /*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:49:06 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/11/28 19:28:19 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/12/03 11:49:36 by pzinurov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,21 +26,29 @@ int	mouse_clicks(int keycode, int x, int y, t_info *info)
 		}
 		info->moving_origin_x = x;
 		info->moving_origin_y = y;
-		info->moving_map = 1;
+		info->rotate_camera = 2;
 	}
 	else if (keycode == 3)
 	{
-		//null
+		info->moving_origin_x = x;
+		info->moving_origin_y = y;
+		info->rotate_camera = 1;
 	}
 	else if (keycode == 4)
 	{
-		info->last_scroll_time = get_current_time_ms();
 		info->scene.camera.coordinates.y++;
+		if (info->toggle_mode == TOGGLE_FULL)
+			info->render_type = FULL_RENDER;
+		else
+			info->render_type = LOW_RENDER;
 	}
 	else if (keycode == 5)
 	{
-		info->last_scroll_time = get_current_time_ms();
 		info->scene.camera.coordinates.y--;
+		if (info->toggle_mode == TOGGLE_FULL)
+			info->render_type = FULL_RENDER;
+		else
+			info->render_type = LOW_RENDER;
 	}
 	return (0);
 }
@@ -50,8 +58,8 @@ int	mouse_off(int keycode, int x, int y, t_info *info)
 	(void)keycode;
 	(void)x;
 	(void)y;
-	if (info->moving_map)
-		info->moving_map = 0;
+	if (info->rotate_camera)
+		info->rotate_camera = 0;
 	if (info->moving_text)
 		info->moving_text = 0;
 	return (0);
@@ -59,38 +67,31 @@ int	mouse_off(int keycode, int x, int y, t_info *info)
 
 int	mouse_moves(int x, int y, t_info *info)
 {
-	static int	limit_moves;
-	static double yaw = 0.0;    // Horizontal rotation
-	static double pitch = 0.0;  // Vertical rotation
+	static int		limit_moves;
+	static double	yaw;
+	static double	pitch;
+	double			dx;
+	double			dy;
 
-   if (info->moving_map)
-    {
-        // Convert mouse movement to angles with reduced sensitivity
-        double dx = (x - info->moving_origin_x) * 0.005;  // Horizontal rotation (yaw)
-        double dy = (y - info->moving_origin_y) * 0.005;  // Vertical rotation (pitch)
+	if (info->rotate_camera)
+	{
+		dx = (x - info->moving_origin_x) * 0.005;
+		dy = (y - info->moving_origin_y) * 0.005;
 
-        // Update angles with smoother motion
-        yaw -= dx;
-        pitch = fmax(-M_PI/2, fmin(M_PI/2, pitch - dy));  // Clamp vertical rotation
+		yaw -= dx;
+		pitch = fmax(-M_PI/2, fmin(M_PI/2, pitch - dy));
 
-        // Convert angles to normalized direction vector (z,y,x order to match convention)
-        info->scene.camera.orientation.x = cos(pitch) * sin(yaw);
-        info->scene.camera.orientation.y = sin(pitch);
-        info->scene.camera.orientation.z = cos(pitch) * cos(yaw);
+		info->scene.camera.orientation.x = cos(pitch) * sin(yaw);
+		info->scene.camera.orientation.y = sin(pitch);
+		info->scene.camera.orientation.z = cos(pitch) * cos(yaw);
 
-        // Update origin for next movement
-        info->moving_origin_x = x;
-        info->moving_origin_y = y;
-    }
+		info->moving_origin_x = x;
+		info->moving_origin_y = y;
+	}
 	else if (info->moving_text)
 	{
 		info->text_x = x - info->moving_origin_x;
 		info->text_y = y - info->moving_origin_y;
 	}
-	else
-		return (0);
-	// if (limit_moves--)
-	// 	return (0);
-	// limit_moves = 7;
 	return (0);
 }

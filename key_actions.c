@@ -6,24 +6,27 @@
 /*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:48:58 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/11/26 23:04:48 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/12/03 12:18:31 by pzinurov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-// Key state tracking
-typedef struct s_key_state {
-    int forward;     // W
-    int backward;    // S
-    int left;        // A
-    int right;       // D
-}				t_key_state;
-
-static t_key_state keys = {0, 0, 0, 0};
-
 static void apply_movement(t_info *info, double forward, double sideways)
 {
+	if (info->rotate_camera == 1)
+	{
+		if (forward > 0)
+			info->scene.camera.coordinates.z++;
+		else if (forward < 0)
+			info->scene.camera.coordinates.z--;
+		else if (sideways > 0)
+			info->scene.camera.coordinates.x++;
+		else if (sideways < 0)
+			info->scene.camera.coordinates.x--;
+		return ;
+	}
+
     // Get directional vector from camera orientation angles
     double yaw = atan2(info->scene.camera.orientation.x, info->scene.camera.orientation.z);
     
@@ -48,13 +51,43 @@ static void apply_movement(t_info *info, double forward, double sideways)
     }
 }
 
-static void update_movement(t_info *info)
+void	update_key_states(t_info *info, t_key_state *keys, int keycode, int is_pressed)
+{
+	if (is_pressed)
+	{
+		if (keycode == 65361 || keycode == 97)
+			keys->left = 1;
+		else if (keycode == 65363 || keycode == 100)
+			keys->right = 1;
+		else if (keycode == 65362 || keycode == 119)
+			keys->forward = 1;
+		else if (keycode == 65364 || keycode == 115)
+			keys->backward = 1;
+	}
+	else
+	{
+		if (keycode == 65361 || keycode == 97)
+			keys->left = 0;
+		else if (keycode == 65363 || keycode == 100)
+			keys->right = 0;
+		else if (keycode == 65362 || keycode == 119)
+			keys->forward = 0;
+		else if (keycode == 65364 || keycode == 115)
+			keys->backward = 0;
+		if (!keys->left && !keys->backward && !keys->forward && !keys->right)
+			info->is_input = 0;
+	}
+}
+
+static void update_movement(t_info *info, int keycode, int is_pressed)
 {
     double	forward;
     double	sideways;
+	static t_key_state	keys;
 
 	forward = 0;
 	sideways = 0;
+	update_key_states(info, &keys, keycode, is_pressed);
     if (keys.forward)
         forward += 2.0;
     if (keys.backward)
@@ -72,15 +105,26 @@ static void update_movement(t_info *info)
 
 static void simple_key_actions(int keycode, t_info *info)
 {
-    if (keycode == 65361 || keycode == 97)
-        keys.left = 1;
-    else if (keycode == 65363 || keycode == 100)
-        keys.right = 1;
-    else if (keycode == 65362 || keycode == 119)
-        keys.forward = 1;
-    else if (keycode == 65364 || keycode == 115)
-        keys.backward = 1;
-    update_movement(info);
+	if (keycode == 49 && info->toggle_mode != TOGGLE_LOW)
+	{
+		info->render_type = LOW_RENDER;
+		info->toggle_mode = TOGGLE_LOW;
+	}
+	else if (keycode == 50 && info->toggle_mode != TOGGLE_FULL)
+	{
+		info->render_type = FULL_RENDER;
+		info->toggle_mode = TOGGLE_FULL;
+	}
+	else if (keycode == 49)
+	{
+		info->render_type = FULL_RENDER;
+		info->toggle_mode = TOGGLE_OFF;
+	}
+	else if (keycode == 50)
+	{
+		info->render_type = LOW_RENDER;
+		info->toggle_mode = TOGGLE_OFF;
+	}
 }
 
 int key_pressed(int keycode, t_info *info)
@@ -88,23 +132,15 @@ int key_pressed(int keycode, t_info *info)
     if (keycode == 65307 || keycode == 113)
         close_window(info);
     else
+	{
         simple_key_actions(keycode, info);
+		update_movement(info, keycode, 1);
+	}
     return (0);
 }
 
 int key_off(int keycode, t_info *info)
 {
-    if (keycode == 65361 || keycode == 97)
-        keys.left = 0;
-    if (keycode == 65363 || keycode == 100)
-        keys.right = 0;
-    if (keycode == 65362 || keycode == 119)
-        keys.forward = 0;
-    if (keycode == 65364 || keycode == 115)
-        keys.backward = 0;
-	if (!keys.left && !keys.backward && !keys.forward && !keys.right)
-		info->is_input = 0;
-	else
-    	update_movement(info);
+    update_movement(info, keycode, 0);
     return (0);
 }
