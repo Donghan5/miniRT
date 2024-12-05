@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:39:54 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/03 12:36:53 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/12/04 23:41:09 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,33 +138,76 @@ void print_scene_info(t_scene *scene) {
     }
     printf("\n");
 }
-int	main(int argc, char **argv)
+// int	main(int argc, char **argv)
+// {
+// 	void	*mlx;
+// 	void	*mlx_win;
+// 	t_data	img;
+// 	t_info	info;
+
+// 	if (argc != 2)
+// 		exit_error(info.scene, 0, "Wrong arguments. Format: ./miniRT \"path_to_rt_scene\"");
+// 	// if (!check_map(argv[1]))
+// 	// 	handle_error("Invaild map name, verify once again");
+// 	mlx = mlx_init();
+// 	mlx_win = mlx_new_window(mlx, SCREEN_WIDTH, SCREEN_HEIGHT, "miniRT");
+// 	img.img = mlx_new_image(mlx, SCREEN_WIDTH, SCREEN_HEIGHT);
+// 	img.addr = mlx_get_data_addr(img.img,
+// 			&img.bits_per_pixel, &img.line_length, &img.endian);
+// 	info.img = &img;
+// 	info.mlx = mlx;
+// 	info.win = mlx_win;
+// 	info_initializer(&info);
+// 	parse_scene(argv[1], &info.scene);
+// 	print_scene_info(&info.scene);
+
+// 	render_next_frame(&info);
+// 	install_hooks(&info);
+// 	mlx_loop_hook(info.mlx, render_next_frame, &info);
+// 	mlx_loop(info.mlx);
+// 	// free_scene(&info.scene);
+// 	return (0);
+// }
+
+int    main(int argc, char **argv)
 {
-	void	*mlx;
-	void	*mlx_win;
-	t_data	img;
-	t_info	info;
+    void    *mlx;
+    void    *mlx_win;
+    t_data    img;
+    t_info    info;
 
-	if (argc != 2)
-		exit_error(info.scene, 0, "Wrong arguments. Format: ./miniRT \"path_to_rt_scene\"");
-	// if (!check_map(argv[1]))
-	// 	handle_error("Invaild map name, verify once again");
-	mlx = mlx_init();
-	mlx_win = mlx_new_window(mlx, SCREEN_WIDTH, SCREEN_HEIGHT, "miniRT");
-	img.img = mlx_new_image(mlx, SCREEN_WIDTH, SCREEN_HEIGHT);
-	img.addr = mlx_get_data_addr(img.img,
-			&img.bits_per_pixel, &img.line_length, &img.endian);
-	info.img = &img;
-	info.mlx = mlx;
-	info.win = mlx_win;
-	info_initializer(&info);
-	parse_scene(argv[1], &info.scene);
-	print_scene_info(&info.scene);
+    if (argc != 2)
+        exit_error(info.scene, 0, "Wrong arguments. Format: ./miniRT ""path_to_rt_scene""");
+    // if (!check_map(argv[1]))
+    //     handle_error("Invaild map name, verify once again");
+    parse_scene(argv[1], &info.scene);
+    mlx = mlx_init();
+    mlx_win = mlx_new_window(mlx, SCREEN_WIDTH, SCREEN_HEIGHT, "miniRT");
+    img.img = mlx_new_image(mlx, SCREEN_WIDTH, SCREEN_HEIGHT);
+    img.addr = mlx_get_data_addr(img.img,
+            &img.bits_per_pixel, &img.line_length, &img.endian);
+    info.img = &img;
+    info.mlx = mlx;
+    info.win = mlx_win;
+    info_initializer(&info);
+    // print_scene_info(&info.scene);
 
-	render_next_frame(&info);
-	install_hooks(&info);
-	mlx_loop_hook(info.mlx, render_next_frame, &info);
-	mlx_loop(info.mlx);
-	// free_scene(&info.scene);
-	return (0);
+    // render_next_frame(&info);
+    // install_hooks(&info);
+    // mlx_loop_hook(info.mlx, render_next_frame, &info);
+    // mlx_loop(info.mlx);
+
+    printf("Passed\n");
+
+    mlx_destroy_window(info.mlx, info.win);
+    mlx_destroy_image(info.mlx, info.img->img);
+    mlx_destroy_display(info.mlx);
+
+
+    free_scene(&info.scene);
+
+
+    free(info.mlx);
+    exit(0);
+    return (0);
 }

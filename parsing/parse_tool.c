@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 12:13:29 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/01 21:30:21 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/04 23:58:39 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,19 +45,21 @@ int	get_type(char *map_info)
 	sep_info = ft_split(map_info, ' ');
 	if (sep_info == NULL)
 		return (printf("%s\n", PARSE_ERR), 0);
+	if (sep_info[0] == NULL)
+		return(free_doub_array(sep_info), printf("Missing type"), 0);
 	if ((ft_strncmp("A", sep_info[0], 1) == 0))
-		return (1);
+		return (free_doub_array(sep_info), 1);
 	else if ((ft_strncmp("C", sep_info[0], 1) == 0))
-		return (2);
+		return (free_doub_array(sep_info), 2);
 	else if ((ft_strncmp("L", sep_info[0], 1) == 0))
-		return (3);
+		return (free_doub_array(sep_info), 3);
 	else if ((ft_strncmp("pl", sep_info[0], 2) == 0))
-		return (4);
+		return (free_doub_array(sep_info), 4);
 	else if ((ft_strncmp("sp", sep_info[0], 2) == 0))
-		return (5);
+		return (free_doub_array(sep_info), 5);
 	else if ((ft_strncmp("cy", sep_info[0], 2) == 0))
-		return (6);
-	return (0);
+		return (free_doub_array(sep_info), 6);
+	return (free_doub_array(sep_info), printf("Unkown: %s\n", sep_info[0]), 0);
 }
 
 /*
