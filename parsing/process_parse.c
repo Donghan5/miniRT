@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 15:01:06 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/03 14:44:42 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/05 12:57:08 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ static void	handle_error_free(char *map_line, char *msg)
 		scene: information to render
 		indices: the structure index
 */
-static void	process_parse_obj(int type, char *map_line, t_scene *scene, t_indices *indices)
+static void	parse_obj(int type, char *map_line, \
+				t_scene *scene, t_indices *indices)
 {
 	if (type == 3)
 	{
@@ -76,9 +77,11 @@ static void	process_parse(char *map_line, t_scene *scene, t_indices *indices)
 	if (type == 1 || type == 2)
 		stock_infos(type, scene, map_line);
 	else if (type >= 3 && type <= 6)
-		process_parse_obj(type, map_line, scene, indices);
+		parse_obj(type, map_line, scene, indices);
 	else if (type == 0)
+	{
 		handle_error_free(map_line, "Invalid type!!");
+	}
 }
 
 /*
@@ -94,4 +97,21 @@ void	handle_map_check(char *map_line, t_scene *scene, t_indices *indices)
 		return ;
 	printf("Processing line: %s\n", map_line);
 	process_parse(map_line, scene, indices);
+}
+
+void	free_just_scene(t_scene *scene)
+{
+	int	i;
+	int	j;
+	int	k;
+
+	i = 0;
+	j = 0;
+	k = 0;
+	while (i < scene->sphere_n)
+		free(scene->sphere[i++]);
+	while (j < scene->plane_n)
+		free(scene->plane[j]);
+	while (k < scene->cylinder_n)
+		free(scene->cylinder)
 }

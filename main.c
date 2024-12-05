@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:39:54 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/04 23:41:09 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/05 12:52:43 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,35 +20,26 @@ int	close_window(t_info *info)
 	mlx_destroy_image(info->mlx, info->img->img);
 	mlx_destroy_display(info->mlx);
 	i = 0;
-	if ((info->scene.cylinder_n > 0) && info->scene.cylinder)
-	{
-		if (info->scene.cylinder[i])
-			free(info->scene.cylinder[i]);
-		i++;
-	}
+	while ((i < info->scene.cylinder_n) && info->scene.cylinder && info->scene.cylinder[i])
+		free(info->scene.cylinder[i++]);
 	if (i)
 		free (info->scene.cylinder);
 	i = 0;
-	if ((info->scene.sphere_n > 0) && info->scene.sphere)
-	{
-		if (info->scene.sphere[i])
-			free(info->scene.sphere[i]);
-		i++;
-	}
+	while ((i < info->scene.sphere_n) && info->scene.sphere && info->scene.sphere[i])
+		free(info->scene.sphere[i++]);
 	if (i)
 		free (info->scene.sphere);
 	i = 0;
-	if ((info->scene.plane_n > 0) && info->scene.plane)
-	{
-		if (info->scene.plane[i])
-			free(info->scene.plane[i]);
-		i++;
-	}
+	while ((i < info->scene.plane_n) && info->scene.plane && info->scene.plane[i])
+		free(info->scene.plane[i++]);
 	if (i)
 		free (info->scene.plane);
-	free(info->mlx);
-	exit(0);
-	return (0);
+	i = 0;
+	while ((i < info->scene.light_n) && info->scene.light && info->scene.light[i])
+		free(info->scene.light[i++]);
+	if (i)
+		free (info->scene.light);
+	return (free(info->mlx), exit (0), 0);
 }
 
 void	install_hooks(t_info *info)
