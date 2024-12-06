@@ -1,9 +1,10 @@
 SRC = main.c frame_render.c key_actions.c mouse_actions.c tools.c render_scene.c vector_operations.c ft_atod.c
 SRC += parsing/init_shape.c parsing/init.c parsing/parse_tool.c parsing/parse_utils.c parsing/parsing.c \
-	parsing/process_parse.c parsing/stock_basic.c parsing/stock_plane.c parsing/stock_cylinder.c
+	parsing/process_parse.c parsing/stock_basic.c parsing/stock_plane.c parsing/stock_cylinder.c \
+	parsing/stock_light.c parsing/stock_ambient.c parsing/stock_cam.c parsing/stock_sphere.c
 
 OBJ = $(SRC:.c=.o)
-CFLAGS = #-Wall -Wextra -Werror
+CFLAGS = -g3 #-Wall -Wextra -Werror
 
 DEPS = $(SRC:.c=.d)
 

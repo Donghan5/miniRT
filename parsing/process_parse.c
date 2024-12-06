@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 15:01:06 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/05 12:57:08 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/05 23:05:10 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ static void	process_parse(char *map_line, t_scene *scene, t_indices *indices)
 		parse_obj(type, map_line, scene, indices);
 	else if (type == 0)
 	{
+		free_just_scene(scene);
 		handle_error_free(map_line, "Invalid type!!");
 	}
 }
@@ -104,6 +105,7 @@ void	free_just_scene(t_scene *scene)
 	int	i;
 	int	j;
 	int	k;
+	int	l;
 
 	i = 0;
 	j = 0;
@@ -111,7 +113,9 @@ void	free_just_scene(t_scene *scene)
 	while (i < scene->sphere_n)
 		free(scene->sphere[i++]);
 	while (j < scene->plane_n)
-		free(scene->plane[j]);
+		free(scene->plane[j++]);
 	while (k < scene->cylinder_n)
-		free(scene->cylinder)
+		free(scene->cylinder[k++]);
+	while (l < scene->light_n)
+		free(scene->light[l++]);
 }

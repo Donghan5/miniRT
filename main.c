@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:39:54 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/05 12:52:43 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/05 23:05:19 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,14 +188,14 @@ int    main(int argc, char **argv)
     // mlx_loop_hook(info.mlx, render_next_frame, &info);
     // mlx_loop(info.mlx);
 
-    printf("Passed\n");
+    printf("Passed rendering\n");
 
     mlx_destroy_window(info.mlx, info.win);
     mlx_destroy_image(info.mlx, info.img->img);
     mlx_destroy_display(info.mlx);
 
 
-    free_scene(&info.scene);
+    // free_scene(&info.scene);
 
 
     free(info.mlx);
