@@ -6,11 +6,26 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 00:48:43 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/06 01:25:09 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/08 10:57:31 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
+
+/*
+	checking the range of the RGB value
+	@param
+		rgb_infos: rgb information to free
+*/
+static void	check_range(char **rgb_infos)
+{
+	if (ft_atoi(rgb_infos[0]) > 255 || ft_atoi(rgb_infos[1]) > 255 || ft_atoi(rgb_infos[2]) > 255)
+	{
+		free_doub_array(rgb_infos);
+		handle_error("RGB value, out of range");
+		printf("Is it working check_range");
+	}
+}
 
 /*
 	stock coordinate information
@@ -35,12 +50,12 @@ static void	stock_coord(t_scene *scene, char **coord_info, int l_idx)
 */
 static void	stock_rgb(t_scene *scene, char **rgb_infos, int l_idx)
 {
-	if (ft_strncmp(rgb_infos[0], ".", 1) == 0 || ft_strncmp(rgb_infos[1], ".", 1) == 0 || ft_strncmp(rgb_infos[2], ".", 1) == 0)
+	if (ft_strchr(rgb_infos[0], '.')|| ft_strchr(rgb_infos[1], '.')|| ft_strchr(rgb_infos[2], '.'))
 	{
 		free_doub_array(rgb_infos);
 		handle_error("Invalid rgb value type");
-		return ;
 	}
+	check_range(rgb_infos);
 	scene->light[l_idx]->color.r = ft_atoi(rgb_infos[0]);
 	scene->light[l_idx]->color.g = ft_atoi(rgb_infos[1]);
 	scene->light[l_idx]->color.b = ft_atoi(rgb_infos[2]);

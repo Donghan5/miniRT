@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 12:13:29 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/05 23:04:34 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/08 21:44:34 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,26 +38,57 @@
 		type (1 to 6): success
 		0: fail
 */
+// int	get_type(char *map_info)
+// {
+// 	char	**sep_info;
+
+// 	sep_info = ft_split(map_info, ' ');
+// 	if (sep_info == NULL)
+// 		return (printf("%s\n", PARSE_ERR), 0);
+// 	if ((ft_strncmp("A", sep_info[0], 1) == 0))
+// 		return (1);
+// 	else if ((ft_strncmp("C", sep_info[0], 1) == 0))
+// 		return (2);
+// 	else if ((ft_strncmp("L", sep_info[0], 1) == 0))
+// 		return (3);
+// 	else if ((ft_strncmp("pl", sep_info[0], 2) == 0))
+// 		return (4);
+// 	else if ((ft_strncmp("sp", sep_info[0], 2) == 0))
+// 		return (5);
+// 	else if ((ft_strncmp("cy", sep_info[0], 2) == 0))
+// 		return (6);
+// 	return (0);
+// }
+
+/*
+	this one is test prototype
+*/
 int	get_type(char *map_info)
 {
-	char	**sep_info;
+	char	**sep;
+	int		type;
 
-	sep_info = ft_split(map_info, ' ');
-	if (sep_info == NULL)
+	type = 0;
+	sep = ft_split(map_info, ' ');
+	if (sep == NULL)
 		return (printf("%s\n", PARSE_ERR), 0);
-	if ((ft_strncmp("A", sep_info[0], 1) == 0))
-		return (1);
-	else if ((ft_strncmp("C", sep_info[0], 1) == 0))
-		return (2);
-	else if ((ft_strncmp("L", sep_info[0], 1) == 0))
-		return (3);
-	else if ((ft_strncmp("pl", sep_info[0], 2) == 0))
-		return (4);
-	else if ((ft_strncmp("sp", sep_info[0], 2) == 0))
-		return (5);
-	else if ((ft_strncmp("cy", sep_info[0], 2) == 0))
-		return (6);
-	return (0);
+	if (sep[0] == NULL)
+		return (free_doub_array(sep), printf("Missing type"), 0);
+	if (sep[0][0] == 'A' && sep[0][1] == '\0')
+		type = 1;
+	else if (sep[0][0] == 'C' && sep[0][1] == '\0')
+		type = 2;
+	else if (sep[0][0] == 'L' && sep[0][1] == '\0')
+		type = 3;
+	else if (sep[0][0] == 'p' && sep[0][1] == 'l' && sep[0][2] == '\0')
+		type = 4;
+	else if (sep[0][0] == 's' && sep[0][1] == 'p' && sep[0][2] == '\0')
+		type = 5;
+	else if (sep[0][0] == 'c' && sep[0][1] == 'y' && sep[0][2] == '\0')
+		type = 6;
+	else
+		return (free_doub_array(sep), 0);
+	return (free_doub_array(sep), type);
 }
 
 /*

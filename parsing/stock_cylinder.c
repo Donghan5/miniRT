@@ -6,11 +6,26 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 22:39:04 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/04 22:54:55 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/08 10:57:24 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
+
+/*
+	checking the range of the RGB value
+	@param
+		rgb_infos: rgb information to free
+*/
+static void	check_range(char **rgb_infos)
+{
+	if (ft_atoi(rgb_infos[0]) > 255 || ft_atoi(rgb_infos[1]) > 255 || ft_atoi(rgb_infos[2]) > 255)
+	{
+		free_doub_array(rgb_infos);
+		handle_error("RGB value, out of range");
+		printf("Is it working check_range");
+	}
+}
 
 /*
 	helper function of stock coordinate
@@ -49,6 +64,12 @@ static void	stock_axis_vec(t_scene *scene, char **orient_info, int cy_idx)
 */
 static void	stock_rgb(t_scene *scene, char **rgb_infos, int cy_idx)
 {
+	if (ft_strchr(rgb_infos[0], '.')|| ft_strchr(rgb_infos[1], '.')|| ft_strchr(rgb_infos[2], '.'))
+	{
+		free_doub_array(rgb_infos);
+		handle_error("Invalid rgb value type");
+	}
+	check_range(rgb_infos);
 	scene->cylinder[cy_idx]->color.r = ft_atoi(rgb_infos[0]);
 	scene->cylinder[cy_idx]->color.g = ft_atoi(rgb_infos[1]);
 	scene->cylinder[cy_idx]->color.b = ft_atoi(rgb_infos[2]);

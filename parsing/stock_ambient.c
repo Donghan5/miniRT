@@ -6,23 +6,41 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 23:06:48 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/06 00:57:44 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/08 10:57:40 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
 /*
+	checking the range of the RGB value
+	@param
+		rgb_infos: rgb information to free
+*/
+static void	check_range(char **rgb_infos)
+{
+	if (ft_atoi(rgb_infos[0]) > 255 || ft_atoi(rgb_infos[1]) > 255 || ft_atoi(rgb_infos[2]) > 255)
+	{
+		free_doub_array(rgb_infos);
+		handle_error("RGB value, out of range");
+		printf("Is it working check_range");
+	}
+}
+
+/*
 	stock the rgb value and check int or double
+	@param
+		scene: to render
+		rgb_infos: information of RGB
 */
 static void	stock_rgb(t_scene *scene, char **rgb_infos)
 {
-	if (ft_strncmp(rgb_infos[0], ".", 1) == 0 || ft_strncmp(rgb_infos[1], ".", 1) == 0 || ft_strncmp(rgb_infos[2], ".", 1) == 0)
+	if (ft_strchr(rgb_infos[0], '.')|| ft_strchr(rgb_infos[1], '.')|| ft_strchr(rgb_infos[2], '.'))
 	{
 		free_doub_array(rgb_infos);
 		handle_error("Invalid rgb value type");
-		return ;
 	}
+	check_range(rgb_infos);
 	scene->ambient.color.r = ft_atoi(rgb_infos[0]);
 	scene->ambient.color.g = ft_atoi(rgb_infos[1]);
 	scene->ambient.color.b = ft_atoi(rgb_infos[2]);

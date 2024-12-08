@@ -1,8 +1,10 @@
 # spsdfsdf -12,6,25 6 255,255,255
 # sp -12,6,25ffffff 6 255,255,255
-# sp -12,6,25 6 255,255,255 sp
+sp -12,6,25 6 255,255,255 sp
 # sp -12,6,25 6 -255,-255,-255 #(I assume it's wrong)
 # L -30,15,0 12 255,209,163 # (should be between 0-1)
-sp -8,4,35 4 200,200,255.6 # (double instead of int)
+#sp -8,4,35 4 200,200,255.6 # (double instead of int)
 # sp -12,6,25 6 255,   255,  255 # crash
+# sp -12,6,25 6 255,255,256 # case out of range
 # sp 8,4,35 255,200,200 # wrong error msg
+#sp -12,6,25 6 255,255,255
