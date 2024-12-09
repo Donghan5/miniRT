@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 12:13:29 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/09 15:59:58 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/09 23:52:48 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ static void	check_double(char **sep)
 
 	i = 0;
 	init_count(&count);
-	while (sep[i])
+	while (sep[i] != NULL)
 	{
 		if (sep[i][0] == 'A' && sep[i][1] == '\0')
 			count.a_count++;
@@ -95,9 +95,33 @@ static void	check_double(char **sep)
 		if (count.a_count > 1 || count.c_count > 1 || count.l_count > 1 \
 			|| count.pl_count > 1 || count.sp_count > 1 || count.cy_count > 1 \
 			|| count.co_count > 1)
+			{
 				handle_error("Multiple declaration of type in the single line");
+				return ;
+			}
 		i++;
 	}
+}
+
+/*
+	PROTOTYPE
+*/
+static void	check_double(char *map_info)
+{
+	int	i;
+
+	i = 0;
+	while (ft_isdigit(map_info[i]))
+		i++;
+	if (!* str)
+	    return (bad);
+	if (str[i] == '.')
+	    i++;
+	if (!* str || !ft_isspace(* str))
+	    return (bad);
+	while (ft_isdigit(str[i]))
+	    i++;
+
 }
 
 /*
@@ -189,3 +213,4 @@ void	count_objs(char *path, t_scene *scene)
 // 	if (i > 4)
 // 		handle_error("Invalid information form");
 // }
+
