@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 12:12:42 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/03 14:44:33 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/09 14:12:12 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	init_scene(char *path, t_scene *scene)
 	scene->sphere_n = 0;
 	scene->cylinder_n = 0;
 	scene->light_n = 0;
+	scene->cone_n = 0;
 	count_objs(path, scene);
 	init_ambient(scene);
 	init_camera(scene);
@@ -30,6 +31,7 @@ void	init_scene(char *path, t_scene *scene)
 	init_sphere(scene);
 	init_plane(scene);
 	init_cylinder(scene);
+	init_cone(scene);
 }
 
 /*
@@ -96,4 +98,5 @@ void	init_indices(t_indices *indices)
 	indices->pl_idx = 0;
 	indices->sp_idx = 0;
 	indices->l_idx = 0;
+	indices->co_idx = 0;
 }

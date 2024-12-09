@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 12:20:51 by donghank          #+#    #+#             */
-/*   Updated: 2024/11/30 14:18:16 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/09 15:06:02 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,8 @@ void	init_plane(t_scene *scene)
 		scene->plane[pl_idx]->coordinates.y = 0.0;
 		scene->plane[pl_idx]->coordinates.z = 0.0;
 		scene->plane[pl_idx]->normal_vector.x = 0.0;
+		scene->plane[pl_idx]->normal_vector.y = 0.0;
+		scene->plane[pl_idx]->normal_vector.z = 0.0;
 		pl_idx++;
 	}
 }
@@ -88,6 +90,7 @@ void	init_cylinder(t_scene *scene)
 		scene->cylinder[cy_idx] = ft_calloc(1, sizeof(t_cylinder));
 		if (!scene->cylinder[cy_idx])
 			handle_error("Fail dynamic allocate t_cylinder");
+		scene->cylinder[cy_idx]->axis_vector.x = 0.0;
 		scene->cylinder[cy_idx]->axis_vector.y = 0.0;
 		scene->cylinder[cy_idx]->axis_vector.z = 0.0;
 		scene->cylinder[cy_idx]->color.r = 0;
@@ -99,5 +102,38 @@ void	init_cylinder(t_scene *scene)
 		scene->cylinder[cy_idx]->cy_diameter = 0.0;
 		scene->cylinder[cy_idx]->cy_height = 0.0;
 		cy_idx++;
+	}
+}
+
+/*
+	init cone part
+	@param
+		scene: the structure which want to init
+*/
+void	init_cone(t_scene *scene)
+{
+	int	co_idx;
+
+	co_idx = 0;
+	scene->cone = malloc(scene->cone_n * sizeof(t_cone *));
+	if (!scene->cone)
+		handle_error("Fail to dynamic allocate t_cone");
+	while (co_idx < scene->cone_n)
+	{
+		scene->cone[co_idx] = ft_calloc(1, sizeof(t_cone));
+		if (!scene->cone[co_idx])
+			handle_error("Fail dynamic allocate t_cone");
+		scene->cone[co_idx]->axis_vector.x = 0.0;
+		scene->cone[co_idx]->axis_vector.y = 0.0;
+		scene->cone[co_idx]->axis_vector.z = 0.0;
+		scene->cone[co_idx]->color.r = 0;
+		scene->cone[co_idx]->color.g = 0;
+		scene->cone[co_idx]->color.b = 0;
+		scene->cone[co_idx]->coordinates.x = 0.0;
+		scene->cone[co_idx]->coordinates.y = 0.0;
+		scene->cone[co_idx]->coordinates.z = 0.0;
+		scene->cone[co_idx]->co_diameter = 0.0;
+		scene->cone[co_idx]->co_height = 0.0;
+		co_idx++;
 	}
 }

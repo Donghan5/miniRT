@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 23:07:02 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/08 10:57:15 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/09 15:56:57 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ void	stock_sphere(t_scene *scene, char *info_map, int sp_idx)
 	sep_info = ft_split(info_map, ' ');
 	if (sep_info == NULL)
 		handle_error(PARSE_ERR);
+	// valid_form(sep_info);
 	coord_info = ft_split(sep_info[1], ',');
 	if (coord_info == NULL)
 		handle_error(COOR_ERR);

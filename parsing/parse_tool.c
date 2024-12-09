@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 12:13:29 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/08 21:44:34 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/09 15:59:58 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,10 @@
 */
 // int	check_map(char *map_name)
 // {
-// 	if (ft_strncmp(map_name, ".rt", 2))
+// 	if (ft_strncmp(map_name, ".rt", 3))
 // 		return (0);
 // 	return (1);
 // }
-
 
 /*
 	set the number of type information
@@ -59,6 +58,47 @@
 // 		return (6);
 // 	return (0);
 // }
+static void	init_count(t_count *count)
+{
+	count->a_count = 0;
+	count->c_count = 0;
+	count->l_count = 0;
+	count->sp_count = 0;
+	count->pl_count = 0;
+	count->cy_count = 0;
+	count->co_count = 0;
+}
+
+static void	check_double(char **sep)
+{
+	int		i;
+	t_count	count;
+
+	i = 0;
+	init_count(&count);
+	while (sep[i])
+	{
+		if (sep[i][0] == 'A' && sep[i][1] == '\0')
+			count.a_count++;
+		else if (sep[i][0] == 'C' && sep[i][1] == '\0')
+			count.c_count++;
+		else if (sep[i][0] == 'L' && sep[i][1] == '\0')
+			count.l_count++;
+		else if (sep[i][0] == 'p' && sep[i][1] == 'l' && sep[i][2] == '\0')
+			count.pl_count++;
+		else if (sep[i][0] == 's' && sep[i][1] == 'p' && sep[i][2] == '\0')
+			count.sp_count++;
+		else if (sep[i][0] == 'c' && sep[i][1] == 'y' && sep[i][2] == '\0')
+			count.cy_count++;
+		else if (sep[i][0] == 'c' && sep[i][1] == 'o' && sep[i][2] == '\0')
+			count.co_count++;
+		if (count.a_count > 1 || count.c_count > 1 || count.l_count > 1 \
+			|| count.pl_count > 1 || count.sp_count > 1 || count.cy_count > 1 \
+			|| count.co_count > 1)
+				handle_error("Multiple declaration of type in the single line");
+		i++;
+	}
+}
 
 /*
 	this one is test prototype
@@ -74,6 +114,7 @@ int	get_type(char *map_info)
 		return (printf("%s\n", PARSE_ERR), 0);
 	if (sep[0] == NULL)
 		return (free_doub_array(sep), printf("Missing type"), 0);
+	check_double(sep);
 	if (sep[0][0] == 'A' && sep[0][1] == '\0')
 		type = 1;
 	else if (sep[0][0] == 'C' && sep[0][1] == '\0')
@@ -86,6 +127,8 @@ int	get_type(char *map_info)
 		type = 5;
 	else if (sep[0][0] == 'c' && sep[0][1] == 'y' && sep[0][2] == '\0')
 		type = 6;
+	else if (sep[0][0] == 'c' && sep[0][1] == 'o' && sep[0][2] == '\0')
+		type = 7;
 	else
 		return (free_doub_array(sep), 0);
 	return (free_doub_array(sep), type);
@@ -121,6 +164,8 @@ void	count_objs(char *path, t_scene *scene)
 			scene->plane_n++;
 		else if (ft_strncmp(map_line, "cy", 2) == 0)
 			scene->cylinder_n++;
+		else if (ft_strncmp(map_line, "co", 2) == 0)
+			scene->cone_n++;
 		else if (ft_strncmp(map_line, "L", 1) == 0)
 			scene->light_n++;
 		free(map_line);
@@ -128,3 +173,19 @@ void	count_objs(char *path, t_scene *scene)
 	}
 	close(fd);
 }
+
+// /*
+// 	to check the validity of the information form
+// 	@param
+// 		sep_info: separated information
+// */
+// void	valid_form(char **sep_info)
+// {
+// 	int	i;
+
+// 	i = 0;
+// 	while (sep_info[i])
+// 		i++;
+// 	if (i > 4)
+// 		handle_error("Invalid information form");
+// }

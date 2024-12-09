@@ -6,11 +6,28 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 23:06:48 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/08 10:57:40 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/09 15:56:48 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
+
+// /*
+// 	to check the validity of the information form
+// 	how to treat comment?
+// 	@param
+// 		sep_info: separated information
+// */
+// static void	valid_form_amb(char **sep_info)
+// {
+// 	int	i;
+
+// 	i = 0;
+// 	while (sep_info[i])
+// 		i++;
+// 	if (i > 3)
+// 		handle_error("Invalid information form");
+// }
 
 /*
 	checking the range of the RGB value
@@ -64,6 +81,7 @@ void	stock_ambient(t_scene *scene, char *info_map)
 	sep_info = ft_split(info_map, ' ');
 	if (sep_info == NULL)
 		handle_error(PARSE_ERR);
+	// valid_form_amb(sep_info);
 	scene->ambient.a_ratio = ft_atod(sep_info[1]);
 	rgb_infos = ft_split((char *)sep_info[2], ',');
 	if (rgb_infos == NULL)

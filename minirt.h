@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:40:16 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/03 14:45:21 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/09 15:32:55 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,24 @@
 # define COOR_ERR "Fail to coordinate parse"
 # define ORI_ERR "Fail to orientation parse"
 
+typedef struct s_count
+{
+	int	a_count;
+	int	c_count;
+	int	l_count;
+	int	sp_count;
+	int	pl_count;
+	int	cy_count;
+	int	co_count;
+}		t_count;
+
 typedef struct s_indices
 {
 	int	sp_idx;
 	int	pl_idx;
 	int	cy_idx;
 	int	l_idx;
+	int	co_idx;
 }			t_indices;
 
 typedef struct s_vec3 {
@@ -107,14 +119,25 @@ typedef struct s_cylinder
 	double	cy_height;
 }				t_cylinder;
 
+typedef struct s_cone
+{
+	t_vec3	coordinates;
+	t_vec3	axis_vector;
+	t_color	color;
+	double	co_diameter;
+	double	co_height;
+}			t_cone;
+
 typedef struct s_scene
 {
 	t_ambient	ambient;
 	t_camera	camera;
+	t_cone		**cone;
 	t_light		**light;
 	t_sphere	**sphere;
 	t_plane		**plane;
 	t_cylinder	**cylinder;
+	int			cone_n;
 	int			sphere_n;
 	int			plane_n;
 	int			cylinder_n;
@@ -213,6 +236,7 @@ void	init_indices(t_indices *indices);
 void	init_sphere(t_scene *scene);
 void	init_plane(t_scene *scene);
 void	init_cylinder(t_scene *scene);
+void	init_cone(t_scene *scene);
 
 void	free_scene(t_scene *scene);
 // int		check_map(char *map_name);
@@ -224,6 +248,7 @@ void	free_doub_array(char **strs);
 // parse_tool.c
 void	count_objs(char *path, t_scene *scene);
 int		get_type(char *map_info);
+void	valid_form(char **sep_info);
 
 // stock_basic.c
 void	stock_ambient(t_scene *scene, char *info_map);
@@ -235,5 +260,6 @@ void	stock_infos(int type, t_scene *scene, char *info_map);
 void	stock_plane(t_scene *scene, char *info_map, int pl_idx);
 void	stock_sphere(t_scene *scene, char *info_map, int sp_idx);
 void	stock_cylinder(t_scene *scene, char *info_map, int cy_idx);
+void	stock_cone(t_scene *scene, char *info_map, int co_idx);
 
 #endif

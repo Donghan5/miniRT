@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 15:01:06 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/08 21:42:55 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/09 14:44:08 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,12 @@ static void	parse_obj(int type, char *map_line, \
 			handle_error("Index is out of range in cylinder");
 		stock_cylinder(scene, map_line, indices->cy_idx++);
 	}
+	else if (type == 7)
+	{
+		if (indices->co_idx >= scene->cone_n)
+			handle_error("Index is out of range in cone");
+		stock_cone(scene, map_line, indices->co_idx++);
+	}
 }
 
 /*
@@ -76,11 +82,11 @@ static void	process_parse(char *map_line, t_scene *scene, t_indices *indices)
 	type = get_type(map_line);
 	if (type == 1 || type == 2)
 		stock_infos(type, scene, map_line);
-	else if (type >= 3 && type <= 6)
+	else if (type >= 3 && type <= 7)
 		parse_obj(type, map_line, scene, indices);
 	else if (type == 0)
 	{
-		free_just_scene(scene);
+		// free_just_scene(scene);
 		handle_error_free(map_line, "Invalid type!!");
 	}
 }
@@ -100,22 +106,22 @@ void	handle_map_check(char *map_line, t_scene *scene, t_indices *indices)
 	process_parse(map_line, scene, indices);
 }
 
-void	free_just_scene(t_scene *scene)
-{
-	int	i;
-	int	j;
-	int	k;
-	int	l;
+// void	free_just_scene(t_scene *scene)
+// {
+// 	int	i;
+// 	int	j;
+// 	int	k;
+// 	int	l;
 
-	i = 0;
-	j = 0;
-	k = 0;
-	while (i < scene->sphere_n)
-		free(scene->sphere[i++]);
-	while (j < scene->plane_n)
-		free(scene->plane[j++]);
-	while (k < scene->cylinder_n)
-		free(scene->cylinder[k++]);
-	while (l < scene->light_n)
-		free(scene->light[l++]);
-}
+// 	i = 0;
+// 	j = 0;
+// 	k = 0;
+// 	while (i < scene->sphere_n)
+// 		free(scene->sphere[i++]);
+// 	while (j < scene->plane_n)
+// 		free(scene->plane[j++]);
+// 	while (k < scene->cylinder_n)
+// 		free(scene->cylinder[k++]);
+// 	while (l < scene->light_n)
+// 		free(scene->light[l++]);
+// }
