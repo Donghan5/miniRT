@@ -6,11 +6,181 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 13:43:21 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/10 15:38:15 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/10 23:10:29 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
+
+/*
+	check int
+	@param
+		map_info: information of the map
+		i: index of the main check validity
+*/
+void	check_int(char *map_info, size_t *i)
+{
+	while (ft_isspace(map_info[*i]))
+		(*i)++;
+	if ((!ft_isdigit(map_info[*i]) && map_info[*i] != '-')
+		|| (map_info[*i] == '-' && !ft_isdigit(map_info[*i + 1])))
+		handle_error("Incorrect number format, wrong symbol");
+	if (map_info[*i] == '-')
+		(*i)++;
+	while (ft_isdigit(map_info[*i]))
+		(*i)++;
+}
+
+/*
+	check double
+	@param
+		map_info: information of the map
+		i: index of the main check validity
+*/
+void	check_doub(char *map_info, size_t *i)
+{
+	check_int(map_info, i);
+	if (map_info[*i] == '.')
+	{
+		(*i)++;
+		if (!ft_isdigit(map_info[*i]))
+			handle_error("Error in double format, wrong symbol");
+		while (ft_isdigit(map_info[*i]))
+			(*i)++;
+	}
+}
+
+/*
+	check three element
+	@param
+		map_info: information of the map
+		i: index if the main check validity
+		type: type like A, C, L, sp, ...
+*/
+void	check_three(char *map_info, size_t *i, char *type)
+{
+	int	j;
+
+	j = 0;
+	while (j < 3)
+	{
+		if (!ft_strncmp(type, "int", 3))
+			check_int(map_info, i);
+		else
+			check_doub(map_info, i);
+		if (j != 2)
+		{
+			if (!map_info[*i])
+				handle_error("Missing number data, sequence of \
+three is not complete");
+			while (ft_isspace(map_info[*i]))
+				(*i)++;
+			if (map_info[*i] != ',')
+				handle_error("Incorrect sequence of three");
+			(*i)++;
+			while (ft_isspace(map_info[*i]))
+				(*i)++;
+		}
+		j++;
+	}
+}
+
+/*
+	check "A    double    int, int, int"
+	@param
+		map_info: information of the map
+		i: index of the check main validity
+*/
+static void	validity_type_one(char *map_info, size_t *i)
+{
+	check_doub(map_info, i);
+	check_three(map_info, i, "int");
+}
+
+/*
+	check "C    int, int, int    double, double, double    int"
+	@param
+		map_info: information of the map
+		i: index of the check main validity
+*/
+static void	validity_type_two(char *map_info, size_t *i)
+{
+	check_three(map_info, i, "int");
+	check_three(map_info, i, "double");
+	check_int(map_info, i);
+}
+
+/*
+	check "[L, sp]   double, double, double    double    int, int, int"
+	@param
+		map_info: information of the map
+		i: index of the check main validity
+*/
+static void	validity_type_three(char *map_info, size_t *i)
+{
+	check_three(map_info, i, "double");
+	check_doub(map_info, i);
+	check_three(map_info, i, "int");
+}
+
+/*
+	check "pl    double, double, double    double, double, double    int, int, int"
+	@param
+		map_info: information of the map
+		i: index of the check map validity
+*/
+static void	validity_type_four(char *map_info, size_t *i)
+{
+	check_three(map_info, i, "double");
+	check_three(map_info, i, "double");
+	check_three(map_info, i, "int");
+}
+
+/*
+	check [cy, co]    double, double, double    double, double, double
+			   double    double    int, int, int
+	@param
+		map_info: information of the map
+		i: index of the checking map validity
+*/
+static void	validity_type_five(char *map_info, size_t *i)
+{
+	check_three(map_info, i, "double");
+	check_three(map_info, i, "double");
+	check_doub(map_info, i);
+	check_doub(map_info, i);
+	check_three(map_info, i, "int");
+}
+
+static void	check_validity(char *map_info)
+{
+	size_t	i;
+
+	i = 0;
+	while (ft_isalnum(map_info[i]))
+		i++;
+	if (!ft_strncmp(map_info, "A ", 2))
+		validity_type_one(map_info, &i);
+	else if (!ft_strncmp(map_info, "C ", 2))
+		validity_type_two(map_info, &i);
+	else if (!ft_strncmp(map_info, "l ", 2) || !ft_strncmp(map_info, "L ", 2)
+		|| !ft_strncmp(map_info, "sp ", 3))
+		validity_type_three(map_info, &i);
+	else if (!ft_strncmp(map_info, "pl ", 3))
+		validity_type_four(map_info, &i);
+	else if (!ft_strncmp(map_info, "cy ", 3) || !ft_strncmp(map_info, "co ", 3))
+		validity_type_five(map_info, &i);
+	else
+		handle_error("This type is not supported");
+	while (map_info[i] && map_info[i] != '\n')
+	{
+		if (map_info[i] == '#')
+			return ;
+		if (!ft_isspace(map_info[i]))
+			handle_error("Extra symbols");
+		i++;
+	}
+}
 
 /*
 	check multiple declaration of the type
@@ -86,7 +256,12 @@ static int	set_type(char **sep)
 }
 
 /*
-	this one is test prototype
+	get the type value
+	@param
+		map_info: information of the map
+	@return
+		type (1 ~ 7): each type value
+		0: fail
 */
 int	get_type(char *map_info)
 {
@@ -94,6 +269,7 @@ int	get_type(char *map_info)
 	int		type;
 
 	type = 0;
+	check_validity(map_info);
 	sep = ft_split(map_info, ' ');
 	if (sep == NULL)
 		return (printf("%s\n", PARSE_ERR), 0);
