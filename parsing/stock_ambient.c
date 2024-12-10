@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 23:06:48 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/09 15:56:48 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/10 15:49:25 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ void	stock_ambient(t_scene *scene, char *info_map)
 	sep_info = ft_split(info_map, ' ');
 	if (sep_info == NULL)
 		handle_error(PARSE_ERR);
-	// valid_form_amb(sep_info);
+	valid_form(1, sep_info);
 	scene->ambient.a_ratio = ft_atod(sep_info[1]);
 	rgb_infos = ft_split((char *)sep_info[2], ',');
 	if (rgb_infos == NULL)

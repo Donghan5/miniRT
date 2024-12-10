@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 12:12:42 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/09 14:12:12 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/10 14:17:01 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,32 +64,19 @@ void	init_camera(t_scene *scene)
 }
 
 /*
-	initailze light
+	init all of the count
 	@param
-		scene: want to init
+		count: structure of count which want to init
 */
-void	init_light(t_scene *scene)
+void	init_count(t_count *count)
 {
-	int	l_idx;
-
-	l_idx = 0;
-	scene->light = malloc(scene->light_n * sizeof(t_light *));
-	if (!scene->light)
-		handle_error("Fail to dynamic allocatie t_light");
-	while (l_idx < scene->light_n)
-	{
-		scene->light[l_idx] = ft_calloc(1, sizeof(t_light));
-		if (!scene->light[l_idx])
-			handle_error("Fail to dynamic allocat t_light");
-		scene->light[l_idx]->color.r = 0;
-		scene->light[l_idx]->color.g = 0;
-		scene->light[l_idx]->color.b = 0;
-		scene->light[l_idx]->coordinates.x = 0.0;
-		scene->light[l_idx]->coordinates.y = 0.0;
-		scene->light[l_idx]->coordinates.z = 0.0;
-		scene->light[l_idx]->l_brightness = 0.0;
-		l_idx++;
-	}
+	count->a_count = 0;
+	count->c_count = 0;
+	count->l_count = 0;
+	count->sp_count = 0;
+	count->pl_count = 0;
+	count->cy_count = 0;
+	count->co_count = 0;
 }
 
 void	init_indices(t_indices *indices)

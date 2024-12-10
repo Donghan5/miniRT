@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 22:39:04 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/09 15:03:11 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/10 15:50:52 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ void	stock_cylinder(t_scene *scene, char *info_map, int cy_idx)
 	sep_info = ft_split(info_map, ' ');
 	if (sep_info == NULL)
 		handle_error(PARSE_ERR);
-	// valid_form(sep_info);
+	valid_form(6, sep_info);
 	coord_info = ft_split(sep_info[1], ',');
 	if (coord_info == NULL)
 		handle_error(COOR_ERR);

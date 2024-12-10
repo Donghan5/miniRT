@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 22:30:21 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/04 22:55:11 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/10 15:50:27 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ void	stock_plane(t_scene *scene, char *info_map, int pl_idx)
 	sep_info = ft_split(info_map, ' ');
 	if (sep_info == NULL)
 		handle_error(PARSE_ERR);
+	valid_form(4, sep_info);
 	coord_info = ft_split(sep_info[1], ',');
 	if (coord_info == NULL)
 		handle_error(COOR_ERR);

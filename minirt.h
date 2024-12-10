@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:40:16 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/09 15:32:55 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/10 15:51:35 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -230,6 +230,7 @@ void	init_scene(char *path, t_scene *scene);
 void	init_ambient(t_scene *scene);
 void	init_camera(t_scene *scene);
 void	init_light(t_scene *scene);
+void	init_count(t_count *count);
 void	init_indices(t_indices *indices);
 
 // init_shape.c
@@ -248,7 +249,6 @@ void	free_doub_array(char **strs);
 // parse_tool.c
 void	count_objs(char *path, t_scene *scene);
 int		get_type(char *map_info);
-void	valid_form(char **sep_info);
 
 // stock_basic.c
 void	stock_ambient(t_scene *scene, char *info_map);
@@ -262,4 +262,7 @@ void	stock_sphere(t_scene *scene, char *info_map, int sp_idx);
 void	stock_cylinder(t_scene *scene, char *info_map, int cy_idx);
 void	stock_cone(t_scene *scene, char *info_map, int co_idx);
 
+
+//valid.c
+void	valid_form(int type, char **sep_info);
 #endif

@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 00:48:43 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/09 15:57:15 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/10 15:49:59 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void	stock_light(t_scene *scene, char *info_map, int l_idx)
 	sep_info = ft_split(info_map, ' ');
 	if (sep_info == NULL)
 		handle_error(PARSE_ERR);
-	// valid_form(sep_info);
+	valid_form(3, sep_info);
 	coord_info = ft_split((char *)sep_info[1], ',');
 	if (coord_info == NULL)
 		handle_error(COOR_ERR);
