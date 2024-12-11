@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:40:16 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/10 15:51:35 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/11 14:44:12 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -239,7 +239,7 @@ void	init_plane(t_scene *scene);
 void	init_cylinder(t_scene *scene);
 void	init_cone(t_scene *scene);
 
-void	free_scene(t_scene *scene);
+void	free_just_scene(t_scene *scene);
 // int		check_map(char *map_name);
 void	handle_error(char *msg);
 int		ft_isspace(char c);

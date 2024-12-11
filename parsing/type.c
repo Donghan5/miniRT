@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 13:43:21 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/10 23:10:29 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/11 16:07:37 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,7 +157,7 @@ static void	check_validity(char *map_info)
 	size_t	i;
 
 	i = 0;
-	while (ft_isalnum(map_info[i]))
+	while (ft_isalpha(map_info[i]))
 		i++;
 	if (!ft_strncmp(map_info, "A ", 2))
 		validity_type_one(map_info, &i);
@@ -170,7 +170,7 @@ static void	check_validity(char *map_info)
 		validity_type_four(map_info, &i);
 	else if (!ft_strncmp(map_info, "cy ", 3) || !ft_strncmp(map_info, "co ", 3))
 		validity_type_five(map_info, &i);
-	else
+	else if (map_info[0] != '#')
 		handle_error("This type is not supported");
 	while (map_info[i] && map_info[i] != '\n')
 	{
@@ -204,7 +204,7 @@ static void	check_double(char **sep)
 			count.a_count++;
 		else if (sep[i][0] == 'C' && sep[i][1] == '\0')
 			count.c_count++;
-		else if (sep[i][0] == 'L' && sep[i][1] == '\0')
+		else if (sep[i][0] == 'L' && sep[i][1] == '\0' || sep[i][0] == 'l' && sep[i][1] == '\0')
 			count.l_count++;
 		else if (sep[i][0] == 'p' && sep[i][1] == 'l' && sep[i][2] == '\0')
 			count.pl_count++;
@@ -240,7 +240,7 @@ static int	set_type(char **sep)
 		type = 1;
 	else if (sep[0][0] == 'C' && sep[0][1] == '\0')
 		type = 2;
-	else if (sep[0][0] == 'L' && sep[0][1] == '\0')
+	else if (sep[0][0] == 'L' && sep[0][1] == '\0' || sep[0][0] == 'l' && sep[0][1] == '\0')
 		type = 3;
 	else if (sep[0][0] == 'p' && sep[0][1] == 'l' && sep[0][2] == '\0')
 		type = 4;
@@ -277,7 +277,12 @@ int	get_type(char *map_info)
 		return (free_doub_array(sep), printf("Missing type"), 0);
 	check_double(sep);
 	type = set_type(sep);
+	printf("type is %d\n", type);
 	if (type == 0)
-		return (free_doub_array(sep), 0);
-	return (free_doub_array(sep), type);
+	{
+		free_doub_array(sep);
+		handle_error("Invalid type!");
+	}
+	free_doub_array(sep);
+	return (type);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tools.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:49:17 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/11/28 20:32:05 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/12/11 14:42:23 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,24 @@ void	exit_error(t_scene scene, int free_index_limit, char *message)
 	}
 	if (i)
 		free (scene.plane);
+	i = 0;
+	if ((scene.light_n > 0) && scene.light)
+	{
+		if (scene.light[i])
+			free(scene.light[i]);
+		i++;
+	}
+	if (i)
+		free (scene.light);
+	i = 0;
+	if ((scene.cone_n > 0) && scene.cone)
+	{
+		if (scene.cone[i])
+			free(scene.cone[i]);
+		i++;
+	}
+	if (i)
+		free (scene.cone);
 	ft_putstr_fd(message, 2);
 	if (!errno)
 	{

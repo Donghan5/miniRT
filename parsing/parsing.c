@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 17:39:31 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/10 15:38:40 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/11 15:21:35 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ static void	do_stock(int fd, t_scene *scene)
 		free(map_line);
 		map_line = get_next_line(fd);
 	}
+	free(map_line);
 }
 
 /*
