@@ -5,29 +5,52 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/10 15:12:43 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/10 15:53:05 by donghank         ###   ########.fr       */
+/*   Created: 2024/12/12 12:54:06 by donghank          #+#    #+#             */
+/*   Updated: 2024/12/12 12:57:57 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-/*
-	to check the validity of the information form
-	@param
-		sep_info: separated information
-*/
-void	valid_form(int type, char **sep_info)
+// A    double    int, int, int
+void	validity_type_one(char *map_info, size_t *i)
 {
-	int	i;
-
-	i = 0;
-	while (sep_info[i])
-		i++;
-	if (type == 1 && i > 3)
-		handle_error("error syntax");
-	else if ((type >= 2 && type <= 5) && i > 4)
-		handle_error("error syntax");
-	else if ((type == 6 || type == 7) && i > 6)
-		handle_error("error syntax");
+	check_doub(map_info, i);
+	check_three(map_info, i, "int");
 }
+
+// C    int, int, int    double, double, double    int
+void	validity_type_two(char *map_info, size_t *i)
+{
+	check_three(map_info, i, "int");
+	check_three(map_info, i, "double");
+	check_int(map_info, i);
+}
+
+// [L, sp]   double, double, double    double    int, int, int
+void	validity_type_three(char *map_info, size_t *i)
+{
+	check_three(map_info, i, "double");
+	check_doub(map_info, i);
+	check_three(map_info, i, "int");
+}
+
+// pl    double, double, double    double, double, double    int, int, int
+void	validity_type_four(char *map_info, size_t *i)
+{
+	check_three(map_info, i, "double");
+	check_three(map_info, i, "double");
+	check_three(map_info, i, "int");
+}
+
+// [cy, co]    double, double, double    double, double, double
+//			   double    double    int, int, int
+void	validity_type_five(char *map_info, size_t *i)
+{
+	check_three(map_info, i, "double");
+	check_three(map_info, i, "double");
+	check_doub(map_info, i);
+	check_doub(map_info, i);
+	check_three(map_info, i, "int");
+}
+

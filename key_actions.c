@@ -6,14 +6,16 @@
 /*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:48:58 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/03 12:18:31 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/12/10 13:57:37 by pzinurov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-static void apply_movement(t_info *info, double forward, double sideways)
+static void	apply_movement(t_info *info, double forward, double sideways)
 {
+	double	yaw;
+
 	if (info->rotate_camera == 1)
 	{
 		if (forward > 0)
@@ -26,32 +28,26 @@ static void apply_movement(t_info *info, double forward, double sideways)
 			info->scene.camera.coordinates.x--;
 		return ;
 	}
-
-    // Get directional vector from camera orientation angles
-    double yaw = atan2(info->scene.camera.orientation.x, info->scene.camera.orientation.z);
-    
-    // Apply diagonal normalization if moving in both directions
-    if (forward != 0 && sideways != 0) {
-        // Normalize diagonal movement
-        const double DIAGONAL_SCALE = 0.7071067811865476; // 1/sqrt(2)
-        forward *= DIAGONAL_SCALE;
-        sideways *= DIAGONAL_SCALE;
-    }
-
-    // Calculate movement vector based on yaw angle
-    if (forward != 0) {
-        info->scene.camera.coordinates.x += forward * sin(yaw);
-        info->scene.camera.coordinates.z += forward * cos(yaw);
-    }
-    
-    if (sideways != 0) {
-        // For sideways movement, add 90 degrees (PI/2) to yaw
-        info->scene.camera.coordinates.x += sideways * sin(yaw + M_PI/2);
-        info->scene.camera.coordinates.z += sideways * cos(yaw + M_PI/2);
-    }
+	yaw = atan2(info->scene.camera.orientation.x,
+			info->scene.camera.orientation.z);
+	if (forward != 0 && sideways != 0)
+	{
+		forward *= 0.7071067811865476;
+		sideways *= 0.7071067811865476;
+	}
+	if (forward != 0)
+	{
+		info->scene.camera.coordinates.x += forward * sin(yaw);
+		info->scene.camera.coordinates.z += forward * cos(yaw);
+	}
+	if (sideways != 0)
+	{
+		info->scene.camera.coordinates.x += sideways * sin(yaw + M_PI / 2);
+		info->scene.camera.coordinates.z += sideways * cos(yaw + M_PI / 2);
+	}
 }
 
-void	update_key_states(t_info *info, t_key_state *keys, int keycode, int is_pressed)
+static void	update_key_states(t_info *info, t_key_state *keys, int keycode, int is_pressed)
 {
 	if (is_pressed)
 	{

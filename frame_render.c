@@ -6,7 +6,7 @@
 /*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:48:45 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/03 12:34:32 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/12/05 21:26:46 by pzinurov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,21 +91,27 @@ static void	print_info_block(t_info *info)
 	data = ft_itoa(info->scene.camera.coordinates.x);
 	mlx_string_put(info->mlx, info->win, info->text_x + 90,
 		info->text_y + 135, gray, data);
+	free(data);
 	data = ft_itoa(info->scene.camera.coordinates.y);
 	mlx_string_put(info->mlx, info->win, info->text_x + 120,
 		info->text_y + 135, gray, data);
+	free(data);
 	data = ft_itoa(info->scene.camera.coordinates.z);
 	mlx_string_put(info->mlx, info->win, info->text_x + 150,
 		info->text_y + 135, gray, data);
+	free(data);
+
 
 	mlx_string_put(info->mlx, info->win, info->text_x,
 		info->text_y + 155, gray, "Cam X Y Z");
 	data = ft_itoa(info->scene.camera.orientation.x * 100);
 	mlx_string_put(info->mlx, info->win, info->text_x + 90,
 		info->text_y + 155, gray, data);
+	free(data);
 	data = ft_itoa(info->scene.camera.orientation.y * 100);
 	mlx_string_put(info->mlx, info->win, info->text_x + 120,
 		info->text_y + 155, gray, data);
+	free(data);
 	data = ft_itoa(info->scene.camera.orientation.z * 100);
 	mlx_string_put(info->mlx, info->win, info->text_x + 150,
 		info->text_y + 155, gray, data);

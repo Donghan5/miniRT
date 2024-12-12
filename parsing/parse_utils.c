@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 16:06:16 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/11 15:39:24 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/12 12:38:07 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,3 +57,4 @@ void	handle_error(char *msg)
 	printf("%s\n", msg);
 	exit(EXIT_FAILURE);
 }
+

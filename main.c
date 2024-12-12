@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:39:54 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/11 15:27:59 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/12 12:42:10 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,31 +14,10 @@
 
 int	close_window(t_info *info)
 {
-	int	i;
-
 	mlx_destroy_window(info->mlx, info->win);
 	mlx_destroy_image(info->mlx, info->img->img);
 	mlx_destroy_display(info->mlx);
-	i = 0;
-	while ((i < info->scene.cylinder_n) && info->scene.cylinder && info->scene.cylinder[i])
-		free(info->scene.cylinder[i++]);
-	if (i)
-		free (info->scene.cylinder);
-	i = 0;
-	while ((i < info->scene.sphere_n) && info->scene.sphere && info->scene.sphere[i])
-		free(info->scene.sphere[i++]);
-	if (i)
-		free (info->scene.sphere);
-	i = 0;
-	while ((i < info->scene.plane_n) && info->scene.plane && info->scene.plane[i])
-		free(info->scene.plane[i++]);
-	if (i)
-		free (info->scene.plane);
-	i = 0;
-	while ((i < info->scene.light_n) && info->scene.light && info->scene.light[i])
-		free(info->scene.light[i++]);
-	if (i)
-		free (info->scene.light);
+	free_scene_safe(&info->scene);
 	return (free(info->mlx), exit (0), 0);
 }
 
@@ -64,13 +43,12 @@ void	info_initializer(t_info *info)
 	info->toggle_mode = TOGGLE_OFF;
 }
 
-#include <stdio.h>
-void print_color(t_color color, const char *prefix) {
-    printf("%s: R:%d G:%d B:%d\n", prefix, color.r, color.g, color.b);
+void	print_color(t_color color, const char *prefix) {
+	printf("%s: R:%d G:%d B:%d\n", prefix, color.r, color.g, color.b);
 }
 
-void print_vector(t_vec3 vec, const char *prefix) {
-    printf("%s: x:%f y:%f z:%f\n", prefix, vec.x, vec.y, vec.z);
+void	print_vector(t_vec3 vec, const char *prefix) {
+	printf("%s: x:%f y:%f z:%f\n", prefix, vec.x, vec.y, vec.z);
 }
 
 void print_scene_info(t_scene *scene) {
@@ -127,76 +105,46 @@ void print_scene_info(t_scene *scene) {
             printf("Height: %f\n", scene->cylinder[i]->cy_height);
         }
     }
+
+	// Print Cone info
+    printf("\n=== Cones (%d) ===\n", scene->cone_n);
+    for (int i = 0; i < scene->cone_n; i++) {
+        if (scene->cone[i]) {
+            printf("\nCone %d:\n", i + 1);
+            print_vector(scene->cone[i]->coordinates, "Position");
+            print_vector(scene->cone[i]->axis_vector, "Axis");
+            print_color(scene->cone[i]->color, "Color");
+            printf("Diameter: %f\n", scene->cone[i]->co_diameter);
+            printf("Height: %f\n", scene->cone[i]->co_height);
+        }
+    }
     printf("\n");
 }
-// int	main(int argc, char **argv)
-// {
-// 	void	*mlx;
-// 	void	*mlx_win;
-// 	t_data	img;
-// 	t_info	info;
 
-// 	if (argc != 2)
-// 		exit_error(info.scene, 0, "Wrong arguments. Format: ./miniRT \"path_to_rt_scene\"");
-// 	// if (!check_map(argv[1]))
-// 	// 	handle_error("Invaild map name, verify once again");
-// 	mlx = mlx_init();
-// 	mlx_win = mlx_new_window(mlx, SCREEN_WIDTH, SCREEN_HEIGHT, "miniRT");
-// 	img.img = mlx_new_image(mlx, SCREEN_WIDTH, SCREEN_HEIGHT);
-// 	img.addr = mlx_get_data_addr(img.img,
-// 			&img.bits_per_pixel, &img.line_length, &img.endian);
-// 	info.img = &img;
-// 	info.mlx = mlx;
-// 	info.win = mlx_win;
-// 	info_initializer(&info);
-// 	parse_scene(argv[1], &info.scene);
-// 	print_scene_info(&info.scene);
-
-// 	render_next_frame(&info);
-// 	install_hooks(&info);
-// 	mlx_loop_hook(info.mlx, render_next_frame, &info);
-// 	mlx_loop(info.mlx);
-// 	// free_scene(&info.scene);
-// 	return (0);
-// }
-
-int    main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
-    void    *mlx;
-    void    *mlx_win;
-    t_data    img;
-    t_info    info;
+	void	*mlx;
+	void	*mlx_win;
+	t_data	img;
+	t_info	info;
 
-    if (argc != 2)
-        exit_error(info.scene, 0, "Wrong arguments. Format: ./miniRT ""path_to_rt_scene""");
-    // if (!check_map(argv[1]))
-    //     handle_error("Invaild map name, verify once again");
-    parse_scene(argv[1], &info.scene);
-    mlx = mlx_init();
-    mlx_win = mlx_new_window(mlx, SCREEN_WIDTH, SCREEN_HEIGHT, "miniRT");
-    img.img = mlx_new_image(mlx, SCREEN_WIDTH, SCREEN_HEIGHT);
-    img.addr = mlx_get_data_addr(img.img,
-            &img.bits_per_pixel, &img.line_length, &img.endian);
-    info.img = &img;
-    info.mlx = mlx;
-    info.win = mlx_win;
-    info_initializer(&info);
-    // print_scene_info(&info.scene);
-
-    // render_next_frame(&info);
-    // install_hooks(&info);
-    // mlx_loop_hook(info.mlx, render_next_frame, &info);
-    // mlx_loop(info.mlx);
-
-    printf("Passed rendering\n");
-
-	free_just_scene(&info.scene);
-    mlx_destroy_window(info.mlx, info.win);
-    mlx_destroy_image(info.mlx, info.img->img);
-    mlx_destroy_display(info.mlx);
-
-
-    free(info.mlx);
-    exit(0);
-    return (0);
+	if (argc != 2)
+		exit_error(NULL, NULL,
+			"Wrong arguments. Format: ./miniRT \"path_to_rt_scene\"");
+	parse_scene(argv[1], &info.scene);
+	mlx = mlx_init();
+	mlx_win = mlx_new_window(mlx, SCREEN_WIDTH, SCREEN_HEIGHT, "miniRT");
+	img.img = mlx_new_image(mlx, SCREEN_WIDTH, SCREEN_HEIGHT);
+	img.addr = mlx_get_data_addr(img.img,
+			&img.bits_per_pixel, &img.line_length, &img.endian);
+	info.img = &img;
+	info.mlx = mlx;
+	info.win = mlx_win;
+	// info_initializer(&info);
+	// install_hooks(&info);
+	// mlx_loop_hook(info.mlx, render_next_frame, &info);
+	// mlx_loop(info.mlx);
+	printf("Passed rendering part\n");
+	close_window(&info);
+	return (exit(0), 0);
 }

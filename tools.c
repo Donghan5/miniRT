@@ -3,20 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   tools.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:49:17 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/11 14:42:23 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/11 16:31:24 by pzinurov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-int	isEqual(double a, double b)
+int	is_equal(double a, double b)
 {
-	if(fabs(a - b) <= EPSILON * fabs(a))
+	if (fabs(a - b) <= EPSILON * fabs(a))
 		return (1);
 	return (0);
+}
+
+void	smart_free(void *element)
+{
+	if (element != NULL)
+		free(element);
 }
 
 void	ft_putstr_fd(char *s, int fd)
@@ -27,55 +33,11 @@ void	ft_putstr_fd(char *s, int fd)
 	write(fd, s, len);
 }
 
-void	exit_error(t_scene scene, int free_index_limit, char *message)
+void	exit_error(char *line, t_scene *scene, char *message)
 {
-	int	i;
-
-	i = 0;
-	if ((scene.cylinder_n > 0) && scene.cylinder)
-	{
-		if (scene.cylinder[i])
-			free(scene.cylinder[i]);
-		i++;
-	}
-	if (i)
-		free (scene.cylinder);
-	i = 0;
-	if ((scene.sphere_n > 0) && scene.sphere)
-	{
-		if (scene.sphere[i])
-			free(scene.sphere[i]);
-		i++;
-	}
-	if (i)
-		free (scene.sphere);
-	i = 0;
-	if ((scene.plane_n > 0) && scene.plane)
-	{
-		if (scene.plane[i])
-			free(scene.plane[i]);
-		i++;
-	}
-	if (i)
-		free (scene.plane);
-	i = 0;
-	if ((scene.light_n > 0) && scene.light)
-	{
-		if (scene.light[i])
-			free(scene.light[i]);
-		i++;
-	}
-	if (i)
-		free (scene.light);
-	i = 0;
-	if ((scene.cone_n > 0) && scene.cone)
-	{
-		if (scene.cone[i])
-			free(scene.cone[i]);
-		i++;
-	}
-	if (i)
-		free (scene.cone);
+	smart_free(line);
+	if (scene)
+		free_scene_safe(scene);
 	ft_putstr_fd(message, 2);
 	if (!errno)
 	{
@@ -85,4 +47,32 @@ void	exit_error(t_scene scene, int free_index_limit, char *message)
 	ft_putstr_fd(": ", 2);
 	perror(NULL);
 	exit (errno);
+}
+
+void	free_scene_safe(t_scene *scene)
+{
+	int	i;
+
+	i = 0;
+	while (i < scene->cylinder_n || i < scene->sphere_n
+		|| i < scene->plane_n || i < scene->light_n
+		|| i < scene->cone_n)
+	{
+		if (i < scene->cylinder_n && scene->cylinder)
+			smart_free(scene->cylinder[i]);
+		if (i < scene->sphere_n && scene->sphere)
+			smart_free(scene->sphere[i]);
+		if (i < scene->plane_n && scene->plane)
+			smart_free(scene->plane[i]);
+		if (i < scene->light_n && scene->light)
+			smart_free(scene->light[i]);
+		if (i < scene->cone_n && scene->cone)
+			smart_free(scene->cone[i]);
+		i++;
+	}
+	smart_free(scene->cylinder);
+	smart_free(scene->sphere);
+	smart_free(scene->plane);
+	smart_free(scene->light);
+	smart_free(scene->cone);
 }

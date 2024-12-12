@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 00:48:43 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/10 15:49:59 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/12 13:53:07 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,18 @@
 	checking the range of the RGB value
 	@param
 		rgb_infos: rgb information to free
+	@return
+		0: out of value (fail)
+		1: success
 */
-static void	check_range(char **rgb_infos)
+static int	check_range(char **rgb_infos)
 {
-	if (ft_atoi(rgb_infos[0]) > 255 || ft_atoi(rgb_infos[1]) > 255 || ft_atoi(rgb_infos[2]) > 255)
+	if (ft_atoi(rgb_infos[0]) > 255 || \
+	ft_atoi(rgb_infos[1]) > 255 || ft_atoi(rgb_infos[2]) > 255)
 	{
-		free_doub_array(rgb_infos);
-		handle_error("RGB value, out of range");
-		printf("Is it working check_range");
+		return (0);
 	}
+	return (1);
 }
 
 /*
@@ -50,12 +53,18 @@ static void	stock_coord(t_scene *scene, char **coord_info, int l_idx)
 */
 static void	stock_rgb(t_scene *scene, char **rgb_infos, int l_idx)
 {
-	if (ft_strchr(rgb_infos[0], '.')|| ft_strchr(rgb_infos[1], '.')|| ft_strchr(rgb_infos[2], '.'))
+	if (ft_strchr(rgb_infos[0], '.')
+		|| ft_strchr(rgb_infos[1], '.')
+		|| ft_strchr(rgb_infos[2], '.'))
 	{
 		free_doub_array(rgb_infos);
-		handle_error("Invalid rgb value type");
+		exit_error(NULL, scene, "Bad RGB");
 	}
-	check_range(rgb_infos);
+	if (!check_range(rgb_infos))
+	{
+		free_doub_array(rgb_infos);
+		exit_error(NULL, scene, "Bad RGB");
+	}
 	scene->light[l_idx]->color.r = ft_atoi(rgb_infos[0]);
 	scene->light[l_idx]->color.g = ft_atoi(rgb_infos[1]);
 	scene->light[l_idx]->color.b = ft_atoi(rgb_infos[2]);
@@ -79,17 +88,18 @@ void	stock_light(t_scene *scene, char *info_map, int l_idx)
 
 	sep_info = ft_split(info_map, ' ');
 	if (sep_info == NULL)
-		handle_error(PARSE_ERR);
-	valid_form(3, sep_info);
+		exit_error(info_map, scene, PARSE_ERR);
 	coord_info = ft_split((char *)sep_info[1], ',');
 	if (coord_info == NULL)
-		handle_error(COOR_ERR);
+		return (free_doub_array(sep_info),
+			exit_error(info_map, scene, COOR_ERR));
 	stock_coord(scene, coord_info, l_idx);
 	free_doub_array(coord_info);
 	scene->light[l_idx]->l_brightness = ft_atod(sep_info[2]);
 	rgb_infos = ft_split((char *)sep_info[3], ',');
 	if (rgb_infos == NULL)
-		handle_error(PARSE_RGB_ERR);
+		return (free_doub_array(sep_info),
+			exit_error(info_map, scene, PARSE_RGB_ERR));
 	stock_rgb(scene, rgb_infos, l_idx);
 	free_doub_array(rgb_infos);
 	free_doub_array(sep_info);

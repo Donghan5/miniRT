@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 12:13:29 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/11 16:06:54 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/12 12:40:30 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,25 +46,21 @@ void	count_objs(char *path, t_scene *scene)
 	map_line = get_next_line(fd);
 	while (map_line != NULL)
 	{
-		if (is_empty_or_comment(map_line))
+		if (!is_empty_or_comment(map_line))
 		{
-			free(map_line);
-			map_line = get_next_line(fd);
-			continue ;
+			if (ft_strncmp(map_line, "sp", 2) == 0)
+				scene->sphere_n++;
+			else if (ft_strncmp(map_line, "pl", 2) == 0)
+				scene->plane_n++;
+			else if (ft_strncmp(map_line, "cy", 2) == 0)
+				scene->cylinder_n++;
+			else if (ft_strncmp(map_line, "co", 2) == 0)
+				scene->cone_n++;
+			else if (ft_strncmp(map_line, "L", 1) == 0 || ft_strncmp(map_line, "l", 1) == 0)
+				scene->light_n++;
 		}
-		if (ft_strncmp(map_line, "sp", 2) == 0)
-			scene->sphere_n++;
-		else if (ft_strncmp(map_line, "pl", 2) == 0)
-			scene->plane_n++;
-		else if (ft_strncmp(map_line, "cy", 2) == 0)
-			scene->cylinder_n++;
-		else if (ft_strncmp(map_line, "co", 2) == 0)
-			scene->cone_n++;
-		else if (ft_strncmp(map_line, "L", 1) == 0 || ft_strncmp(map_line, "l", 1) == 0)
-			scene->light_n++;
 		free(map_line);
 		map_line = get_next_line(fd);
 	}
 	close(fd);
 }
-

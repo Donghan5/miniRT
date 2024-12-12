@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:40:16 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/11 14:44:12 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/12 16:09:15 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,26 +20,16 @@
 # include <fcntl.h>
 # include <errno.h>
 # include <float.h>
+# include <stdbool.h>
 # include <sys/time.h>
-# define SCREEN_HEIGHT 500 //1080
-# define SCREEN_WIDTH 700 //1920
+# define SCREEN_HEIGHT 700
+# define SCREEN_WIDTH 900
 # define MAX_REFLECTION_DEPTH 3
 # define EPSILON 0.0001
 # define PARSE_ERR "Fail to parse"
 # define PARSE_RGB_ERR "Fail to parse RGB"
 # define COOR_ERR "Fail to coordinate parse"
 # define ORI_ERR "Fail to orientation parse"
-
-typedef struct s_count
-{
-	int	a_count;
-	int	c_count;
-	int	l_count;
-	int	sp_count;
-	int	pl_count;
-	int	cy_count;
-	int	co_count;
-}		t_count;
 
 typedef struct s_indices
 {
@@ -48,12 +38,12 @@ typedef struct s_indices
 	int	cy_idx;
 	int	l_idx;
 	int	co_idx;
-}			t_indices;
+}				t_indices;
 
 typedef struct s_vec3 {
-    double	x;
-    double	y;
-    double	z;
+	double	x;
+	double	y;
+	double	z;
 }				t_vec3;
 
 typedef struct s_color {
@@ -63,8 +53,8 @@ typedef struct s_color {
 }				t_color;
 
 typedef struct s_ray {
-    t_vec3	origin;
-    t_vec3	direction;
+	t_vec3	origin;
+	t_vec3	direction;
 }				t_ray;
 
 typedef struct s_data
@@ -126,17 +116,30 @@ typedef struct s_cone
 	t_color	color;
 	double	co_diameter;
 	double	co_height;
-}			t_cone;
+}				t_cone;
+
+typedef struct s_hit_material
+{
+	t_vec3	hit_point;
+	double	t;
+	int		type;
+	int		index;
+	t_color	base_color;
+	double	shininess;
+	double	spec_intensity;
+	double	diffuse_strength;
+	double	reflectivity;
+}				t_hit_material;
 
 typedef struct s_scene
 {
 	t_ambient	ambient;
 	t_camera	camera;
-	t_cone		**cone;
 	t_light		**light;
 	t_sphere	**sphere;
 	t_plane		**plane;
 	t_cylinder	**cylinder;
+	t_cone		**cone;
 	int			cone_n;
 	int			sphere_n;
 	int			plane_n;
@@ -186,83 +189,147 @@ typedef struct s_info
 	int		toggle_mode;
 }				t_info;
 
-t_vec3 vec3(double x, double y, double z);
+typedef struct s_count
+{
+	int	a_count;
+	int	c_count;
+	int	l_count;
+	int	sp_count;
+	int	pl_count;
+	int	cy_count;
+	int	co_count;
+}				t_count;
 
-t_vec3 vec3_add(t_vec3 a, t_vec3 b);
+void	init_count(t_count *count);
 
-t_vec3 vec3_sub(t_vec3 a, t_vec3 b);
+void	process_parse(char *map_line, t_scene *scene, t_indices *indices);
+void	check_validity(char *map_info);
+void	handle_error_free(char *map_line, char *msg);
 
-t_vec3 vec3_mul(t_vec3 v, double t);
+// vector_operations.c
+t_vec3	vec3(double x, double y, double z);
+t_vec3	vec3_add(t_vec3 a, t_vec3 b);
+t_vec3	vec3_sub(t_vec3 a, t_vec3 b);
+t_vec3	vec3_mul(t_vec3 v, double t);
+t_vec3	vec3_hadamard(t_vec3 a, t_vec3 b);
 
-t_vec3 vec3_hadamard(t_vec3 a, t_vec3 b);
+// extra_operations.c
+t_color	t_color_add(t_color a, t_color b);
+double	vec3_dot(t_vec3 a, t_vec3 b);
+t_vec3	vec3_normalize(t_vec3 v);
+t_vec3	vec3_reflect(t_vec3 v, t_vec3 n);
+t_vec3	vec3_cross(t_vec3 a, t_vec3 b);
 
-double vec3_dot(t_vec3 a, t_vec3 b);
+// add_lights.c
+t_color	add_lights(t_hit_material material, t_info *info,
+			t_vec3 normal, t_ray ray);
 
-t_vec3 vec3_normalize(t_vec3 v);
+// intersect_cylinder.c
+double	intersect_cylinder(t_ray ray, t_cylinder *cyl);
 
-t_vec3 vec3_reflect(t_vec3 v, t_vec3 n);
+// intersect_sphere.c
+double	intersect_sphere(t_ray ray, t_sphere *sphere);
 
-t_vec3 vec3_cross(t_vec3 a, t_vec3 b);
+// intersect_plane.c
+double	intersect_plane(t_ray ray, t_plane *plane);
 
+// intersect_cone.c
+double	intersect_cone(t_ray ray, t_cone *co);
+
+// check_shadow.c
+double	check_shadow(t_info *info, t_vec3 hit_point, t_vec3 light_pos);
+
+// trace_ray.c
+t_color	trace_ray(t_ray ray, t_info *info, int depth);
+
+// ft_atod.c
 double	ft_atod(const char *str);
 
-int		isEqual(double a, double b);
+// tools.c
+void	smart_free(void *element);
+int		is_equal(double a, double b);
+void	ft_putstr_fd(char *s, int fd);
+void	exit_error(char *line, t_scene *scene, char *message);
+void	free_scene_safe(t_scene *scene);
 
+// mouse_actions.c
 int		mouse_clicks(int keycode, int x, int y, t_info *info);
 int		mouse_off(int keycode, int x, int y, t_info *info);
 int		mouse_moves(int x, int y, t_info *info);
 
+// key_actions.c
 int		key_pressed(int keycode, t_info *info);
 int		key_off(int keycode, t_info *info);
-void	parse_scene(char *path, t_scene *scene);
-int		render_next_frame(t_info *info);
-void	exit_error(t_scene scene, int free_index_limit, char *message);
-void	ft_putstr_fd(char *s, int fd);
 
-void	render_scene(t_info *info);
-int		close_window(t_info *info);
+// parsing/parsing.c
+void	parse_scene(char *path, t_scene *scene);
+
+// frame_render.c
 int		render_next_frame(t_info *info);
+
+// render_scene.c
+void	render_scene(t_info *info);
+
+int		close_window(t_info *info);
 
 void	handle_map_check(char *map_line, t_scene *scene, t_indices *indices);
 
-// init.c
+// parsing/init.c
 void	init_scene(char *path, t_scene *scene);
 void	init_ambient(t_scene *scene);
 void	init_camera(t_scene *scene);
 void	init_light(t_scene *scene);
-void	init_count(t_count *count);
 void	init_indices(t_indices *indices);
 
-// init_shape.c
+void	init_cone(t_scene *scene);
+
+// parsing/init_shape.c
 void	init_sphere(t_scene *scene);
 void	init_plane(t_scene *scene);
 void	init_cylinder(t_scene *scene);
-void	init_cone(t_scene *scene);
 
-void	free_just_scene(t_scene *scene);
-// int		check_map(char *map_name);
+// parsing/parse_utils.c
 void	handle_error(char *msg);
 int		ft_isspace(char c);
 int		is_empty_or_comment(char *line);
 void	free_doub_array(char **strs);
 
-// parse_tool.c
+// parsing/parse_tool.c
 void	count_objs(char *path, t_scene *scene);
 int		get_type(char *map_info);
 
-// stock_basic.c
+// parsing/stock_basic.c
 void	stock_ambient(t_scene *scene, char *info_map);
+void	stock_sphere(t_scene *scene, char *info_map, int sp_idx);
 void	stock_cam(t_scene *scene, char *info_map);
 void	stock_light(t_scene *scene, char *info_map, int l_idx);
 void	stock_infos(int type, t_scene *scene, char *info_map);
 
-//stock_shape.c
-void	stock_plane(t_scene *scene, char *info_map, int pl_idx);
-void	stock_sphere(t_scene *scene, char *info_map, int sp_idx);
-void	stock_cylinder(t_scene *scene, char *info_map, int cy_idx);
 void	stock_cone(t_scene *scene, char *info_map, int co_idx);
 
+// parsing/stock_cylinder.c
+void	stock_cylinder(t_scene *scene, char *info_map, int cy_idx);
 
-//valid.c
-void	valid_form(int type, char **sep_info);
+// parsing/stock_plane.c
+void	stock_plane(t_scene *scene, char *info_map, int pl_idx);
+
+// parsing/free.c
+void	free_just_scene(t_scene *scene);
+
+// parsing/valid.c
+void	validity_type_one(char *map_info, size_t *i);
+void	validity_type_two(char *map_info, size_t *i);
+void	validity_type_three(char *map_info, size_t *i);
+void	validity_type_four(char *map_info, size_t *i);
+void	validity_type_five(char *map_info, size_t *i);
+
+// parsing/check.c
+void	check_int(char *map_info, size_t *i);
+void	check_doub(char *map_info, size_t *i);
+void	check_validity(char *map_info);
+void	check_three(char *map_info, size_t *i, char *type);
+void	print_double_array(char **array);
+
+// ft_realloc.c
+void	*ft_realloc(void *ptr, size_t old_size, size_t new_size);
 #endif
