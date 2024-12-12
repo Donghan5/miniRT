@@ -6,7 +6,7 @@
 /*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:48:58 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/10 13:57:37 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/12/11 19:21:24 by pzinurov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,8 @@ static void	apply_movement(t_info *info, double forward, double sideways)
 	}
 }
 
-static void	update_key_states(t_info *info, t_key_state *keys, int keycode, int is_pressed)
+static void	update_key_states(t_info *info, t_key_state *keys,
+	int keycode, int is_pressed)
 {
 	if (is_pressed)
 	{
@@ -75,31 +76,31 @@ static void	update_key_states(t_info *info, t_key_state *keys, int keycode, int 
 	}
 }
 
-static void update_movement(t_info *info, int keycode, int is_pressed)
+static void	update_movement(t_info *info, int keycode, int is_pressed)
 {
-    double	forward;
-    double	sideways;
+	double				forward;
+	double				sideways;
 	static t_key_state	keys;
 
 	forward = 0;
 	sideways = 0;
 	update_key_states(info, &keys, keycode, is_pressed);
-    if (keys.forward)
-        forward += 2.0;
-    if (keys.backward)
-        forward -= 2.0;
-    if (keys.right)
-        sideways -= 2.0;
-    if (keys.left)
-        sideways += 2.0;
-    if (forward != 0 || sideways != 0)
+	if (keys.forward)
+		forward += 2.0;
+	if (keys.backward)
+		forward -= 2.0;
+	if (keys.right)
+		sideways -= 2.0;
+	if (keys.left)
+		sideways += 2.0;
+	if (forward != 0 || sideways != 0)
 	{
-        info->is_input = 1;
-        apply_movement(info, forward, sideways);
-    }
+		info->is_input = 1;
+		apply_movement(info, forward, sideways);
+	}
 }
 
-static void simple_key_actions(int keycode, t_info *info)
+static void	simple_key_actions(int keycode, t_info *info)
 {
 	if (keycode == 49 && info->toggle_mode != TOGGLE_LOW)
 	{
@@ -123,20 +124,20 @@ static void simple_key_actions(int keycode, t_info *info)
 	}
 }
 
-int key_pressed(int keycode, t_info *info)
+int	key_pressed(int keycode, t_info *info)
 {
-    if (keycode == 65307 || keycode == 113)
-        close_window(info);
-    else
+	if (keycode == 65307 || keycode == 113)
+		close_window(info);
+	else
 	{
-        simple_key_actions(keycode, info);
+		simple_key_actions(keycode, info);
 		update_movement(info, keycode, 1);
 	}
-    return (0);
+	return (0);
 }
 
-int key_off(int keycode, t_info *info)
+int	key_off(int keycode, t_info *info)
 {
-    update_movement(info, keycode, 0);
-    return (0);
+	update_movement(info, keycode, 0);
+	return (0);
 }

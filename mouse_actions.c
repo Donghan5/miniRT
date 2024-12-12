@@ -6,11 +6,31 @@
 /*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:49:06 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/03 11:49:36 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/12/11 18:51:25 by pzinurov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
+
+static void	toggle_renders(int keycode, int y, t_info *info)
+{
+	if (keycode == 4)
+	{
+		info->scene.camera.coordinates.y++;
+		if (info->toggle_mode == TOGGLE_FULL)
+			info->render_type = FULL_RENDER;
+		else
+			info->render_type = LOW_RENDER;
+	}
+	else if (keycode == 5)
+	{
+		info->scene.camera.coordinates.y--;
+		if (info->toggle_mode == TOGGLE_FULL)
+			info->render_type = FULL_RENDER;
+		else
+			info->render_type = LOW_RENDER;
+	}
+}
 
 int	mouse_clicks(int keycode, int x, int y, t_info *info)
 {
@@ -34,22 +54,8 @@ int	mouse_clicks(int keycode, int x, int y, t_info *info)
 		info->moving_origin_y = y;
 		info->rotate_camera = 1;
 	}
-	else if (keycode == 4)
-	{
-		info->scene.camera.coordinates.y++;
-		if (info->toggle_mode == TOGGLE_FULL)
-			info->render_type = FULL_RENDER;
-		else
-			info->render_type = LOW_RENDER;
-	}
-	else if (keycode == 5)
-	{
-		info->scene.camera.coordinates.y--;
-		if (info->toggle_mode == TOGGLE_FULL)
-			info->render_type = FULL_RENDER;
-		else
-			info->render_type = LOW_RENDER;
-	}
+	else
+		toggle_renders(keycode, y, info);
 	return (0);
 }
 
@@ -67,7 +73,6 @@ int	mouse_off(int keycode, int x, int y, t_info *info)
 
 int	mouse_moves(int x, int y, t_info *info)
 {
-	static int		limit_moves;
 	static double	yaw;
 	static double	pitch;
 	double			dx;
@@ -77,14 +82,11 @@ int	mouse_moves(int x, int y, t_info *info)
 	{
 		dx = (x - info->moving_origin_x) * 0.005;
 		dy = (y - info->moving_origin_y) * 0.005;
-
 		yaw -= dx;
-		pitch = fmax(-M_PI/2, fmin(M_PI/2, pitch - dy));
-
+		pitch = fmax(-M_PI / 2, fmin(M_PI / 2, pitch - dy));
 		info->scene.camera.orientation.x = cos(pitch) * sin(yaw);
 		info->scene.camera.orientation.y = sin(pitch);
 		info->scene.camera.orientation.z = cos(pitch) * cos(yaw);
-
 		info->moving_origin_x = x;
 		info->moving_origin_y = y;
 	}

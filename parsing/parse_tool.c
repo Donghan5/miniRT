@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_tool.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 12:13:29 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/12 12:40:30 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/11 17:34:43 by pzinurov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	count_objs(char *path, t_scene *scene)
 				scene->cylinder_n++;
 			else if (ft_strncmp(map_line, "co", 2) == 0)
 				scene->cone_n++;
-			else if (ft_strncmp(map_line, "L", 1) == 0 || ft_strncmp(map_line, "l", 1) == 0)
+			else if (ft_strncmp(map_line, "L", 1) == 0)
 				scene->light_n++;
 		}
 		free(map_line);

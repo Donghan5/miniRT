@@ -3,10 +3,38 @@
 /*                                                        :::      ::::::::   */
 /*   stock_cone.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 14:01:27 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/12 16:21:42 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/11 17:41:35 by pzinurov         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minirt.h"
+
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   stock_cylinder.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/04 22:39:04 by donghank          #+#    #+#             */
+/*   Updated: 2024/12/09 13:11:51 by donghank         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minirt.h"
+
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   stock_cylinder.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/04 22:39:04 by donghank          #+#    #+#             */
+/*   Updated: 2024/12/09 13:11:51 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,18 +44,15 @@
 	checking the range of the RGB value
 	@param
 		rgb_infos: rgb information to free
-	@return
-		0: out of value (fail)
-		1: success
 */
-static int	check_range(char **rgb_infos)
+static void	check_range(char **rgb_infos)
 {
-	if (ft_atoi(rgb_infos[0]) > 255 || \
-	ft_atoi(rgb_infos[1]) > 255 || ft_atoi(rgb_infos[2]) > 255)
+	if (ft_atoi(rgb_infos[0]) > 255 || ft_atoi(rgb_infos[1]) > 255 || ft_atoi(rgb_infos[2]) > 255)
 	{
-		return (0);
+		free_doub_array(rgb_infos);
+		handle_error("RGB value, out of range");
+		printf("Is it working check_range");
 	}
-	return (1);
 }
 
 /*
@@ -66,11 +91,7 @@ static void	stock_rgb(t_scene *scene, char **rgb_infos, int co_idx)
 		free_doub_array(rgb_infos);
 		exit_error(NULL, scene, "Invalid rgb value type");
 	}
-	if (!check_range(rgb_infos))
-	{
-		free_doub_array(rgb_infos);
-		exit_error(NULL, scene, "RGB out of value");
-	}
+	check_range(rgb_infos);
 	scene->cone[co_idx]->color.r = ft_atoi(rgb_infos[0]);
 	scene->cone[co_idx]->color.g = ft_atoi(rgb_infos[1]);
 	scene->cone[co_idx]->color.b = ft_atoi(rgb_infos[2]);
@@ -109,6 +130,7 @@ void	stock_cone(t_scene *scene, char *info_map, int co_idx)
 	sep_info = ft_split(info_map, ' ');
 	if (sep_info == NULL)
 		exit_error(info_map, scene, PARSE_ERR);
+	// valid_form(sep_info);
 	coord_info = ft_split(sep_info[1], ',');
 	if (coord_info == NULL)
 		exit_error(info_map, scene, COOR_ERR);

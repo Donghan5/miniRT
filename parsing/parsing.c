@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 17:39:31 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/12 16:31:39 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/12 16:59:39 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,21 +21,17 @@
 // 	line_start = line;
 // 	new_line = malloc(ft_strlen(line) + 1);
 // 	if (!new_line)
-// 		return (free(line), line_start = NULL, NULL);
+// 		return (free(line), line = NULL, NULL);
 // 	new_start = new_line;
 // 	while (*line)
 // 	{
-// 		while (!ft_isspace(*line))
-// 		{
-// 			*new_line = *line;
-// 			(line)++;
-// 			new_line++;
-// 		}
+// 		while (*line && !ft_isspace(*line))
+// 			*new_line++ = *line++;
 // 		if (ft_isspace(*line))
 // 			*new_line = ' ';
 // 		while (ft_isspace(*line))
-// 			(line)++;
-// 		if (*line != ',' && *(new_line - 1) != ',')
+// 			line++;
+// 		if (*line != ',' && new_line != new_start && *(new_line - 1) != ',')
 // 			new_line++;
 // 	}
 // 	*new_line = '\0';
@@ -43,7 +39,6 @@
 // 	line_start = new_start;
 // 	return (line_start);
 // }
-
 
 char	*normalize_line(char *line)
 {
@@ -100,11 +95,10 @@ static int	do_stock(int fd, t_scene *scene)
 		if (!is_empty_or_comment(map_line))
 		{
 			map_line = normalize_line(map_line);
-			printf("~%s~\n", map_line);
 			if (!map_line)
 				return (0);
+			printf("~%s~\n", map_line);
 			process_parse(map_line, scene, &indices);
-			printf("parsed\n");
 		}
 		free(map_line);
 		map_line = get_next_line(fd);

@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:40:16 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/12 16:09:15 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/12 17:02:50 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@
 # include <fcntl.h>
 # include <errno.h>
 # include <float.h>
-# include <stdbool.h>
 # include <sys/time.h>
+# define M_PI 3.14159265358979323846
 # define SCREEN_HEIGHT 700
 # define SCREEN_WIDTH 900
 # define MAX_REFLECTION_DEPTH 3
@@ -121,6 +121,7 @@ typedef struct s_cone
 typedef struct s_hit_material
 {
 	t_vec3	hit_point;
+	t_vec3	normal;
 	double	t;
 	int		type;
 	int		index;
@@ -206,6 +207,13 @@ void	process_parse(char *map_line, t_scene *scene, t_indices *indices);
 void	check_validity(char *map_info);
 void	handle_error_free(char *map_line, char *msg);
 
+// fill_material.c
+void	fill_material(t_hit_material *closest,
+			t_info *info, t_ray ray);
+
+// info_block.c
+void	print_info_block(t_info *info);
+
 // vector_operations.c
 t_vec3	vec3(double x, double y, double z);
 t_vec3	vec3_add(t_vec3 a, t_vec3 b);
@@ -221,8 +229,7 @@ t_vec3	vec3_reflect(t_vec3 v, t_vec3 n);
 t_vec3	vec3_cross(t_vec3 a, t_vec3 b);
 
 // add_lights.c
-t_color	add_lights(t_hit_material material, t_info *info,
-			t_vec3 normal, t_ray ray);
+t_color	add_lights(t_hit_material material, t_info *info, t_ray ray);
 
 // intersect_cylinder.c
 double	intersect_cylinder(t_ray ray, t_cylinder *cyl);
@@ -246,10 +253,13 @@ t_color	trace_ray(t_ray ray, t_info *info, int depth);
 double	ft_atod(const char *str);
 
 // tools.c
-void	smart_free(void *element);
+t_color	normalize_color(t_color color);
 int		is_equal(double a, double b);
 void	ft_putstr_fd(char *s, int fd);
+
+// free_tools.c
 void	exit_error(char *line, t_scene *scene, char *message);
+void	smart_free(void *element);
 void	free_scene_safe(t_scene *scene);
 
 // mouse_actions.c
@@ -289,6 +299,7 @@ void	init_plane(t_scene *scene);
 void	init_cylinder(t_scene *scene);
 
 // parsing/parse_utils.c
+void	free_scene(t_scene *scene);
 void	handle_error(char *msg);
 int		ft_isspace(char c);
 int		is_empty_or_comment(char *line);
@@ -313,23 +324,22 @@ void	stock_cylinder(t_scene *scene, char *info_map, int cy_idx);
 // parsing/stock_plane.c
 void	stock_plane(t_scene *scene, char *info_map, int pl_idx);
 
-// parsing/free.c
+
 void	free_just_scene(t_scene *scene);
 
-// parsing/valid.c
+
+void	check_int(char *map_info, size_t *i);
+void	check_doub(char *map_info, size_t *i);
+void	check_three(char *map_info, size_t *i, char *type);
+void	check_validity(char *map_info);
+
+void print_double_array(char **array);
+
+
 void	validity_type_one(char *map_info, size_t *i);
 void	validity_type_two(char *map_info, size_t *i);
 void	validity_type_three(char *map_info, size_t *i);
 void	validity_type_four(char *map_info, size_t *i);
 void	validity_type_five(char *map_info, size_t *i);
 
-// parsing/check.c
-void	check_int(char *map_info, size_t *i);
-void	check_doub(char *map_info, size_t *i);
-void	check_validity(char *map_info);
-void	check_three(char *map_info, size_t *i, char *type);
-void	print_double_array(char **array);
-
-// ft_realloc.c
-void	*ft_realloc(void *ptr, size_t old_size, size_t new_size);
 #endif

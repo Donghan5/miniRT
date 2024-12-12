@@ -6,7 +6,7 @@
 /*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/25 13:50:09 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/09 14:03:01 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/12/11 18:54:54 by pzinurov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,6 @@ double	ft_atod(const char *str)
 	res = 0.0;
 	fraction = 0.0;
 	div = 1.0;
-	if (!str)
-		return (0.0);
 	while (*str == ' ')
 		str++;
 	check_sign(&str, &sign);
@@ -63,6 +61,5 @@ double	ft_atod(const char *str)
 			div *= 10.0;
 		}
 	}
-	res += fraction / div;
-	return (sign * res);
+	return (res += fraction / div, sign * res);
 }

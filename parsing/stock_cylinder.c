@@ -3,69 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   stock_cylinder.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 22:39:04 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/12 16:22:27 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/12 16:30:53 by pzinurov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-// char *mutiple_single(char *str)
-// {
-// 	while (*str == ' ' || *str == '\t')
-// 		str++;
-// 	size_t len = ft_strlen(str);
-// 	char *result = (char *)malloc(len + 1);
-// 	if (!result)
-// 		return NULL;
-
-// 	bool first_word_printed = false;
-// 	size_t idx = 0;
-
-// 	while (*str)
-// 	{
-// 		if (*str == ' ' || *str == '\t')
-// 		{
-// 			while (*str == ' ' || *str == '\t')
-// 				str++;
-// 			if (*str != '\0' && first_word_printed)
-// 			{
-// 				result[idx++] = ' ';
-// 			}
-// 		}
-// 		else
-// 		{
-// 			result[idx++] = *str;
-// 			first_word_printed = true;
-// 			str++;
-// 		}
-// 	}
-// 	result[idx] = '\0';
-
-// 	char *trimmed_result = ft_realloc(result, len,idx + 1);
-// 	if (trimmed_result)
-// 		result = trimmed_result;
-// 	return (trimmed_result);
-// }
-
 /*
 	checking the range of the RGB value
 	@param
 		rgb_infos: rgb information to free
-	@return
-		0: out of value (fail)
-		1: success
 */
-static int	check_range(char **rgb_infos)
+static void	check_range(char **rgb_infos)
 {
-	if (ft_atoi(rgb_infos[0]) > 255 || \
-	ft_atoi(rgb_infos[1]) > 255 || ft_atoi(rgb_infos[2]) > 255)
+	if (ft_atoi(rgb_infos[0]) > 255 || ft_atoi(rgb_infos[1]) > 255 || ft_atoi(rgb_infos[2]) > 255)
 	{
-		return (0);
+		free_doub_array(rgb_infos);
+		handle_error("RGB value, out of range");
+		printf("Is it working check_range");
 	}
-	return (1);
 }
 
 /*
@@ -97,26 +56,14 @@ static void	stock_coord_orient(t_scene *scene, char **coord_info, char **orient_
 */
 static void	stock_rgb(t_scene *scene, char **rgb_infos, int cy_idx)
 {
-	char	*r_info;
-	char	*g_info;
-	char	*b_info;
-
-	r_info = rgb_infos[0];
-	g_info = rgb_infos[1];
-	b_info = rgb_infos[2];
-
 	if (ft_strchr(rgb_infos[0], '.')
 		|| ft_strchr(rgb_infos[1], '.')
 		|| ft_strchr(rgb_infos[2], '.'))
 	{
 		free_doub_array(rgb_infos);
-		exit_error(NULL, scene, "bad RGB type");
+		exit_error(NULL, scene, "Invalid rgb value type");
 	}
-	if (!check_range(rgb_infos))
-	{
-		free_doub_array(rgb_infos);
-		exit_error(NULL, scene, "bad RGB out of range");
-	}
+	check_range(rgb_infos);
 	scene->cylinder[cy_idx]->color.r = ft_atoi(rgb_infos[0]);
 	scene->cylinder[cy_idx]->color.g = ft_atoi(rgb_infos[1]);
 	scene->cylinder[cy_idx]->color.b = ft_atoi(rgb_infos[2]);
@@ -155,7 +102,6 @@ void	stock_cylinder(t_scene *scene, char *line, int cy_idx)
 	sep = ft_split(line, ' ');
 	if (sep == NULL)
 		exit_error(line, scene, PARSE_ERR);
-	print_double_array(sep);
 	coord = ft_split(sep[1], ',');
 	if (coord == NULL)
 		return (free_doub_array(sep), exit_error(line, scene, COOR_ERR));
@@ -168,11 +114,7 @@ void	stock_cylinder(t_scene *scene, char *line, int cy_idx)
 	free_doub_array(orient_info);
 	stock_dia_hei(scene, sep, cy_idx);
 	rgb_infos = ft_split(sep[5], ',');
-	printf("sep[5]: %s\n", sep[5]);
-	printf("rgb_infos[0]: %s\n", rgb_infos[0]);
-	printf("rgb_infos[1]: %s\n", rgb_infos[1]);
-	printf("rgb_infos[2]: %s\n", rgb_infos[2]);
-	if (rgb_infos[0] == NULL || rgb_infos[1] == NULL || rgb_infos[2] == NULL)
+	if (rgb_infos == NULL)
 		return (free_doub_array(sep), exit_error(line, scene, PARSE_RGB_ERR));
 	stock_rgb(scene, rgb_infos, cy_idx);
 	return (free_doub_array(rgb_infos), free_doub_array(sep));

@@ -3,14 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   stock_ambient.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 23:06:48 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/12 16:21:22 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/11 16:36:26 by pzinurov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
+
+// /*
+// 	to check the validity of the information form
+// 	how to treat comment?
+// 	@param
+// 		sep_info: separated information
+// */
+// static void	valid_form_amb(char **sep_info)
+// {
+// 	int	i;
+
+// 	i = 0;
+// 	while (sep_info[i])
+// 		i++;
+// 	if (i > 3)
+// 		exit_error(NULL, scene, "Invalid information form");
+// }
 
 /*
 	checking the range of the RGB value

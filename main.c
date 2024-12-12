@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:39:54 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/12 12:42:10 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/11 18:55:11 by pzinurov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,84 +43,6 @@ void	info_initializer(t_info *info)
 	info->toggle_mode = TOGGLE_OFF;
 }
 
-void	print_color(t_color color, const char *prefix) {
-	printf("%s: R:%d G:%d B:%d\n", prefix, color.r, color.g, color.b);
-}
-
-void	print_vector(t_vec3 vec, const char *prefix) {
-	printf("%s: x:%f y:%f z:%f\n", prefix, vec.x, vec.y, vec.z);
-}
-
-void print_scene_info(t_scene *scene) {
-    // Print Ambient Light info
-    printf("\n=== Ambient Light ===\n");
-    printf("Ratio: %f\n", scene->ambient.a_ratio);
-    print_color(scene->ambient.color, "Color");
-
-    // Print Camera info
-    printf("\n=== Camera ===\n");
-    print_vector(scene->camera.coordinates, "Position");
-    print_vector(scene->camera.orientation, "Orientation");
-    printf("Field of View: %d\n", scene->camera.c_view);
-
-    // Print Light info
-    printf("\n=== Light ===\n");
-	for (int i = 0; i < scene->light_n; i++) {
-		print_vector(scene->light[i]->coordinates, "Position(light)");
-		print_color(scene->light[i]->color, "Color(light)");
-		printf("Brightness: %f\n", scene->light[i]->l_brightness);
-	}
-
-    // Print Sphere info
-    printf("\n=== Spheres (%d) ===\n", scene->sphere_n);
-    for (int i = 0; i < scene->sphere_n; i++) {
-        if (scene->sphere[i]) {
-            printf("\nSphere %d:\n", i + 1);
-            print_vector(scene->sphere[i]->coordinates, "Position");
-            print_color(scene->sphere[i]->color, "Color");
-            printf("Diameter: %f\n", scene->sphere[i]->sp_diameter);
-        }
-    }
-
-    // Print Plane info
-    printf("\n=== Planes (%d) ===\n", scene->plane_n);
-    for (int i = 0; i < scene->plane_n; i++) {
-        if (scene->plane[i]) {
-            printf("\nPlane %d:\n", i + 1);
-            print_vector(scene->plane[i]->coordinates, "Position");
-            print_vector(scene->plane[i]->normal_vector, "Normal");
-            print_color(scene->plane[i]->color, "Color");
-        }
-    }
-
-    // Print Cylinder info
-    printf("\n=== Cylinders (%d) ===\n", scene->cylinder_n);
-    for (int i = 0; i < scene->cylinder_n; i++) {
-        if (scene->cylinder[i]) {
-            printf("\nCylinder %d:\n", i + 1);
-            print_vector(scene->cylinder[i]->coordinates, "Position");
-            print_vector(scene->cylinder[i]->axis_vector, "Axis");
-            print_color(scene->cylinder[i]->color, "Color");
-            printf("Diameter: %f\n", scene->cylinder[i]->cy_diameter);
-            printf("Height: %f\n", scene->cylinder[i]->cy_height);
-        }
-    }
-
-	// Print Cone info
-    printf("\n=== Cones (%d) ===\n", scene->cone_n);
-    for (int i = 0; i < scene->cone_n; i++) {
-        if (scene->cone[i]) {
-            printf("\nCone %d:\n", i + 1);
-            print_vector(scene->cone[i]->coordinates, "Position");
-            print_vector(scene->cone[i]->axis_vector, "Axis");
-            print_color(scene->cone[i]->color, "Color");
-            printf("Diameter: %f\n", scene->cone[i]->co_diameter);
-            printf("Height: %f\n", scene->cone[i]->co_height);
-        }
-    }
-    printf("\n");
-}
-
 int	main(int argc, char **argv)
 {
 	void	*mlx;
@@ -140,11 +62,10 @@ int	main(int argc, char **argv)
 	info.img = &img;
 	info.mlx = mlx;
 	info.win = mlx_win;
-	// info_initializer(&info);
-	// install_hooks(&info);
-	// mlx_loop_hook(info.mlx, render_next_frame, &info);
-	// mlx_loop(info.mlx);
-	printf("Passed rendering part\n");
+	info_initializer(&info);
+	install_hooks(&info);
+	mlx_loop_hook(info.mlx, render_next_frame, &info);
+	mlx_loop(info.mlx);
 	close_window(&info);
 	return (exit(0), 0);
 }
