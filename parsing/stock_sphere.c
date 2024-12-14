@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 23:07:02 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/09 15:56:57 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/12 21:17:44 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,17 @@
 	checking the range of the RGB value
 	@param
 		rgb_infos: rgb information to free
+	@return
+		1: success
+		0: fail
 */
-static void	check_range(char **rgb_infos)
+static int	check_range(char **rgb_infos)
 {
-	if (ft_atoi(rgb_infos[0]) > 255 || ft_atoi(rgb_infos[1]) > 255 || ft_atoi(rgb_infos[2]) > 255)
-	{
-		free_doub_array(rgb_infos);
-		handle_error("RGB value, out of range");
-	}
+	if (ft_atoi(rgb_infos[0]) > 255
+		|| ft_atoi(rgb_infos[1]) > 255
+		|| ft_atoi(rgb_infos[2]) > 255)
+		return (0);
+	return (1);
 }
 
 static void stock_coord(t_scene *scene, char **coord_info, int sp_idx)
@@ -47,7 +50,11 @@ static void	stock_rgb(t_scene *scene, char **rgb_infos, int sp_idx)
 		free_doub_array(rgb_infos);
 		handle_error("Invalid rgb value type");
 	}
-	check_range(rgb_infos);
+	if (!check_range(rgb_infos))
+	{
+		free_doub_array(rgb_infos);
+		handle_error("RGB value, out of range");
+	}
 	scene->sphere[sp_idx]->color.r = ft_atoi(rgb_infos[0]);
 	scene->sphere[sp_idx]->color.g = ft_atoi(rgb_infos[1]);
 	scene->sphere[sp_idx]->color.b = ft_atoi(rgb_infos[2]);

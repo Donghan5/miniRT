@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   stock_light.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 00:48:43 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/11 17:45:43 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/12/12 21:13:01 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,17 @@
 	checking the range of the RGB value
 	@param
 		rgb_infos: rgb information to free
+	@return
+		1: success
+		0: fail
 */
-static void	check_range(char **rgb_infos)
+static int	check_range(char **rgb_infos)
 {
-	if (ft_atoi(rgb_infos[0]) > 255 || ft_atoi(rgb_infos[1]) > 255 || ft_atoi(rgb_infos[2]) > 255)
-	{
-		free_doub_array(rgb_infos);
-		handle_error("RGB value, out of range");
-		printf("Is it working check_range");
-	}
+	if (ft_atoi(rgb_infos[0]) > 255
+		|| ft_atoi(rgb_infos[1]) > 255
+		|| ft_atoi(rgb_infos[2]) > 255)
+		return (0);
+	return (1);
 }
 
 /*
@@ -55,7 +57,11 @@ static void	stock_rgb(t_scene *scene, char **rgb_infos, int l_idx)
 		free_doub_array(rgb_infos);
 		exit_error(NULL, scene, "Invalid rgb value type");
 	}
-	check_range(rgb_infos);
+	if (!check_range(rgb_infos))
+	{
+		free_doub_array(rgb_infos);
+		exit_error(NULL, scene, "RGB value out of range");
+	}
 	scene->light[l_idx]->color.r = ft_atoi(rgb_infos[0]);
 	scene->light[l_idx]->color.g = ft_atoi(rgb_infos[1]);
 	scene->light[l_idx]->color.b = ft_atoi(rgb_infos[2]);

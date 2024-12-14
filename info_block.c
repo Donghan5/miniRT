@@ -6,13 +6,38 @@
 /*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 18:22:23 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/11 18:26:23 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/12/12 20:07:59 by pzinurov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-static void	print_low_res(t_info *info, unsigned int gray, unsigned int green)
+void	print_mirr_refl(t_info *info, unsigned int gray, unsigned int green)
+{
+	unsigned int	low_color;
+
+	low_color = gray;
+	if (info->is_mirror)
+		low_color = green;
+	mlx_string_put(info->mlx, info->win, info->text_x,
+		info->text_y + 120, gray, "3                        Mirror Reflection");
+	mlx_string_put(info->mlx, info->win, info->text_x,
+		info->text_y + 110, low_color, "                _____");
+	mlx_string_put(info->mlx, info->win, info->text_x,
+		info->text_y + 120, low_color, "               |");
+	if (info->is_mirror)
+		mlx_string_put(info->mlx, info->win, info->text_x,
+			info->text_y + 120, gray, "                 ON");
+	else
+		mlx_string_put(info->mlx, info->win, info->text_x,
+			info->text_y + 120, gray, "                 OFF");
+	mlx_string_put(info->mlx, info->win, info->text_x,
+		info->text_y + 120, low_color, "                     |");
+	mlx_string_put(info->mlx, info->win, info->text_x,
+		info->text_y + 120, low_color, "                _____");
+}
+
+void	print_low_res(t_info *info, unsigned int gray, unsigned int green)
 {
 	unsigned int	low_color;
 
@@ -37,7 +62,7 @@ static void	print_low_res(t_info *info, unsigned int gray, unsigned int green)
 		info->text_y + 90, low_color, "                _____");
 }
 
-static void	print_full_res(t_info *info, unsigned int gray, unsigned int green)
+void	print_full_res(t_info *info, unsigned int gray, unsigned int green)
 {
 	unsigned int	full_color;
 
@@ -62,23 +87,23 @@ static void	print_full_res(t_info *info, unsigned int gray, unsigned int green)
 		info->text_y + 105, full_color, "                _____");
 }
 
-static void	print_camera_coord(t_info *info, unsigned int gray)
+void	print_camera_coord(t_info *info, unsigned int gray)
 {
 	char	*data;
 
 	mlx_string_put(info->mlx, info->win, info->text_x,
-		info->text_y + 135, gray, "Pos X Y Z");
+		info->text_y + 150, gray, "Pos X Y Z");
 	data = ft_itoa(info->scene.camera.coordinates.x);
 	mlx_string_put(info->mlx, info->win, info->text_x + 90,
-		info->text_y + 135, gray, data);
+		info->text_y + 150, gray, data);
 	free(data);
 	data = ft_itoa(info->scene.camera.coordinates.y);
 	mlx_string_put(info->mlx, info->win, info->text_x + 120,
-		info->text_y + 135, gray, data);
+		info->text_y + 150, gray, data);
 	free(data);
 	data = ft_itoa(info->scene.camera.coordinates.z);
 	mlx_string_put(info->mlx, info->win, info->text_x + 150,
-		info->text_y + 135, gray, data);
+		info->text_y + 150, gray, data);
 	free(data);
 }
 
@@ -87,42 +112,17 @@ void	print_camera_view(t_info *info, unsigned int gray)
 	char	*data;
 
 	mlx_string_put(info->mlx, info->win, info->text_x,
-		info->text_y + 155, gray, "Cam X Y Z");
+		info->text_y + 170, gray, "Cam X Y Z");
 	data = ft_itoa(info->scene.camera.orientation.x * 100);
 	mlx_string_put(info->mlx, info->win, info->text_x + 90,
-		info->text_y + 155, gray, data);
+		info->text_y + 170, gray, data);
 	free(data);
 	data = ft_itoa(info->scene.camera.orientation.y * 100);
 	mlx_string_put(info->mlx, info->win, info->text_x + 120,
-		info->text_y + 155, gray, data);
+		info->text_y + 170, gray, data);
 	free(data);
 	data = ft_itoa(info->scene.camera.orientation.z * 100);
 	mlx_string_put(info->mlx, info->win, info->text_x + 150,
-		info->text_y + 155, gray, data);
+		info->text_y + 170, gray, data);
 	free (data);
-}
-
-void	print_info_block(t_info *info)
-{
-	unsigned int	gray;
-	unsigned int	green;
-
-	green = 0x32CD32;
-	gray = 0xC0C0C0;
-	mlx_string_put(info->mlx, info->win, info->text_x,
-		info->text_y, gray, "miniRT. Controls:");
-	mlx_string_put(info->mlx, info->win, info->text_x,
-		info->text_y + 15, gray, "Esc/Q          Exit");
-	mlx_string_put(info->mlx, info->win, info->text_x,
-		info->text_y + 30, gray, "Mouse L        Camera and direction");
-	mlx_string_put(info->mlx, info->win, info->text_x,
-		info->text_y + 45, gray, "Mouse R        Camera rotation");
-	mlx_string_put(info->mlx, info->win, info->text_x,
-		info->text_y + 60, gray, "WASD           Movement");
-	mlx_string_put(info->mlx, info->win, info->text_x,
-		info->text_y + 75, gray, "Scroll         Up/Down");
-	print_low_res(info, gray, green);
-	print_full_res(info, gray, green);
-	print_camera_coord(info, gray);
-	print_camera_view(info, gray);
 }

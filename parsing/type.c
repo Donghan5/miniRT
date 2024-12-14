@@ -6,11 +6,38 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 13:43:21 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/12 13:59:18 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/14 14:10:24 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
+
+/*
+	updating the count
+	@param
+		str: string to verify
+		count: counting index (type count)
+*/
+static void	update_count(char *str, t_count *count)
+{
+	if (ft_strchr(str, '\n'))
+		str = ft_strtrim(str, "\n");
+	if (str[0] == 'A' && str[1] == '\0')
+			count->a_count++;
+	else if (str[0] == 'C' && str[1] == '\0')
+			count->c_count++;
+	else if ((str[0] == 'L' && str[1] == '\0') || \
+		(str[0] == 'l' && str[1] == '\0'))
+			count->l_count++;
+	else if (str[0] == 'p' && str[1] == 'l' && str[2] == '\0')
+			count->pl_count++;
+	else if (str[0] == 's' && str[1] == 'p' && str[2] == '\0')
+			count->sp_count++;
+	else if (str[0] == 'c' && str[1] == 'y' && str[2] == '\0')
+			count->cy_count++;
+	else if (str[0] == 'c' && str[1] == 'o' && str[2] == '\0')
+			count->co_count++;
+}
 
 /*
 	check multiple declaration of the type
@@ -28,22 +55,7 @@ static void	check_double_type(char **sep)
 	init_count(&count);
 	while (sep[i] != NULL)
 	{
-		if (ft_strchr(sep[i], '\n'))
-			sep[i] = ft_strtrim(sep[i], "\n");
-		if (sep[i][0] == 'A' && sep[i][1] == '\0')
-			count.a_count++;
-		else if (sep[i][0] == 'C' && sep[i][1] == '\0')
-			count.c_count++;
-		else if (sep[i][0] == 'L' && sep[i][1] == '\0' || sep[i][0] == 'l' && sep[i][1] == '\0')
-			count.l_count++;
-		else if (sep[i][0] == 'p' && sep[i][1] == 'l' && sep[i][2] == '\0')
-			count.pl_count++;
-		else if (sep[i][0] == 's' && sep[i][1] == 'p' && sep[i][2] == '\0')
-			count.sp_count++;
-		else if (sep[i][0] == 'c' && sep[i][1] == 'y' && sep[i][2] == '\0')
-			count.cy_count++;
-		else if (sep[i][0] == 'c' && sep[i][1] == 'o' && sep[i][2] == '\0')
-			count.co_count++;
+		update_count(sep[i], &count);
 		i++;
 	}
 	if (count.a_count > 1 || count.c_count > 1 || count.l_count > 1 \
@@ -87,7 +99,12 @@ static int	set_type(char **sep)
 }
 
 /*
-	this one is test prototype
+	getter
+	@param
+		map_info: information of the map
+	@return
+		type (1 to 7): type value
+		0: fail
 */
 int	get_type(char *map_info)
 {

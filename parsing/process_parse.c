@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process_parse.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 15:01:06 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/12 16:26:49 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/12/14 14:05:11 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,20 @@ static void	parse_obj(int type, char *map_line, \
 			exit_error(map_line, scene, "Index is out of range in plane");
 		stock_plane(scene, map_line, indices->pl_idx++);
 	}
-	else if (type == 5)
+}
+
+/*
+	helper function of process_parse()
+	@param
+		type: the type of information
+		map_line: information of the map which read by gnl
+		scene: information to render
+		indices: the structure index
+*/
+static void	parse_obj_advance(int type, char *map_line, \
+				t_scene *scene, t_indices *indices)
+{
+	if (type == 5)
 	{
 		if (indices->sp_idx >= scene->sphere_n)
 			exit_error(map_line, scene, "Index is out of range in sphere");
@@ -83,7 +96,10 @@ void	process_parse(char *map_line, t_scene *scene, t_indices *indices)
 	if (type == 1 || type == 2)
 		stock_infos(type, scene, map_line);
 	else if (type >= 3 && type <= 7)
+	{
 		parse_obj(type, map_line, scene, indices);
+		parse_obj_advance(type, map_line, scene, indices);
+	}
 	else if (type == 0)
 		exit_error(map_line, scene, "Invalid type!");
 }
@@ -102,23 +118,3 @@ void	handle_map_check(char *map_line, t_scene *scene, t_indices *indices)
 	printf("Processing line: %s\n", map_line);
 	process_parse(map_line, scene, indices);
 }
-
-// void	free_just_scene(t_scene *scene)
-// {
-// 	int	i;
-// 	int	j;
-// 	int	k;
-// 	int	l;
-
-// 	i = 0;
-// 	j = 0;
-// 	k = 0;
-// 	while (i < scene->sphere_n)
-// 		free(scene->sphere[i++]);
-// 	while (j < scene->plane_n)
-// 		free(scene->plane[j++]);
-// 	while (k < scene->cylinder_n)
-// 		free(scene->cylinder[k++]);
-// 	while (l < scene->light_n)
-// 		free(scene->light[l++]);
-// }

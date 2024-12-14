@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:39:54 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/11 18:55:11 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/12/12 21:32:43 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,9 @@ void	info_initializer(t_info *info)
 	info->text_y = SCREEN_HEIGHT - 250;
 	info->is_input = 0;
 	info->last_scroll_time = 0;
-	info->render_type = FULL_RENDER;
-	info->toggle_mode = TOGGLE_OFF;
+	info->is_mirror = 0;
+	info->render_type = LOW_RENDER;
+	info->toggle_mode = TOGGLE_LOW;
 }
 
 int	main(int argc, char **argv)
@@ -64,8 +65,8 @@ int	main(int argc, char **argv)
 	info.win = mlx_win;
 	info_initializer(&info);
 	install_hooks(&info);
-	mlx_loop_hook(info.mlx, render_next_frame, &info);
-	mlx_loop(info.mlx);
+	// mlx_loop_hook(info.mlx, render_next_frame, &info);
+	// mlx_loop(info.mlx);
 	close_window(&info);
 	return (exit(0), 0);
 }

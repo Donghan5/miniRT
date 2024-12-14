@@ -6,11 +6,28 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 22:30:21 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/04 22:55:11 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/12 21:13:55 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
+
+/*
+	checking the range of the RGB value
+	@param
+		rgb_infos: rgb information to free
+	@return
+		1: success
+		0: fail
+*/
+static int	check_range(char **rgb_infos)
+{
+	if (ft_atoi(rgb_infos[0]) > 255
+		|| ft_atoi(rgb_infos[1]) > 255
+		|| ft_atoi(rgb_infos[2]) > 255)
+		return (0);
+	return (1);
+}
 
 /*
 	helper function to stock information of coordinate
@@ -49,6 +66,18 @@ static void	stock_normal_vec(t_scene *scene, char **orient_info, int pl_idx)
 */
 static void	stock_rgb(t_scene *scene, char **rgb_infos, int pl_idx)
 {
+	if (ft_strchr(rgb_infos[0], '.')
+		|| ft_strchr(rgb_infos[1], '.')
+		|| ft_strchr(rgb_infos[2], '.'))
+	{
+		free_doub_array(rgb_infos);
+		exit_error(NULL, scene, "Invalid rgb value type");
+	}
+	if (!check_range(rgb_infos))
+	{
+		free_doub_array(rgb_infos);
+		exit_error(NULL, scene, "RGB value out of range");
+	}
 	scene->plane[pl_idx]->color.r = ft_atoi(rgb_infos[0]);
 	scene->plane[pl_idx]->color.g = ft_atoi(rgb_infos[1]);
 	scene->plane[pl_idx]->color.b = ft_atoi(rgb_infos[2]);

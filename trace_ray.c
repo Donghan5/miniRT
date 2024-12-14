@@ -6,7 +6,7 @@
 /*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 18:53:25 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/12 16:38:31 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/12/12 19:39:36 by pzinurov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,7 @@ t_color	trace_ray(t_ray ray, t_info *info, int depth)
 	t_hit_material	closest;
 	t_color			refl;
 
-	if (depth >= MAX_REFLECTION_DEPTH)
+	if (depth >= MAX_DEPTH)
 		return ((t_color){0, 0, 0});
 	closest = find_closest(ray, info);
 	if (closest.t >= DBL_MAX)
@@ -133,7 +133,7 @@ t_color	trace_ray(t_ray ray, t_info *info, int depth)
 			vec3_mul(ray.direction, closest.t));
 	fill_material(&closest, info, ray);
 	result = add_lights(closest, info, ray);
-	if (closest.reflectivity <= 0.0 || depth >= MAX_REFLECTION_DEPTH)
+	if (!info->is_mirror || closest.reflectivity <= 0.0 || depth >= MAX_DEPTH)
 		return (result);
 	ray.origin = vec3_add(closest.hit_point, vec3_mul(closest.normal, EPSILON));
 	ray.direction = vec3_reflect(ray.direction, closest.normal);

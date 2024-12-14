@@ -6,7 +6,7 @@
 /*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 18:32:31 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/11 18:43:29 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/12/12 18:37:44 by pzinurov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,17 +51,18 @@ static void	fill_cylinder(t_hit_material *closest, t_info *info)
 
 	cyl = info->scene.cylinder[closest->index];
 	axis = vec3_normalize(cyl->axis_vector);
-
-	 height = vec3_dot(vec3_sub(closest->hit_point, cyl->coordinates), axis);
-	if (fabs(height) < EPSILON || fabs(height - cyl->cy_height) < EPSILON)
-		closest->normal = height < EPSILON ? vec3_mul(axis, -1.0) : axis;
+	height = vec3_dot(vec3_sub(closest->hit_point, cyl->coordinates), axis);
+	if ((fabs(height) < EPSILON || fabs(height - cyl->cy_height) < EPSILON)
+		&& height < EPSILON)
+			closest->normal = vec3_mul(axis, -1.0);
+	else if ((fabs(height) < EPSILON
+			|| fabs(height - cyl->cy_height) < EPSILON))
+			closest->normal = axis;
 	else
-	{
-		t_vec3 cp = vec3_sub(closest->hit_point, cyl->coordinates);
-		double proj = vec3_dot(cp, axis);
-		t_vec3 axis_point = vec3_add(cyl->coordinates, vec3_mul(axis, proj));
-		closest->normal = vec3_normalize(vec3_sub(closest->hit_point, axis_point));
-	}
+		closest->normal = vec3_normalize(vec3_sub(closest->hit_point,
+					vec3_add(cyl->coordinates, vec3_mul(axis,
+							vec3_dot(vec3_sub(closest->hit_point,
+									cyl->coordinates), axis)))));
 	closest->base_color.r = cyl->color.r;
 	closest->base_color.g = cyl->color.g;
 	closest->base_color.b = cyl->color.b;
@@ -82,17 +83,15 @@ static void	fill_cone(t_hit_material *closest, t_info *info)
 	axis = vec3_normalize(co->axis_vector);
 	to_hit = vec3_sub(closest->hit_point, co->coordinates);
 	height = vec3_dot(to_hit, axis);
-	if (fabs(height - co->co_height/2.0) < EPSILON)
+	if (fabs(height - co->co_height / 2.0) < EPSILON)
 		closest->normal = axis;
-	else if (fabs(height + co->co_height/2.0) < EPSILON)
+	else if (fabs(height + co->co_height / 2.0) < EPSILON)
 		closest->normal = vec3_mul(axis, -1.0);
 	else
-	{
-		t_vec3 cp = vec3_sub(closest->hit_point, co->coordinates);
-		double proj = vec3_dot(cp, axis);
-		t_vec3 axis_point = vec3_add(co->coordinates, vec3_mul(axis, proj));
-		closest->normal = vec3_normalize(vec3_sub(closest->hit_point, axis_point));
-	}
+		closest->normal = vec3_normalize(vec3_sub(closest->hit_point,
+					vec3_add(co->coordinates,
+						vec3_mul(axis, vec3_dot(vec3_sub(closest->hit_point,
+									co->coordinates), axis)))));
 	closest->base_color.r = co->color.r;
 	closest->base_color.g = co->color.g;
 	closest->base_color.b = co->color.b;

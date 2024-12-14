@@ -3,47 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   stock_ambient.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 23:06:48 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/11 16:36:26 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/12/14 16:33:12 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-// /*
-// 	to check the validity of the information form
-// 	how to treat comment?
-// 	@param
-// 		sep_info: separated information
-// */
-// static void	valid_form_amb(char **sep_info)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while (sep_info[i])
-// 		i++;
-// 	if (i > 3)
-// 		exit_error(NULL, scene, "Invalid information form");
-// }
-
 /*
 	checking the range of the RGB value
 	@param
 		rgb_infos: rgb information to free
+	@return
+		1: success
+		0: fail
 */
-static void	check_range(char **rgb_infos, t_scene *scene)
+static int	check_range(char **rgb_infos)
 {
-	if (ft_atoi(rgb_infos[0]) > 255
-		|| ft_atoi(rgb_infos[1]) > 255
+	if (ft_atoi(rgb_infos[0]) > 255 || ft_atoi(rgb_infos[1]) > 255
 		|| ft_atoi(rgb_infos[2]) > 255)
-	{
-		free_doub_array(rgb_infos);
-		exit_error(NULL, scene, "RGB value, out of range");
-		printf("Is it working check_range");
-	}
+		return (0);
+	return (1);
 }
 
 /*
@@ -61,7 +43,11 @@ static void	stock_rgb(t_scene *scene, char **rgb_infos)
 		free_doub_array(rgb_infos);
 		exit_error(NULL, scene, "Invalid rgb value type");
 	}
-	check_range(rgb_infos, scene);
+	if (!check_range(rgb_infos))
+	{
+		free_doub_array(rgb_infos);
+		exit_error(NULL, scene, "Out of range RGB value");
+	}
 	scene->ambient.color.r = ft_atoi(rgb_infos[0]);
 	scene->ambient.color.g = ft_atoi(rgb_infos[1]);
 	scene->ambient.color.b = ft_atoi(rgb_infos[2]);
@@ -85,7 +71,6 @@ void	stock_ambient(t_scene *scene, char *info_map)
 	sep_info = ft_split(info_map, ' ');
 	if (sep_info == NULL)
 		exit_error(NULL, scene, PARSE_ERR);
-	// valid_form_amb(sep_info);
 	scene->ambient.a_ratio = ft_atod(sep_info[1]);
 	rgb_infos = ft_split((char *)sep_info[2], ',');
 	if (rgb_infos == NULL)

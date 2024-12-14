@@ -6,73 +6,46 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 17:39:31 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/12 16:59:39 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/12 23:34:45 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-// char	*normalize_line(char *line)
-// {
-// 	char	*new_line;
-// 	char	*new_start;
-// 	char	*line_start;
-
-// 	line_start = line;
-// 	new_line = malloc(ft_strlen(line) + 1);
-// 	if (!new_line)
-// 		return (free(line), line = NULL, NULL);
-// 	new_start = new_line;
-// 	while (*line)
-// 	{
-// 		while (*line && !ft_isspace(*line))
-// 			*new_line++ = *line++;
-// 		if (ft_isspace(*line))
-// 			*new_line = ' ';
-// 		while (ft_isspace(*line))
-// 			line++;
-// 		if (*line != ',' && new_line != new_start && *(new_line - 1) != ',')
-// 			new_line++;
-// 	}
-// 	*new_line = '\0';
-// 	free(line_start);
-// 	line_start = new_start;
-// 	return (line_start);
-// }
-
-char	*normalize_line(char *line)
+/*
+	change multiple white spaces to single white space
+	@param
+		line: line which want to switch
+	@return
+		new_start: converted line
+*/
+char	*normalize_line(char **line)
 {
-	int		i;
-	int		j;
 	char	*new_line;
+	char	*new_start;
+	char	*line_start;
 
-
-	i = 0;
-	j = 0;
-	if (!line)
-		return (NULL);
-	new_line = malloc(ft_strlen(line) + 1);
+	line_start = *line;
+	new_line = malloc(ft_strlen(*line) + 2);
 	if (!new_line)
+		return (smart_free(*line), *line = NULL, NULL);
+	new_start = new_line;
+	while (**line)
 	{
-		free(line);
-		return (NULL);
+		while (**line && !ft_isspace(**line))
+			*new_line++ = *(*line)++;
+		if (!ft_isspace(**line))
+			continue ;
+		*new_line = ' ';
+		while (ft_isspace(**line))
+			(*line)++;
+		if (**line != ',' && new_line != new_start && *(new_line - 1) != ',')
+			new_line++;
 	}
-	while (line[i])
-	{
-		while (line[i] && !ft_isspace(line[i]))
-			new_line[j++] = line[i++];
-		if (line[i] && ft_isspace(line[i]))
-		{
-			new_line[j] = ' ';
-			while (line[i] && ft_isspace(line[i]))
-				i++;
-			if (line[i] != ',' && (j == 0 || new_line[j - 1] != ','))
-				j++;
-		}
-	}
-	new_line[j] = '\0';
-	free(line);
-	return (new_line);
+	*new_line = '\0';
+	smart_free(line_start);
+	*line = new_start;
+	return (new_start);
 }
 
 /*
@@ -94,7 +67,7 @@ static int	do_stock(int fd, t_scene *scene)
 	{
 		if (!is_empty_or_comment(map_line))
 		{
-			map_line = normalize_line(map_line);
+			normalize_line(&map_line);
 			if (!map_line)
 				return (0);
 			printf("~%s~\n", map_line);
@@ -106,6 +79,12 @@ static int	do_stock(int fd, t_scene *scene)
 	return (1);
 }
 
+/*
+	To check the validity of the line
+	@param
+		fd: file descriptor of the map
+		scene: scene to render
+*/
 static int	validate(int fd, t_scene *scene)
 {
 	char	*map_line;

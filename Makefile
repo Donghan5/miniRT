@@ -1,10 +1,6 @@
 SRC = main.c frame_render.c key_actions.c mouse_actions.c tools.c render_scene.c vector_operations.c ft_atod.c
-# SRC += parsing/init_shape.c parsing/init.c parsing/parse_tool.c parsing/parse_utils.c parsing/parsing.c \
-# 	parsing/process_parse.c parsing/stock_basic.c parsing/stock_cylinder.c parsing/stock_plane.c
 SRC += check_shadow.c intersect_cylinder.c intersect_plane.c intersect_sphere.c trace_ray.c intersect_cone.c\
-	extra_operations.c add_lights.c info_block.c fill_material.c free_tools.c
-
-# parsing new
+	extra_operations.c add_lights.c info_block.c fill_material.c free_tools.c print_info_block.c
 SRC += parsing/init_shape.c parsing/init.c parsing/parse_tool.c parsing/parse_utils.c parsing/parsing.c \
 	parsing/process_parse.c parsing/stock_ambient.c parsing/stock_basic.c parsing/stock_cam.c parsing/stock_cone.c \
 	parsing/stock_cylinder.c parsing/stock_light.c parsing/stock_plane.c parsing/stock_sphere.c parsing/type.c \

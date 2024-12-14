@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_tool.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 12:13:29 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/11 17:34:43 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/12/14 14:14:34 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,26 @@
 // }
 
 /*
+	to update the object count
+	@param
+		map_line: information of the map
+		scene: to render`
+*/
+static void	update_count(char *map_line, t_scene *scene)
+{
+	if (ft_strncmp(map_line, "sp", 2) == 0)
+		scene->sphere_n++;
+	else if (ft_strncmp(map_line, "pl", 2) == 0)
+		scene->plane_n++;
+	else if (ft_strncmp(map_line, "cy", 2) == 0)
+		scene->cylinder_n++;
+	else if (ft_strncmp(map_line, "co", 2) == 0)
+		scene->cone_n++;
+	else if (ft_strncmp(map_line, "L", 1) == 0)
+		scene->light_n++;
+}
+
+/*
 	check the amount of sp, pl and cy
 	@param
 		path: path of the map(.rt)
@@ -47,18 +67,7 @@ void	count_objs(char *path, t_scene *scene)
 	while (map_line != NULL)
 	{
 		if (!is_empty_or_comment(map_line))
-		{
-			if (ft_strncmp(map_line, "sp", 2) == 0)
-				scene->sphere_n++;
-			else if (ft_strncmp(map_line, "pl", 2) == 0)
-				scene->plane_n++;
-			else if (ft_strncmp(map_line, "cy", 2) == 0)
-				scene->cylinder_n++;
-			else if (ft_strncmp(map_line, "co", 2) == 0)
-				scene->cone_n++;
-			else if (ft_strncmp(map_line, "L", 1) == 0)
-				scene->light_n++;
-		}
+			update_count(map_line, scene);
 		free(map_line);
 		map_line = get_next_line(fd);
 	}

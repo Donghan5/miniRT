@@ -6,7 +6,7 @@
 /*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:49:06 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/11 18:51:25 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/12/12 20:04:32 by pzinurov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,8 @@ int	mouse_clicks(int keycode, int x, int y, t_info *info)
 {
 	if (keycode == 1)
 	{
-		if (x < info->text_x + 230 && x > info->text_x
-			&& y > info->text_y && y < info->text_y + 100)
+		if (x < info->text_x + 240 && x > info->text_x
+			&& y > info->text_y - 15 && y < info->text_y + 200)
 		{
 			info->moving_origin_x = x - info->text_x;
 			info->moving_origin_y = y - info->text_y;

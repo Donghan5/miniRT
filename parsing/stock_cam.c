@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 23:06:53 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/09 15:56:33 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/12 21:07:41 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ void	stock_cam(t_scene *scene, char *info_map)
 	sep_info = ft_split(info_map, ' ');
 	if (sep_info == NULL)
 		handle_error(PARSE_ERR);
-	// valid_form(sep_info);
 	coord_info = ft_split((char *)sep_info[1], ',');
 	if (coord_info == NULL)
 		handle_error(COOR_ERR);

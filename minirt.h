@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:40:16 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/12 17:02:50 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/12 21:27:18 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 # define M_PI 3.14159265358979323846
 # define SCREEN_HEIGHT 700
 # define SCREEN_WIDTH 900
-# define MAX_REFLECTION_DEPTH 3
+# define MAX_DEPTH 3
 # define EPSILON 0.0001
 # define PARSE_ERR "Fail to parse"
 # define PARSE_RGB_ERR "Fail to parse RGB"
@@ -188,6 +188,7 @@ typedef struct s_info
 	long	last_scroll_time;
 	int		render_type;
 	int		toggle_mode;
+	int		is_mirror;
 }				t_info;
 
 typedef struct s_count
@@ -211,8 +212,15 @@ void	handle_error_free(char *map_line, char *msg);
 void	fill_material(t_hit_material *closest,
 			t_info *info, t_ray ray);
 
-// info_block.c
+// print_info_block.c
 void	print_info_block(t_info *info);
+
+// info_block.c
+void	print_mirr_refl(t_info *info, unsigned int gray, unsigned int green);
+void	print_low_res(t_info *info, unsigned int gray, unsigned int green);
+void	print_full_res(t_info *info, unsigned int gray, unsigned int green);
+void	print_camera_coord(t_info *info, unsigned int gray);
+void	print_camera_view(t_info *info, unsigned int gray);
 
 // vector_operations.c
 t_vec3	vec3(double x, double y, double z);
@@ -323,8 +331,6 @@ void	stock_cylinder(t_scene *scene, char *info_map, int cy_idx);
 
 // parsing/stock_plane.c
 void	stock_plane(t_scene *scene, char *info_map, int pl_idx);
-
-
 void	free_just_scene(t_scene *scene);
 
 
@@ -341,5 +347,4 @@ void	validity_type_two(char *map_info, size_t *i);
 void	validity_type_three(char *map_info, size_t *i);
 void	validity_type_four(char *map_info, size_t *i);
 void	validity_type_five(char *map_info, size_t *i);
-
 #endif
