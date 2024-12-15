@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:40:16 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/14 17:35:14 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/15 01:30:13 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -357,14 +357,13 @@ void	stock_cylinder(t_scene *scene, char *info_map, int cy_idx);
 // parsing/stock_plane.c
 void	stock_plane(t_scene *scene, char *info_map, int pl_idx);
 
+// parsing/check.c
 void	check_int(char *map_info, size_t *i);
 void	check_doub(char *map_info, size_t *i);
 void	check_three(char *map_info, size_t *i, char *type);
 void	check_validity(char *map_info);
 
-void print_double_array(char **array);
-
-
+// parsing/valid.c
 void	validity_type_one(char *map_info, size_t *i);
 void	validity_type_two(char *map_info, size_t *i);
 void	validity_type_three(char *map_info, size_t *i);
