@@ -6,28 +6,11 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 22:30:21 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/12 21:13:55 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/15 19:35:23 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
-
-/*
-	checking the range of the RGB value
-	@param
-		rgb_infos: rgb information to free
-	@return
-		1: success
-		0: fail
-*/
-static int	check_range(char **rgb_infos)
-{
-	if (ft_atoi(rgb_infos[0]) > 255
-		|| ft_atoi(rgb_infos[1]) > 255
-		|| ft_atoi(rgb_infos[2]) > 255)
-		return (0);
-	return (1);
-}
 
 /*
 	helper function to stock information of coordinate
@@ -58,6 +41,32 @@ static void	stock_normal_vec(t_scene *scene, char **orient_info, int pl_idx)
 }
 
 /*
+	verify the validity of the RGB value
+	@param
+		scene: to render
+		rgb_infos: information of RGB
+		sep: separated information
+		info: information of the map
+*/
+static void	verify_rgb(t_scene *scene, char **rgb_infos, char **sep, char *info)
+{
+	if (ft_strchr(rgb_infos[0], '.')
+		|| ft_strchr(rgb_infos[1], '.')
+		|| ft_strchr(rgb_infos[2], '.'))
+	{
+		free_doub_array(rgb_infos);
+		free_doub_array(sep);
+		exit_error(info, scene, "Invalid rgb value type");
+	}
+	if (!check_range(rgb_infos))
+	{
+		free_doub_array(rgb_infos);
+		free_doub_array(sep);
+		exit_error(info, scene, "Out of range RGB value");
+	}
+}
+
+/*
 	helper function to stock the value of rgb
 	@param
 		scene: scene to render
@@ -66,18 +75,6 @@ static void	stock_normal_vec(t_scene *scene, char **orient_info, int pl_idx)
 */
 static void	stock_rgb(t_scene *scene, char **rgb_infos, int pl_idx)
 {
-	if (ft_strchr(rgb_infos[0], '.')
-		|| ft_strchr(rgb_infos[1], '.')
-		|| ft_strchr(rgb_infos[2], '.'))
-	{
-		free_doub_array(rgb_infos);
-		exit_error(NULL, scene, "Invalid rgb value type");
-	}
-	if (!check_range(rgb_infos))
-	{
-		free_doub_array(rgb_infos);
-		exit_error(NULL, scene, "RGB value out of range");
-	}
 	scene->plane[pl_idx]->color.r = ft_atoi(rgb_infos[0]);
 	scene->plane[pl_idx]->color.g = ft_atoi(rgb_infos[1]);
 	scene->plane[pl_idx]->color.b = ft_atoi(rgb_infos[2]);
@@ -94,30 +91,31 @@ static void	stock_rgb(t_scene *scene, char **rgb_infos, int pl_idx)
 		rgb_infos: RGB information of plane
 
 */
-void	stock_plane(t_scene *scene, char *info_map, int pl_idx)
+void	stock_plane(t_scene *scene, char *info, int pl_idx)
 {
-	char	**sep_info;
+	char	**sep;
 	char	**coord_info;
 	char	**orient_info;
 	char	**rgb_infos;
 
-	sep_info = ft_split(info_map, ' ');
-	if (sep_info == NULL)
+	sep = ft_split(info, ' ');
+	if (sep == NULL)
 		handle_error(PARSE_ERR);
-	coord_info = ft_split(sep_info[1], ',');
+	coord_info = ft_split(sep[1], ',');
 	if (coord_info == NULL)
-		handle_error(COOR_ERR);
+		return (free_doub_array(sep), exit_error(info, scene, COOR_ERR));
 	stock_coordinate(scene, coord_info, pl_idx);
 	free_doub_array(coord_info);
-	orient_info = ft_split(sep_info[2], ',');
+	orient_info = ft_split(sep[2], ',');
 	if (orient_info == NULL)
-		handle_error(ORI_ERR);
+		return (free_doub_array(sep), exit_error(info, scene, ORI_ERR));
 	stock_normal_vec(scene, orient_info, pl_idx);
 	free_doub_array(orient_info);
-	rgb_infos = ft_split(sep_info[3], ',');
+	rgb_infos = ft_split(sep[3], ',');
 	if (rgb_infos == NULL)
-		handle_error(PARSE_RGB_ERR);
+		return (free_doub_array(sep), exit_error(info, scene, PARSE_RGB_ERR));
+	verify_rgb(scene, rgb_infos, sep, info);
 	stock_rgb(scene, rgb_infos, pl_idx);
 	free_doub_array(rgb_infos);
-	free_doub_array(sep_info);
+	free_doub_array(sep);
 }

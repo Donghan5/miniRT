@@ -6,26 +6,36 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 23:06:48 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/14 16:33:12 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/15 19:44:17 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
 /*
-	checking the range of the RGB value
+	verify the validity of the RGB value
 	@param
-		rgb_infos: rgb information to free
-	@return
-		1: success
-		0: fail
+		scene: to render
+		rgb_infos: information of RGB
+		sep: separated information
+		info: information of the map
 */
-static int	check_range(char **rgb_infos)
+static void	verify_rgb(t_scene *scene, char **rgb_infos, char **sep, char *info)
 {
-	if (ft_atoi(rgb_infos[0]) > 255 || ft_atoi(rgb_infos[1]) > 255
-		|| ft_atoi(rgb_infos[2]) > 255)
-		return (0);
-	return (1);
+	if (ft_strchr(rgb_infos[0], '.')
+		|| ft_strchr(rgb_infos[1], '.')
+		|| ft_strchr(rgb_infos[2], '.'))
+	{
+		free_doub_array(rgb_infos);
+		free_doub_array(sep);
+		exit_error(info, scene, "Invalid rgb value type");
+	}
+	if (!check_range(rgb_infos))
+	{
+		free_doub_array(rgb_infos);
+		free_doub_array(sep);
+		exit_error(info, scene, "Out of range RGB value");
+	}
 }
 
 /*
@@ -36,18 +46,6 @@ static int	check_range(char **rgb_infos)
 */
 static void	stock_rgb(t_scene *scene, char **rgb_infos)
 {
-	if (ft_strchr(rgb_infos[0], '.')
-		|| ft_strchr(rgb_infos[1], '.')
-		|| ft_strchr(rgb_infos[2], '.'))
-	{
-		free_doub_array(rgb_infos);
-		exit_error(NULL, scene, "Invalid rgb value type");
-	}
-	if (!check_range(rgb_infos))
-	{
-		free_doub_array(rgb_infos);
-		exit_error(NULL, scene, "Out of range RGB value");
-	}
 	scene->ambient.color.r = ft_atoi(rgb_infos[0]);
 	scene->ambient.color.g = ft_atoi(rgb_infos[1]);
 	scene->ambient.color.b = ft_atoi(rgb_infos[2]);
@@ -70,11 +68,13 @@ void	stock_ambient(t_scene *scene, char *info_map)
 
 	sep_info = ft_split(info_map, ' ');
 	if (sep_info == NULL)
-		exit_error(NULL, scene, PARSE_ERR);
+		exit_error(info_map, scene, PARSE_ERR);
 	scene->ambient.a_ratio = ft_atod(sep_info[1]);
 	rgb_infos = ft_split((char *)sep_info[2], ',');
 	if (rgb_infos == NULL)
-		exit_error(NULL, scene, PARSE_RGB_ERR);
+		return (free_doub_array(sep_info), \
+			exit_error(NULL, scene, PARSE_RGB_ERR));
+	verify_rgb(scene, rgb_infos, sep_info, info_map);
 	stock_rgb(scene, rgb_infos);
 	free_doub_array(rgb_infos);
 	free_doub_array(sep_info);

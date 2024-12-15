@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:40:16 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/15 01:30:13 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/15 19:28:31 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -333,6 +333,7 @@ void	init_cylinder(t_scene *scene);
 
 // parsing/parse_utils.c
 void	free_scene(t_scene *scene);
+int		check_range(char **rgb_infos);
 void	handle_error(char *msg);
 int		ft_isspace(char c);
 int		is_empty_or_comment(char *line);
@@ -355,7 +356,7 @@ void	stock_cone(t_scene *scene, char *info_map, int co_idx);
 void	stock_cylinder(t_scene *scene, char *info_map, int cy_idx);
 
 // parsing/stock_plane.c
-void	stock_plane(t_scene *scene, char *info_map, int pl_idx);
+void	stock_plane(t_scene *scene, char *info, int pl_idx);
 
 // parsing/check.c
 void	check_int(char *map_info, size_t *i);

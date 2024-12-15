@@ -26,7 +26,7 @@ OBJ += $(addprefix $(OBJDIR), $(GNL:.c=.o))
 DEPS = $(addprefix $(DEPDIR), $(SRC:.c=.d))
 DEPS += $(addprefix $(DEPDIR), $(GNL:.c=.d))
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -g3 -Wall -Wextra -Werror
 
 NAME = miniRT
 

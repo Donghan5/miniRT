@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 17:39:31 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/15 01:28:07 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/15 19:13:16 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,6 @@ static int	do_stock(int fd, t_scene *scene)
 			normalize_line(&map_line);
 			if (!map_line)
 				return (0);
-			printf("~%s~\n", map_line);
 			process_parse(map_line, scene, &indices);
 		}
 		free(map_line);
@@ -78,6 +77,7 @@ static int	do_stock(int fd, t_scene *scene)
 	}
 	return (1);
 }
+
 
 /*
 	To check the validity of the line
@@ -90,7 +90,7 @@ static int	validate(int fd)
 
 	map_line = get_next_line(fd);
 	if (!map_line)
-		return (0);
+		return (free(map_line), 0);
 	while (map_line != NULL)
 	{
 		if (!is_empty_or_comment(map_line))

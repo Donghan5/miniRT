@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 13:43:21 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/15 01:28:26 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/15 16:38:50 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ int	get_type(char *map_info)
 	check_double_type(sep);
 	type = set_type(sep);
 	if (type == 0)
-		return (free_doub_array(sep), 0);
+		return (free_doub_array(sep), printf("Invalid type value\n"), 0);
 	free_doub_array(sep);
 	return (type);
 }
