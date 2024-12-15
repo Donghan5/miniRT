@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 22:39:04 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/12 21:12:15 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/15 01:17:30 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ static int	check_range(char **rgb_infos)
 		orient_info: information of axis vector
 		cy_idx: index of cylinder
 */
-static void	stock_coord_orient(t_scene *scene, char **coord_info, char **orient_info, int cy_idx)
+static void	stock_co(t_scene *scene, char **coord_info, \
+					char **orient_info, int cy_idx)
 {
 	scene->cylinder[cy_idx]->coordinates.x = ft_atod(coord_info[0]);
 	scene->cylinder[cy_idx]->coordinates.y = ft_atod(coord_info[1]);
@@ -115,7 +116,7 @@ void	stock_cylinder(t_scene *scene, char *line, int cy_idx)
 	if (orient_info == NULL)
 		return (free_doub_array(coord),
 			free_doub_array(sep), exit_error(line, scene, ORI_ERR));
-	stock_coord_orient(scene, coord, orient_info, cy_idx);
+	stock_co(scene, coord, orient_info, cy_idx);
 	free_doub_array(coord);
 	free_doub_array(orient_info);
 	stock_dia_hei(scene, sep, cy_idx);

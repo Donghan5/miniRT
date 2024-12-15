@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 00:48:43 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/12 21:13:01 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/15 01:24:16 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,9 @@ static void	stock_coord(t_scene *scene, char **coord_info, int l_idx)
 */
 static void	stock_rgb(t_scene *scene, char **rgb_infos, int l_idx)
 {
-	if (ft_strchr(rgb_infos[0], '.')|| ft_strchr(rgb_infos[1], '.')|| ft_strchr(rgb_infos[2], '.'))
+	if (ft_strchr(rgb_infos[0], '.') || \
+		ft_strchr(rgb_infos[1], '.') || \
+		ft_strchr(rgb_infos[2], '.'))
 	{
 		free_doub_array(rgb_infos);
 		exit_error(NULL, scene, "Invalid rgb value type");
@@ -86,7 +88,6 @@ void	stock_light(t_scene *scene, char *info_map, int l_idx)
 	sep_info = ft_split(info_map, ' ');
 	if (sep_info == NULL)
 		exit_error(info_map, scene, PARSE_ERR);
-	// valid_form(sep_info);
 	coord_info = ft_split((char *)sep_info[1], ',');
 	if (coord_info == NULL)
 		return (free_doub_array(sep_info),

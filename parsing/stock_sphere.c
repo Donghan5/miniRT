@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 23:07:02 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/12 21:17:44 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/15 01:16:22 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,14 @@ static int	check_range(char **rgb_infos)
 	return (1);
 }
 
-static void stock_coord(t_scene *scene, char **coord_info, int sp_idx)
+/*
+	stock coordinate informations
+	@param
+		scene: to render
+		coord_info: information of the coordinate
+		sp_idx: index of the sphere
+*/
+static void	stock_coord(t_scene *scene, char **coord_info, int sp_idx)
 {
 	scene->sphere[sp_idx]->coordinates.x = ft_atod(coord_info[0]);
 	scene->sphere[sp_idx]->coordinates.y = ft_atod(coord_info[1]);
@@ -45,7 +52,9 @@ static void stock_coord(t_scene *scene, char **coord_info, int sp_idx)
 */
 static void	stock_rgb(t_scene *scene, char **rgb_infos, int sp_idx)
 {
-	if (ft_strchr(rgb_infos[0], '.')|| ft_strchr(rgb_infos[1], '.')|| ft_strchr(rgb_infos[2], '.'))
+	if (ft_strchr(rgb_infos[0], '.') || \
+		ft_strchr(rgb_infos[1], '.') || \
+		ft_strchr(rgb_infos[2], '.'))
 	{
 		free_doub_array(rgb_infos);
 		handle_error("Invalid rgb value type");
@@ -78,7 +87,6 @@ void	stock_sphere(t_scene *scene, char *info_map, int sp_idx)
 	sep_info = ft_split(info_map, ' ');
 	if (sep_info == NULL)
 		handle_error(PARSE_ERR);
-	// valid_form(sep_info);
 	coord_info = ft_split(sep_info[1], ',');
 	if (coord_info == NULL)
 		handle_error(COOR_ERR);

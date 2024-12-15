@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:40:16 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/12 21:27:18 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/14 17:35:14 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,15 +202,33 @@ typedef struct s_count
 	int	co_count;
 }				t_count;
 
+typedef struct s_intersection
+{
+	t_vec3	axis;
+	t_vec3	center;
+	double	height;
+	double	half_height;
+	t_vec3	v;
+	t_vec3	p;
+	double	d2;
+	double	radius;
+	double	a;
+	double	b;
+	double	c;
+	double	discriminant;
+	double	t1;
+	double	t2;
+	double	t_cap;
+	double	denom;
+}				t_intersection;
+
 void	init_count(t_count *count);
 
-void	process_parse(char *map_line, t_scene *scene, t_indices *indices);
 void	check_validity(char *map_info);
 void	handle_error_free(char *map_line, char *msg);
 
 // fill_material.c
-void	fill_material(t_hit_material *closest,
-			t_info *info, t_ray ray);
+void	fill_material(t_hit_material *closest, t_info *info);
 
 // print_info_block.c
 void	print_info_block(t_info *info);
@@ -236,8 +254,11 @@ t_vec3	vec3_normalize(t_vec3 v);
 t_vec3	vec3_reflect(t_vec3 v, t_vec3 n);
 t_vec3	vec3_cross(t_vec3 a, t_vec3 b);
 
-// add_lights.c
-t_color	add_lights(t_hit_material material, t_info *info, t_ray ray);
+// calc_diffuse_spec.c
+t_color	multiply_colors(t_color a, t_color b, double factor);
+t_color	add_white_component(t_color base, double factor);
+void	calc_diffuse_spec(t_hit_material closest, t_info *info, t_ray ray,
+			t_color (*total_diff_spec)[2]);
 
 // intersect_cylinder.c
 double	intersect_cylinder(t_ray ray, t_cylinder *cyl);
@@ -275,11 +296,15 @@ int		mouse_clicks(int keycode, int x, int y, t_info *info);
 int		mouse_off(int keycode, int x, int y, t_info *info);
 int		mouse_moves(int x, int y, t_info *info);
 
+// update_movement.c
+void	update_movement(t_info *info, int keycode, int is_pressed);
+
 // key_actions.c
 int		key_pressed(int keycode, t_info *info);
 int		key_off(int keycode, t_info *info);
 
 // parsing/parsing.c
+void	process_parse(char *map_line, t_scene *scene, t_indices *indices);
 void	parse_scene(char *path, t_scene *scene);
 
 // frame_render.c
@@ -331,8 +356,6 @@ void	stock_cylinder(t_scene *scene, char *info_map, int cy_idx);
 
 // parsing/stock_plane.c
 void	stock_plane(t_scene *scene, char *info_map, int pl_idx);
-void	free_just_scene(t_scene *scene);
-
 
 void	check_int(char *map_info, size_t *i);
 void	check_doub(char *map_info, size_t *i);
@@ -347,4 +370,5 @@ void	validity_type_two(char *map_info, size_t *i);
 void	validity_type_three(char *map_info, size_t *i);
 void	validity_type_four(char *map_info, size_t *i);
 void	validity_type_five(char *map_info, size_t *i);
+
 #endif

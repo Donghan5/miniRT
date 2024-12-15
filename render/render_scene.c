@@ -6,38 +6,50 @@
 /*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:51:26 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/11 19:21:35 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/12/13 15:06:06 by pzinurov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-static t_ray	get_ray(int x, int y, t_info *info)
+static t_vec3	calc_ray_dir(t_vec3 target, double px, double py)
 {
-	t_ray		ray;
-	t_camera	camera;
+	t_vec3	dir;
+	t_vec3	right;
+	t_vec3	up;
+	t_vec3	forward;
 
-	camera = info->scene.camera;
-	ray.origin = camera.coordinates;
-	double fov = camera.c_view * M_PI / 180.0;
-	double px = (2.0 * ((double)x / SCREEN_WIDTH) - 1.0) * tan(fov/2.0);
-	double py = -(2.0 * ((double)y / SCREEN_HEIGHT) - 1.0) * tan(fov/2.0) * SCREEN_HEIGHT / SCREEN_WIDTH;
-	t_vec3 dir = vec3_normalize(vec3(1.0, py, px));
-	t_vec3 target = vec3_normalize(camera.orientation);
+	dir = vec3_normalize(vec3(1.0, py, px));
 	if (target.x != 0 || target.y != 0 || target.z != 0)
 	{
-		t_vec3 world_up = {0, 1, 0};
-		t_vec3 right = vec3_normalize(vec3_cross(target, world_up));
-		t_vec3 up = vec3_normalize(vec3_cross(right, target));
-		t_vec3 forward = target;
-			ray.direction = vec3_normalize(vec3(
+		right = vec3_normalize(vec3_cross(target, (t_vec3){0, 1, 0}));
+		up = vec3_normalize(vec3_cross(right, target));
+		forward = target;
+		dir = vec3_normalize(vec3(
 					dir.x * forward.x + dir.y * up.x + dir.z * right.x,
 					dir.x * forward.y + dir.y * up.y + dir.z * right.y,
 					dir.x * forward.z + dir.y * up.z + dir.z * right.z
 					));
-		return (ray);
 	}
-	return (ray.direction = dir, ray);
+	return (dir);
+}
+
+static t_ray	get_ray(int x, int y, t_info *info)
+{
+	t_ray		ray;
+	t_vec3		target;
+	double		fov;
+	double		px;
+	double		py;
+
+	ray.origin = info->scene.camera.coordinates;
+	target = vec3_normalize(info->scene.camera.orientation);
+	fov = info->scene.camera.c_view * M_PI / 180.0;
+	px = (2.0 * ((double)x / SCREEN_WIDTH) - 1.0) * tan(fov / 2.0);
+	py = -(2.0 * ((double)y / SCREEN_HEIGHT) - 1.0)
+		* tan(fov / 2.0) * SCREEN_HEIGHT / SCREEN_WIDTH;
+	ray.direction = calc_ray_dir(target, px, py);
+	return (ray);
 }
 
 static void	put_pixels_to_image(t_info *info, int y, int x, t_color pixel_color)

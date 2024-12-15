@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 17:39:31 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/12 23:34:45 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/15 01:28:07 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,9 +83,8 @@ static int	do_stock(int fd, t_scene *scene)
 	To check the validity of the line
 	@param
 		fd: file descriptor of the map
-		scene: scene to render
 */
-static int	validate(int fd, t_scene *scene)
+static int	validate(int fd)
 {
 	char	*map_line;
 
@@ -118,12 +117,10 @@ static int	validate(int fd, t_scene *scene)
 */
 void	parse_scene(char *path, t_scene *scene)
 {
-	char	*map_line;
-	int		type;
 	int		fd;
 
 	fd = open(path, O_RDONLY);
-	if (fd < 0 || !validate(fd, scene))
+	if (fd < 0 || !validate(fd))
 	{
 		close(fd);
 		handle_error("Fail to open the file");

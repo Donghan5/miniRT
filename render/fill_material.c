@@ -6,7 +6,7 @@
 /*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 18:32:31 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/12 18:37:44 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/12/13 18:09:09 by pzinurov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,8 +104,7 @@ static void	fill_cone(t_hit_material *closest, t_info *info)
 /*
 	Fills material properties of object hit
 */
-void	fill_material(t_hit_material *closest,
-	t_info *info, t_ray ray)
+void	fill_material(t_hit_material *closest, t_info *info)
 {
 	if (closest->type == 0)
 		fill_sphere(closest, info);

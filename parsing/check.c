@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 12:55:24 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/12 15:51:06 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/15 01:22:44 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,20 +117,5 @@ void	check_validity(char *map_info)
 			return ;
 		if (!ft_isspace(map_info[i++]))
 			handle_error_free(map_info, "Extra symbols");
-	}
-}
-
-/*
-	have to delete
-*/
-void print_double_array(char **array)
-{
-	int i = 0;
-	if (!array)
-		return;
-	while (array[i])
-	{
-		printf("%s\n", array[i]);
-		i++;
 	}
 }

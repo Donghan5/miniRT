@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:39:54 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/12 21:32:43 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/12 20:06:25 by pzinurov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,8 @@ int	main(int argc, char **argv)
 	info.win = mlx_win;
 	info_initializer(&info);
 	install_hooks(&info);
-	// mlx_loop_hook(info.mlx, render_next_frame, &info);
-	// mlx_loop(info.mlx);
+	mlx_loop_hook(info.mlx, render_next_frame, &info);
+	mlx_loop(info.mlx);
 	close_window(&info);
 	return (exit(0), 0);
 }

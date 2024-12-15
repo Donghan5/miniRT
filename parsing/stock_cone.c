@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 14:01:27 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/12 21:31:22 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/15 01:18:15 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ static int	check_range(char **rgb_infos)
 		orient_info: information of axis vector
 		cy_idx: index of cylinder
 */
-static void	stock_coord_orient(t_scene *scene, char **coord_info, char **orient_info, int co_idx)
+static void	stock_co(t_scene *scene, char **coord_info, \
+					char **orient_info, int co_idx)
 {
 	scene->cone[co_idx]->coordinates.x = ft_atod(coord_info[0]);
 	scene->cone[co_idx]->coordinates.y = ft_atod(coord_info[1]);
@@ -65,7 +66,7 @@ static void	stock_rgb(t_scene *scene, char **rgb_infos, int co_idx)
 		free_doub_array(rgb_infos);
 		exit_error(NULL, scene, "Invalid rgb value type");
 	}
-	if(!check_range(rgb_infos))
+	if (!check_range(rgb_infos))
 	{
 		free_doub_array(rgb_infos);
 		exit_error(NULL, scene, "Out of range RGB value");
@@ -108,14 +109,13 @@ void	stock_cone(t_scene *scene, char *info_map, int co_idx)
 	sep_info = ft_split(info_map, ' ');
 	if (sep_info == NULL)
 		exit_error(info_map, scene, PARSE_ERR);
-	// valid_form(sep_info);
 	coord_info = ft_split(sep_info[1], ',');
 	if (coord_info == NULL)
 		exit_error(info_map, scene, COOR_ERR);
 	orient_info = ft_split((char *)sep_info[2], ',');
 	if (orient_info == NULL)
 		exit_error(info_map, scene, ORI_ERR);
-	stock_coord_orient(scene, coord_info, orient_info, co_idx);
+	stock_co(scene, coord_info, orient_info, co_idx);
 	free_doub_array(coord_info);
 	free_doub_array(orient_info);
 	stock_dia_hei(scene, sep_info, co_idx);

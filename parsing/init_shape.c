@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_shape.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 12:20:51 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/11 16:32:23 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/12/15 01:22:10 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,12 @@ void	init_sphere(t_scene *scene)
 	sp_idx = 0;
 	scene->sphere = malloc(scene->sphere_n * sizeof(t_sphere *));
 	if (!scene->sphere)
-		exit_error(NULL, scene, "Fail dynamic allocate t_sphere scope all");
+		exit_error(NULL, scene, "Fail allocate t_sphere scope all");
 	while (sp_idx < scene->sphere_n)
 	{
 		scene->sphere[sp_idx] = ft_calloc(1, sizeof(t_sphere));
 		if (!scene->sphere[sp_idx])
-			exit_error(NULL, scene, "Fail dynamic allocate t_sphere scope index");
+			exit_error(NULL, scene, "Fail allocate t_sphere scope index");
 		scene->sphere[sp_idx]->color.r = 0;
 		scene->sphere[sp_idx]->color.g = 0;
 		scene->sphere[sp_idx]->color.b = 0;

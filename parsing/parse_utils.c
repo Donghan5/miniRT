@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 16:06:16 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/12 17:03:29 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/15 01:21:30 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,31 +46,6 @@ int	is_empty_or_comment(char *line)
 		line++;
 	}
 	return (1);
-}
-
-/*
-	free all allocation of the scene
-	@param
-		scene: want to deallocation
-*/
-void	free_scene(t_scene *scene)
-{
-	int	i;
-	int	j;
-	int	k;
-
-	i = 0;
-	while (i < scene->plane_n)
-		free(scene->plane[i++]);
-	free(scene->plane);
-	j = 0;
-	while (j < scene->sphere_n)
-		free(scene->sphere[j++]);
-	free(scene->sphere);
-	k = 0;
-	while (k < scene->cylinder_n)
-		free(scene->cylinder[k]);
-	free(scene->cylinder);
 }
 
 /*

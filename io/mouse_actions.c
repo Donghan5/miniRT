@@ -6,17 +6,17 @@
 /*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:49:06 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/12 20:04:32 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/12/13 18:08:07 by pzinurov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-static void	toggle_renders(int keycode, int y, t_info *info)
+static void	toggle_renders(int keycode, t_info *info)
 {
 	if (keycode == 4)
 	{
-		info->scene.camera.coordinates.y++;
+		info->scene.camera.coordinates.y += 2;
 		if (info->toggle_mode == TOGGLE_FULL)
 			info->render_type = FULL_RENDER;
 		else
@@ -24,7 +24,7 @@ static void	toggle_renders(int keycode, int y, t_info *info)
 	}
 	else if (keycode == 5)
 	{
-		info->scene.camera.coordinates.y--;
+		info->scene.camera.coordinates.y -= 2;
 		if (info->toggle_mode == TOGGLE_FULL)
 			info->render_type = FULL_RENDER;
 		else
@@ -55,7 +55,7 @@ int	mouse_clicks(int keycode, int x, int y, t_info *info)
 		info->rotate_camera = 1;
 	}
 	else
-		toggle_renders(keycode, y, info);
+		toggle_renders(keycode, info);
 	return (0);
 }
 

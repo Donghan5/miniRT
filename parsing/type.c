@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 13:43:21 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/14 14:10:24 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/15 01:28:26 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,20 +23,20 @@ static void	update_count(char *str, t_count *count)
 	if (ft_strchr(str, '\n'))
 		str = ft_strtrim(str, "\n");
 	if (str[0] == 'A' && str[1] == '\0')
-			count->a_count++;
+		count->a_count++;
 	else if (str[0] == 'C' && str[1] == '\0')
-			count->c_count++;
+		count->c_count++;
 	else if ((str[0] == 'L' && str[1] == '\0') || \
 		(str[0] == 'l' && str[1] == '\0'))
-			count->l_count++;
+		count->l_count++;
 	else if (str[0] == 'p' && str[1] == 'l' && str[2] == '\0')
-			count->pl_count++;
+		count->pl_count++;
 	else if (str[0] == 's' && str[1] == 'p' && str[2] == '\0')
-			count->sp_count++;
+		count->sp_count++;
 	else if (str[0] == 'c' && str[1] == 'y' && str[2] == '\0')
-			count->cy_count++;
+		count->cy_count++;
 	else if (str[0] == 'c' && str[1] == 'o' && str[2] == '\0')
-			count->co_count++;
+		count->co_count++;
 }
 
 /*
@@ -82,8 +82,8 @@ static int	set_type(char **sep)
 		type = 1;
 	else if (sep[0][0] == 'C' && sep[0][1] == '\0')
 		type = 2;
-	else if (sep[0][0] == 'L' && sep[0][1] == '\0' || \
-		sep[0][0] == 'l' && sep[0][1] == '\0')
+	else if ((sep[0][0] == 'L' && sep[0][1] == '\0') || \
+		(sep[0][0] == 'l' && sep[0][1] == '\0'))
 		type = 3;
 	else if (sep[0][0] == 'p' && sep[0][1] == 'l' && sep[0][2] == '\0')
 		type = 4;
