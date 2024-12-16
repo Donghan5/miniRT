@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   process_parse.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 15:01:06 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/15 17:40:58 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/12/17 00:07:09 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
+
 /*
 	helper function to save the line
 	basically, free the map_line and exit the loop
@@ -109,9 +110,9 @@ void	process_parse(char *map_line, t_scene *scene, t_indices *indices)
 /*
 	checking validity of the map and contain the process of stock
 	@param
-		map_line: same as process_parse()
-		scene: same as process_parse()
-		indices: same as process_parse()
+		map_line: information of the map
+		scene: to render
+		indices: the structure which contain all index of multiple element
 */
 void	handle_map_check(char *map_line, t_scene *scene, t_indices *indices)
 {

@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 16:06:16 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/16 16:08:59 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/16 22:28:58 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 	check the space
 	@param
 		c: checking char
+	@return
+		all spaces
 */
 int	ft_isspace(char c)
 {

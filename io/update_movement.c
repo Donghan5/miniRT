@@ -6,7 +6,7 @@
 /*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/13 17:43:38 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/16 15:08:33 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/12/16 15:13:34 by pzinurov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,25 +27,25 @@ static void	no_camera_conscious_moves(t_info *info,
 
 static void	apply_movement(t_info *info, double forward, double sideways)
 {
-	double	cam_horiz_rotat;
+	double	horiz_cam;
 
 	if (info->rotate_camera == 1)
 		return (no_camera_conscious_moves(info, forward, sideways));
-	cam_horiz_rotat = atan2(info->scene.camera.orientation.x,
+	horiz_cam = atan2(info->scene.camera.orientation.x,
 			info->scene.camera.orientation.z);
 	if (forward == 0 && sideways != 0)
 		sideways *= 0.7071067811865476;
 	if (forward != 0)
 	{
-		info->scene.camera.coordinates.x += forward * sin(cam_horiz_rotat);
-		info->scene.camera.coordinates.z += forward * cos(cam_horiz_rotat);
+		info->scene.camera.coordinates.x += forward * sin(horiz_cam);
+		info->scene.camera.coordinates.z += forward * cos(horiz_cam);
 	}
 	if (sideways != 0)
 	{
 		info->scene.camera.coordinates.x += sideways
-			* sin(cam_horiz_rotat + M_PI / 2);
+			* sin(horiz_cam + M_PI / 2);
 		info->scene.camera.coordinates.z += sideways
-			* cos(cam_horiz_rotat + M_PI / 2);
+			* cos(horiz_cam + M_PI / 2);
 	}
 }
 

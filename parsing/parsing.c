@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 17:39:31 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/16 15:56:22 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/17 00:07:41 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,10 +109,8 @@ static t_bool	validate(int fd)
 	@param
 		path: path of the file
 		scene: struct information
-		map_line: all of information (separate by) in a single line
 		type: type of information
-		i: index
-		fd: file descriptor of path
+		fd: file descriptor of path (map with .rt extension)
 */
 void	parse_scene(char *path, t_scene *scene)
 {

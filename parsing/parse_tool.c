@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 12:13:29 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/16 15:54:33 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/16 22:28:27 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,10 @@ t_bool	is_rt_extension(char *map_name)
 	to update the object count
 	@param
 		map_line: information of the map
-		scene: to render`
+		scene: to render
+		ambient: the number of ambient
+		camera: the number of camera
+		capital_light: the number of L
 */
 static t_bool	update_count(char *map_line, t_scene *scene)
 {
@@ -71,7 +74,7 @@ static t_bool	update_count(char *map_line, t_scene *scene)
 }
 
 /*
-	check the amount of sp, pl and cy
+	check the amount of all element
 	@param
 		path: path of the map(.rt)
 		scene: structure information

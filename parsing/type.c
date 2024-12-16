@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   type.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 13:43:21 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/15 20:49:27 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/12/16 23:19:28 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ static int	set_type(char **sep)
 }
 
 /*
-	getter
+	getter value of the type
 	@param
 		map_info: information of the map
 	@return

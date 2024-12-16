@@ -6,7 +6,7 @@
 /*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:49:06 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/16 15:12:34 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/12/16 16:55:58 by pzinurov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,23 @@ int	mouse_off(int keycode, int x, int y, t_info *info)
 	return (0);
 }
 
+static	void	first_move_setup(t_info *info, double *horiz_cam,
+	double *vertical_cam)
+{
+	static t_bool	not_first;
+	static t_vec3	initial_orientation;
+
+	if (info->rotate_camera && !not_first)
+	{
+		initial_orientation = info->scene.camera.orientation;
+		*horiz_cam = atan2(initial_orientation.x, initial_orientation.z);
+		*vertical_cam = asin(initial_orientation.y);
+		not_first = 1;
+	}
+	if (!info->rotate_camera)
+		not_first = 0;
+}
+
 int	mouse_moves(int x, int y, t_info *info)
 {
 	static double	horiz_cam;
@@ -78,12 +95,14 @@ int	mouse_moves(int x, int y, t_info *info)
 	double			dx;
 	double			dy;
 
+	first_move_setup(info, &horiz_cam, &vertical_cam);
 	if (info->rotate_camera)
 	{
 		dx = (x - info->moving_origin_x) * 0.005;
 		dy = (y - info->moving_origin_y) * 0.005;
 		horiz_cam -= dx;
-		vertical_cam = fmax(-M_PI / 2, fmin(M_PI / 2, vertical_cam - dy));
+		vertical_cam -= dy;
+		vertical_cam = fmax(-M_PI * 0.99, fmin(M_PI * 0.99, vertical_cam));
 		info->scene.camera.orientation.x = cos(vertical_cam) * sin(horiz_cam);
 		info->scene.camera.orientation.y = sin(vertical_cam);
 		info->scene.camera.orientation.z = cos(vertical_cam) * cos(horiz_cam);
