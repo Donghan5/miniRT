@@ -6,36 +6,41 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 12:13:29 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/15 23:13:26 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/16 15:54:33 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
 /*
-	check the logic once again
-	to check the name of the map
+	to check the name of the map (Using right extension)
 	@param
 		map_name: map name of the av[1]
 	@return
 		1: success
 		0: fail
 */
-// int	check_map(char *map_name)
-// {
-// 	if (ft_strncmp(map_name, ".rt", 3))
-// 		return (0);
-// 	return (1);
-// }
+t_bool	is_rt_extension(char *map_name)
+{
+	int	length;
+
+	if (!map_name)
+		return (0);
+	length = ft_strlen(map_name);
+	if (length < 3)
+		return (0);
+	if (map_name[length - 1] == 't'
+		&& map_name[length - 2] == 'r'
+		&& map_name[length - 3] == '.')
+		return (1);
+	return (0);
+}
 
 /*
 	to update the object count
 	@param
 		map_line: information of the map
-		scene: to render
-		ambient: to check the number of A
-		camera: to check the number of C
-		capital_light: to check the number of L
+		scene: to render`
 */
 static t_bool	update_count(char *map_line, t_scene *scene)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   stock_cam.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 23:06:53 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/15 20:02:57 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/12/16 16:08:15 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +39,13 @@ static void	stock_orient(t_scene *scene, char **orient_info)
 }
 
 /*
-	stock the informations of camera
+	stock the informations of camera to structure
 	@param
-		scene: same with stock_ambient
-		line: same with stock_ambient
-		sep_info: same with stock_ambient
+		scene: to render
+		line: information of the map which read by gnl
+		sep_info: separated information (meaningful value)
 		coord_info: coordination information of camera
 		orient_info: orientation vector information of camera
-
 */
 void	stock_cam(t_scene *scene, char *line)
 {

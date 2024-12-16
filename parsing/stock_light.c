@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   stock_light.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 00:48:43 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/15 19:45:50 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/12/16 16:08:06 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,13 @@ static void	stock_coord(t_scene *scene, char **coord_info, int l_idx)
 }
 
 /*
-	stock function
+	stock light element to structure
 	@param
-		scene: same with function stock_ambient
-		info_map: same with function stock_ambient
-		sep_info: same with function stock_ambient
+		scene: to render
+		info_map: information map read by gnl
+		sep_info: separated information (meaningful value)
 		coord_info: coordinate information of light
 		rgb_infos: RGB information of light
-
 */
 void	stock_light(t_scene *scene, char *info_map, int l_idx)
 {

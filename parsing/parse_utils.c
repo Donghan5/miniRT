@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 16:06:16 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/15 16:50:36 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/12/16 16:08:59 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,9 @@ int	is_empty_or_comment(char *line)
 }
 
 /*
+	print error message and exit the program
 	@param
-		msg: error msg
+		msg: error message
 */
 void	handle_error(char *msg)
 {

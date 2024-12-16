@@ -3,9 +3,9 @@ A 0.4 100,140,255    # Deep blue underwater ambient
 C 0,8,-25 0,-0.2,1 80
 
 # Underwater sun rays
-L 10,20,-15 0.7 180,200,255    # Bluish sunlight
-L -10,20,-10 0.6 180,200,255
-L 0,20,-5 0.5 180,200,255
+l 10,20,-15 0.7 180,200,255    # Bluish sunlight
+l -10,20,-10 0.6 180,200,255
+l 0,20,-5 0.5 180,200,255
 
 # Ocean floor
 pl 0,-5,0 0,1,0 180,160,120    # Sandy bottom

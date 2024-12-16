@@ -6,14 +6,14 @@ C 0,20,-50 0,-0.1,1 70
 
 # Ominous Lighting
 # Main source - blood moon
-L 0,500,0 0.4 255,50,50
+l 0,500,0 0.4 255,50,50
 # Flickering lights
-L 100,30,-100 0.2 150,150,100    # Unstable light 1
-L -200,25,50 0.15 130,130,80     # Unstable light 2
-L 50,40,200 0.3 100,50,50        # Red warning light
+l 100,30,-100 0.2 150,150,100    # Unstable light 1
+l -200,25,50 0.15 130,130,80     # Unstable light 2
+l 50,40,200 0.3 100,50,50        # Red warning light
 # Distance creepy glow
-L -1000,100,-1000 0.2 50,100,50  # Sickly green
-L 1000,100,1000 0.2 100,50,100   # Purple haze
+l -1000,100,-1000 0.2 50,100,50  # Sickly green
+l 1000,100,1000 0.2 100,50,100   # Purple haze
 
 # Ground - dark and wet looking
 pl 0,-10,0 0,1,0 30,30,35

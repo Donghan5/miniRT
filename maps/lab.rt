@@ -5,11 +5,11 @@
 # C 0,40,-100 0,-0.2,1 90
 
 # # Main lab lighting - fluorescent style
-# L 0,80,0 0.8 255,255,250      # Central light
-# # L -50,80,0 0.8 255,255,250    # Left light
-# # L 50,80,0 0.8 255,255,250     # Right light
-# # L 0,80,50 0.8 255,255,250     # Back light
-# # L 0,80,-50 0.8 255,255,250    # Front light
+# l 0,80,0 0.8 255,255,250      # Central light
+# # l -50,80,0 0.8 255,255,250    # Left light
+# # l 50,80,0 0.8 255,255,250     # Right light
+# # l 0,80,50 0.8 255,255,250     # Back light
+# # l 0,80,-50 0.8 255,255,250    # Front light
 
 # # Lab structure
 # pl 0,-10,0 0,1,0 240,240,240  # White floor
@@ -92,9 +92,9 @@ A  0.2                                255,255,255
 C  -15,8,-25     0.5,0,1             70
 
 # Room lighting
-L  0,18,0        0.7                 255,255,255    # Main ceiling light
-L  -10,18,-10    0.6                 255,240,220    # Secondary light
-L  10,18,-10     0.6                 255,240,220    # Third light
+l  0,18,0        0.7                 255,255,255    # Main ceiling light
+l  -10,18,-10    0.6                 255,240,220    # Secondary light
+l  10,18,-10     0.6                 255,240,220    # Third light
 
 # Room structure - using planes for walls, floor, ceiling
 pl 0,-2,0        0,1,0               240,240,240    # Floor

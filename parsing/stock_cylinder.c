@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   stock_cylinder.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 22:39:04 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/15 20:08:26 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/12/16 16:08:25 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,11 +46,11 @@ static void	stock_dia_hei(t_scene *scene, char **sep_info, int cy_idx)
 }
 
 /*
-	stock information of cylinder
+	stock information of cylinder to structure
 	@param
 		scene: scene to render
-		info_map: information of the map which read by gnl
-		sep_info: separated information
+		line: information of the map which read by gnl
+		sep: separated information
 		coord_info: coordinate information of cylinder
 		orient_info: normal vector information of cylinder
 		rgb_infos: RGB information of cylinder

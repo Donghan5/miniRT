@@ -6,7 +6,7 @@
 /*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 18:32:31 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/15 18:29:48 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/12/16 15:02:12 by pzinurov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,15 @@ static void	fill_sphere(t_hit_material *closest, t_info *info)
 	t_sphere	*sphere;
 
 	sphere = info->scene.sphere[closest->index];
-		closest->normal = vec3_normalize(vec3_sub(closest->hit_point,
+	closest->normal = vec3_normalize(vec3_sub(closest->hit_point,
 				sphere->coordinates));
-		closest->base_color.r = sphere->color.r;
-		closest->base_color.g = sphere->color.g;
-		closest->base_color.b = sphere->color.b;
-		closest->shininess = 50.0;
-		closest->spec_intensity = 0.4;
-		closest->diffuse_strength = 0.6;
-		closest->reflectivity = 0.5;
+	closest->base_color.r = sphere->color.r;
+	closest->base_color.g = sphere->color.g;
+	closest->base_color.b = sphere->color.b;
+	closest->shininess = 50.0;
+	closest->spec_intensity = 0.4;
+	closest->diffuse_strength = 0.6;
+	closest->reflectivity = 0.5;
 }
 
 static void	fill_plane(t_hit_material *closest, t_info *info)

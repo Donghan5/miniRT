@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   calc_diffuse_spec.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 18:31:21 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/15 21:58:59 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/15 17:56:52 by pzinurov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static t_color	calc_diffuse(t_light *light,
 
 static t_color	calc_specular(t_light *light, t_hit_material closest,
 	t_ray ray, double shadow)
-{
+{		
 	t_vec3	view_dir;
 	t_vec3	reflect_dir;
 	t_vec3	light_dir;

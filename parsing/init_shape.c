@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_shape.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 12:20:51 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/15 16:50:58 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/12/16 16:10:04 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /*
 	initailze light
 	@param
-		scene: want to init
+		scene: the structure which want to init
 */
 void	init_light(t_scene *scene)
 {

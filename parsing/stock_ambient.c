@@ -3,24 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   stock_ambient.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 23:06:48 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/15 20:00:51 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/12/16 16:07:44 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
 /*
-	stock functions
-	using ft_atod convert
+	stock ambient values in structure
 	@param
-		scene: structure of scene (to print with mlx)
+		scene: to render
 		info_map: information of the map which read by gnl
-		sep_info: separate information of info_map
+		sep_info: separate information (meaningful value)
 		rgb_infos: RGB information
-
 */
 void	stock_ambient(t_scene *scene, char *info_map)
 {

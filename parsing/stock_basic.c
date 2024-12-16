@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 12:16:25 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/15 22:37:51 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/16 16:00:23 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,16 @@ static t_bool	check_range(t_color *color)
 	return (1);
 }
 
+/*
+	store all rgb information
+	check double or out of range cases
+	@param
+		color: color structure
+		rgb_infos: information of RGB
+	@return
+		1: success
+		0: fail
+*/
 t_bool	stock_rgb(t_color *color, char **rgb_infos)
 {
 	if (ft_strchr(rgb_infos[0], '.')

@@ -7,32 +7,32 @@ C 0,100,-400 0,-0.1,1 90
 # ENHANCED LIGHTING SYSTEM
 
 # Primary Light Sources
-L 0,2000,0 1.0 255,245,220      # Main celestial light (warm)
-L 0,1500,-1000 0.8 180,200,255  # Moon reflection (cool)
+l 0,2000,0 1.0 255,245,220      # Main celestial light (warm)
+l 0,1500,-1000 0.8 180,200,255  # Moon reflection (cool)
 
 # Atmospheric Lights
-L -800,400,-800 0.5 230,180,255   # Purple haze
-L 800,400,800 0.5 255,200,180     # Warm glow
-L -800,400,800 0.5 180,230,255    # Cool shimmer
-L 800,400,-800 0.5 255,220,180    # Golden haze
+l -800,400,-800 0.5 230,180,255   # Purple haze
+l 800,400,800 0.5 255,200,180     # Warm glow
+l -800,400,800 0.5 180,230,255    # Cool shimmer
+l 800,400,-800 0.5 255,220,180    # Golden haze
 
 # Ground Level Magical Lights
-L 0,50,0 0.4 190,255,220        # Central green glow
-L 500,30,500 0.3 255,190,220    # Pink corner
-L -500,30,-500 0.3 190,220,255  # Blue corner
-L 500,30,-500 0.3 255,220,190   # Warm corner
-L -500,30,500 0.3 220,190,255   # Purple corner
+l 0,50,0 0.4 190,255,220        # Central green glow
+l 500,30,500 0.3 255,190,220    # Pink corner
+l -500,30,-500 0.3 190,220,255  # Blue corner
+l 500,30,-500 0.3 255,220,190   # Warm corner
+l -500,30,500 0.3 220,190,255   # Purple corner
 
 # Crystal Formation Lights
-L -1000,300,-1000 0.4 160,200,255  # Crystal canyon glow
-L 1000,300,1000 0.4 255,180,160    # Mountain aura
-L 0,900,0 0.6 180,255,180          # World tree crown light
+l -1000,300,-1000 0.4 160,200,255  # Crystal canyon glow
+l 1000,300,1000 0.4 255,180,160    # Mountain aura
+l 0,900,0 0.6 180,255,180          # World tree crown light
 
 # Mysterious Distance Lights
-L 2000,200,2000 0.3 255,150,150    # Far red glow
-L -2000,200,-2000 0.3 150,150,255  # Far blue glow
-L 2000,200,-2000 0.3 255,200,150   # Far orange glow
-L -2000,200,2000 0.3 150,255,200   # Far green glow
+l 2000,200,2000 0.3 255,150,150    # Far red glow
+l -2000,200,-2000 0.3 150,150,255  # Far blue glow
+l 2000,200,-2000 0.3 255,200,150   # Far orange glow
+l -2000,200,2000 0.3 150,255,200   # Far green glow
 
 
 # Base World - More interesting ground

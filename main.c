@@ -52,9 +52,9 @@ int	main(int argc, char **argv)
 	t_data	img;
 	t_info	info;
 
-	if (argc != 2)
+	if (argc != 2 || !is_rt_extension(argv[1]))
 		exit_error(NULL, NULL,
-			"Wrong arguments. Format: ./miniRT \"path_to_rt_scene\"");
+			"Wrong arguments. Format: ./miniRT \"path_to_rt_scene.rt\"");
 	parse_scene(argv[1], &info.scene);
 	mlx = mlx_init();
 	mlx_win = mlx_new_window(mlx, SCREEN_WIDTH, SCREEN_HEIGHT, "miniRT");

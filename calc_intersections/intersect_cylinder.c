@@ -6,12 +6,40 @@
 /*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 18:48:42 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/15 18:38:15 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/12/16 15:02:04 by pzinurov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
+/*
+	Cylinder formula:
+	||(R(t) - C) - ((R(t) - C)·A)A|| = r
+	Where:
+	- R(t) is any point on cylinder surface
+	- C is cylinder center point
+	- A is normalized axis vector
+	- r is cylinder radius
+	
+	Ray formula:
+	R(t) = O + tD
+	Where:
+	- O is ray origin
+	- D is ray direction
+	- t is distance along ray
+	
+	Final formula:
+	(((O - C) + tD) - (((O - C) + tD)·A)A)·(((O - C) + tD)
+		- (((O - C) + tD)·A)A) = r²
+	at² + bt + c = 0
+	Where:
+	a = D·D - (D·A)²
+	b = 2(D·(O-C) - (D·A)(O-C)·A)
+	c = (O-C)·(O-C) - ((O-C)·A)² - r²
+	
+	(solved through quadratic equation)
+	t = (-b - √discriminant) / (2a)
+*/
 static t_bool	solve_quadratic(t_intersection *inters, t_ray ray)
 {
 	t_vec3	oc;

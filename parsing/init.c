@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 12:12:42 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/11 17:35:00 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/12/16 15:55:15 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,11 @@ void	init_count(t_count *count)
 	count->co_count = 0;
 }
 
+/*
+	init all the indexs
+	@param
+		indices: sturucture of the index
+*/
 void	init_indices(t_indices *indices)
 {
 	indices->cy_idx = 0;

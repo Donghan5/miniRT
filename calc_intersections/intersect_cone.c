@@ -6,12 +6,43 @@
 /*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 21:06:23 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/15 18:40:26 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/12/16 15:02:05 by pzinurov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
+/*
+	Cone formula:
+	||(R(t) - C) - ((R(t) - C)·A)A|| = r(h)
+	Where:
+	- R(t) is any point on cone surface
+	- C is cone center point
+	- A is normalized axis vector
+	- r(h) is radius at height h
+	- h is height from cone center
+	r(h) = h * tan(theta) where theta is cone angle
+	
+	Ray formula:
+	R(t) = O + tD
+	Where:
+	- O is ray origin
+	- D is ray direction
+	- t is distance along ray
+	
+	Final formula:
+	(((O - C) + tD) - (((O - C) + tD)·A)A)·(((O - C) + tD)
+		- (((O - C) + tD)·A)A) = (((O - C) + tD)·A)² * tan²(theta)
+	at² + bt + c = 0
+	Where:
+	a = D·D - (1 + tan²(theta))(D·A)²
+	b = 2(D·(O-C) - (1 + tan²(theta))(D·A)(O-C)·A)
+	c = (O-C)·(O-C) - (1 + tan²(theta))((O-C)·A)²
+
+	(solved through quadratic equation)
+	t1 = (-b - √discriminant) / (2a)
+	t2 = (-b + √discriminant) / (2a)
+*/
 static double	validate_t(t_intersection *inters, t_ray ray, double t)
 {
 	t_vec3	hit_point;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   stock_plane.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 22:30:21 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/15 20:11:44 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/12/16 16:07:53 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static void	stock_normal_vec(t_scene *scene, char **orient_info, int pl_idx)
 }
 
 /*
-	stock element of the plane
+	stock element of the plane to structure
 	@param
 		scene: scene to render
 		line: information of the map which read by gnl
@@ -49,7 +49,6 @@ static void	stock_normal_vec(t_scene *scene, char **orient_info, int pl_idx)
 		coord_info: coordination information of plane
 		orient_info: normal vector information of plane
 		rgb_infos: RGB information of plane
-
 */
 void	stock_plane(t_scene *scene, char *line, int pl_idx)
 {

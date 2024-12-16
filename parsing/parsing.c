@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 17:39:31 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/15 19:50:02 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/12/16 15:56:22 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 	@param
 		line: line which want to switch
 	@return
-		new_start: converted line
+		new_start: converted line (i.e. convert mult space to single)
 */
 char	*normalize_line(char **line)
 {
@@ -102,9 +102,9 @@ static t_bool	validate(int fd)
 
 /*
 	parse and stock all informations
-	idea of this function
+	logic of this function
 	1. parsing the map_line (read by gnl) by separating white-space
-	2. verify element (map_infos[0] is char) the other have just , and num
+	2. verify element (map_infos[0] is char) the other have just comma(,) and num
 	3. separate the case --> stock each structures
 	@param
 		path: path of the file

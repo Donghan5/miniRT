@@ -6,7 +6,7 @@
 /*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:40:16 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/15 19:38:33 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/12/15 20:24:33 by pzinurov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -265,49 +265,56 @@ int		mouse_moves(int x, int y, t_info *info);
 void	update_movement(t_info *info, int keycode, int is_pressed);
 
 //	parsing
-//		process_parse.c
-void	handle_error_free(char *map_line, char *msg);
-//		parsing.c
-void	process_parse(char *map_line, t_scene *scene, t_indices *indices);
-void	parse_scene(char *path, t_scene *scene);
-//		init.c
-void	init_scene(char *path, t_scene *scene);
-void	init_ambient(t_scene *scene);
-void	init_camera(t_scene *scene);
-void	init_light(t_scene *scene);
-void	init_indices(t_indices *indices);
-void	init_count(t_count *count);
-void	init_cone(t_scene *scene);
-//		init_shape.c
-void	init_sphere(t_scene *scene);
-void	init_plane(t_scene *scene);
-void	init_cylinder(t_scene *scene);
-//		parse_utils.c
-void	free_scene(t_scene *scene);
-void	handle_error(char *msg);
-int		ft_isspace(char c);
-int		is_empty_or_comment(char *line);
-void	free_doub_array(char **strs);
-//		parse_tool.c
-void	count_objs(char *path, t_scene *scene);
-int		get_type(char *map_info);
-//		stock_basic.c
-t_bool	stock_rgb(t_color *color, char **rgb_infos);
-void	stock_ambient(t_scene *scene, char *info_map);
-void	stock_sphere(t_scene *scene, char *info_map, int sp_idx);
-void	stock_cam(t_scene *scene, char *info_map);
-void	stock_light(t_scene *scene, char *info_map, int l_idx);
-void	stock_infos(int type, t_scene *scene, char *info_map);
-void	stock_cone(t_scene *scene, char *info_map, int co_idx);
-//		stock_cylinder.c
-void	stock_cylinder(t_scene *scene, char *info_map, int cy_idx);
-//		stock_plane.c
-void	stock_plane(t_scene *scene, char *info_map, int pl_idx);
 //		check.c
 void	check_int(char *map_info, size_t *i);
 void	check_doub(char *map_info, size_t *i);
 void	check_three(char *map_info, size_t *i, char *type);
 void	check_validity(char *map_info);
+//		free.c
+void	free_doub_array(char **strs);
+//		init_shape.c
+void	init_light(t_scene *scene);
+void	init_cone(t_scene *scene);
+void	init_sphere(t_scene *scene);
+void	init_plane(t_scene *scene);
+void	init_cylinder(t_scene *scene);
+//		init.c
+void	init_scene(char *path, t_scene *scene);
+void	init_ambient(t_scene *scene);
+void	init_camera(t_scene *scene);
+void	init_indices(t_indices *indices);
+void	init_count(t_count *count);
+//		parse_tool.c
+t_bool	is_rt_extension(char *map_name);
+void	count_objs(char *path, t_scene *scene);
+//		parse_utils.c
+void	handle_error(char *msg);
+int		ft_isspace(char c);
+int		is_empty_or_comment(char *line);
+//		parsing.c
+void	parse_scene(char *path, t_scene *scene);
+//		process_parse.c
+void	handle_error_free(char *map_line, char *msg);
+void	process_parse(char *map_line, t_scene *scene, t_indices *indices);
+//		stock_ambient.c
+void	stock_ambient(t_scene *scene, char *info_map);
+//		stock_basic.c
+t_bool	stock_rgb(t_color *color, char **rgb_infos);
+void	stock_infos(int type, t_scene *scene, char *info_map);
+//		stock_cam.c
+void	stock_cam(t_scene *scene, char *info_map);
+//		stock_cone.c
+void	stock_cone(t_scene *scene, char *info_map, int co_idx);
+//		stock_cylinder.c
+void	stock_cylinder(t_scene *scene, char *info_map, int cy_idx);
+//		stock_light.c
+void	stock_light(t_scene *scene, char *info_map, int l_idx);
+//		stock_plane.c
+void	stock_plane(t_scene *scene, char *info_map, int pl_idx);
+//		stock_sphere.c
+void	stock_sphere(t_scene *scene, char *info_map, int sp_idx);
+//		type.c
+int		get_type(char *map_info);
 //		valid.c
 void	validity_type_one(char *map_info, size_t *i);
 void	validity_type_two(char *map_info, size_t *i);

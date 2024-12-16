@@ -6,7 +6,7 @@
 /*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 18:53:25 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/14 22:20:28 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/12/16 15:02:14 by pzinurov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,36 @@ t_hit_material	find_closest(t_ray ray, t_info *info)
 }
 
 /*
-	Returns full Phong lights
+	Returns full Phong lights.
+
+	Phong Reflection formula:
+	I = Ia + Id + Is
+	I = ka×La + kd×Ld×(N·L) + ks×Ls×(R·V)^n
+
+	1. Ambient Component (Ia):
+	Ia = ka × La
+	where:
+	- ka = ambient reflection coefficient (material)
+	- La = ambient light intensity
+
+	2. Diffuse Component (Id):
+	Id = kd × Ld × (N·L)
+	where:
+	- kd = diffuse reflection coefficient (material)
+	- Ld = diffuse light intensity
+	- N = surface normal vector (normalized)
+	- L = light direction vector (normalized)
+	- (N·L) = dot product, represents cosine of angle between N and L
+
+	3. Specular Component (Is):
+	Is = ks × Ls × (R·V)^n
+	where:
+	- ks = specular reflection coefficient (material)
+	- Ls = specular light intensity
+	- R = reflection vector = 2(N·L)N - L
+	- V = view vector (normalized)
+	- n = shininess coefficient (material)
+	- (R·V) = dot product, represents cosine of angle between R and V
 */
 static t_color	add_lights(t_hit_material closest, t_info *info, t_ray ray)
 {
@@ -111,6 +140,16 @@ static t_color	add_lights(t_hit_material closest, t_info *info, t_ray ray)
 	return (result);
 }
 
+/*
+	Raytracing formula
+
+	P(t) = O + tD
+	Where:
+	- P is point along ray
+	- O is ray origin
+	- D is ray direction
+	- t is distance along ray
+*/
 t_color	trace_ray(t_ray ray, t_info *info, int depth)
 {
 	t_color			result;

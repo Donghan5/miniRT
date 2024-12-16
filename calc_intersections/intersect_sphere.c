@@ -6,12 +6,38 @@
 /*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 18:51:07 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/14 19:05:12 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/12/16 15:02:01 by pzinurov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
+/*
+	Sphere formula:
+	(X - C)·(X - C) = r²
+	Where:
+	- X is any point on sphere
+	- C is sphere center
+	- r is sphere radius
+
+	Ray formula:
+	R(t) = O + tD
+	Where:
+	- O is ray origin
+	- D is ray direction
+	- t is distance along ray
+
+	Final formula:
+	(O - C)·(O - C) + 2t(O - C)·D + t²(D·D) = r²
+	at² + bt + c = 0
+	Where:
+	a = D·D
+	b = 2(O - C)·D
+	c = (O - C)·(O - C) - r²
+
+	(solved through quadratic equation)
+	t = (-b - √discriminant) / (2a)
+*/
 double	solve_quadratic(double a, double b, double c)
 {
 	double	discriminant;
