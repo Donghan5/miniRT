@@ -8,7 +8,7 @@ SRC += parsing/init_shape.c parsing/init.c parsing/parse_tool.c parsing/parse_ut
 	parsing/process_parse.c parsing/stock_ambient.c parsing/stock_basic.c parsing/stock_cam.c parsing/stock_cone.c \
 	parsing/stock_cylinder.c parsing/stock_light.c parsing/stock_plane.c parsing/stock_sphere.c parsing/type.c \
 	parsing/free.c parsing/check.c parsing/valid.c
-SRC += render/fill_material.c render/frame_render.c render/render_scene.c render/trace_ray.c
+SRC += render/fill_material.c render/frame_render.c render/get_checker_color.c render/render_scene.c render/trace_ray.c
 SRC += tools/extra_operations.c tools/free_tools.c tools/ft_atod.c tools/vector_operations.c tools/tools.c
 
 GNL = get_next_line/get_next_line.c get_next_line/get_next_line_utils.c
@@ -26,7 +26,7 @@ OBJ += $(addprefix $(OBJDIR), $(GNL:.c=.o))
 DEPS = $(addprefix $(DEPDIR), $(SRC:.c=.d))
 DEPS += $(addprefix $(DEPDIR), $(GNL:.c=.d))
 
-CFLAGS = -g3 -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror
 
 NAME = miniRT
 

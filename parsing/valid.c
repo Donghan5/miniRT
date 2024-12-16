@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   valid.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 12:54:06 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/14 14:11:23 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/15 16:40:39 by pzinurov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,4 +80,3 @@ void	validity_type_five(char *map_info, size_t *i)
 	check_doub(map_info, i);
 	check_three(map_info, i, "int");
 }
-

@@ -6,7 +6,7 @@
 /*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 18:22:23 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/12 20:07:59 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/12/15 18:32:43 by pzinurov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,18 +92,18 @@ void	print_camera_coord(t_info *info, unsigned int gray)
 	char	*data;
 
 	mlx_string_put(info->mlx, info->win, info->text_x,
-		info->text_y + 150, gray, "Pos X Y Z");
+		info->text_y + 165, gray, "Pos X Y Z");
 	data = ft_itoa(info->scene.camera.coordinates.x);
 	mlx_string_put(info->mlx, info->win, info->text_x + 90,
-		info->text_y + 150, gray, data);
+		info->text_y + 165, gray, data);
 	free(data);
 	data = ft_itoa(info->scene.camera.coordinates.y);
 	mlx_string_put(info->mlx, info->win, info->text_x + 120,
-		info->text_y + 150, gray, data);
+		info->text_y + 165, gray, data);
 	free(data);
 	data = ft_itoa(info->scene.camera.coordinates.z);
 	mlx_string_put(info->mlx, info->win, info->text_x + 150,
-		info->text_y + 150, gray, data);
+		info->text_y + 165, gray, data);
 	free(data);
 }
 
@@ -112,17 +112,17 @@ void	print_camera_view(t_info *info, unsigned int gray)
 	char	*data;
 
 	mlx_string_put(info->mlx, info->win, info->text_x,
-		info->text_y + 170, gray, "Cam X Y Z");
+		info->text_y + 185, gray, "Cam X Y Z");
 	data = ft_itoa(info->scene.camera.orientation.x * 100);
 	mlx_string_put(info->mlx, info->win, info->text_x + 90,
-		info->text_y + 170, gray, data);
+		info->text_y + 185, gray, data);
 	free(data);
 	data = ft_itoa(info->scene.camera.orientation.y * 100);
 	mlx_string_put(info->mlx, info->win, info->text_x + 120,
-		info->text_y + 170, gray, data);
+		info->text_y + 185, gray, data);
 	free(data);
 	data = ft_itoa(info->scene.camera.orientation.z * 100);
 	mlx_string_put(info->mlx, info->win, info->text_x + 150,
-		info->text_y + 170, gray, data);
+		info->text_y + 185, gray, data);
 	free (data);
 }

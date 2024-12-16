@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process_parse.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 15:01:06 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/15 17:17:22 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/15 17:40:58 by pzinurov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,9 @@
 */
 void	handle_error_free(char *map_line, char *msg)
 {
+	ft_putstr_fd(map_line, 2);
 	free(map_line);
+	ft_putstr_fd("\n", 2);
 	handle_error(msg);
 }
 
@@ -101,7 +103,7 @@ void	process_parse(char *map_line, t_scene *scene, t_indices *indices)
 		parse_obj_advance(type, map_line, scene, indices);
 	}
 	else if (type == 0)
-		exit_error(map_line, scene, "Invalid type value!");
+		exit_error(map_line, scene, "Invalid type!");
 }
 
 /*

@@ -6,13 +6,13 @@
 /*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 18:48:42 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/14 19:05:07 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/12/15 18:38:15 by pzinurov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-static int	solve_quadratic(t_intersection *inters, t_ray ray)
+static t_bool	solve_quadratic(t_intersection *inters, t_ray ray)
 {
 	t_vec3	oc;
 

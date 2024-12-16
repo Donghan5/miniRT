@@ -6,13 +6,13 @@
 /*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 21:06:23 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/14 18:36:44 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/12/15 18:40:26 by pzinurov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-double	validate_t(t_intersection *inters, t_ray ray, double t)
+static double	validate_t(t_intersection *inters, t_ray ray, double t)
 {
 	t_vec3	hit_point;
 	t_vec3	hp_c;
@@ -28,7 +28,7 @@ double	validate_t(t_intersection *inters, t_ray ray, double t)
 	return (t);
 }
 
-void	check_cap(t_intersection *inters, t_ray ray, int check_top)
+static void	check_cap(t_intersection *inters, t_ray ray, t_bool check_top)
 {
 	t_vec3	cap_center;
 	t_vec3	to_cap;
@@ -57,7 +57,7 @@ void	check_cap(t_intersection *inters, t_ray ray, int check_top)
 	}
 }
 
-static int	solve_quadratic(t_intersection *inters, t_ray ray)
+static t_bool	solve_quadratic(t_intersection *inters, t_ray ray)
 {
 	t_vec3	oc;
 	double	tan_theta;

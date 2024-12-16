@@ -6,7 +6,7 @@
 /*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:39:54 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/12 20:06:25 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/12/15 18:26:31 by pzinurov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ void	info_initializer(t_info *info)
 	info->is_input = 0;
 	info->last_scroll_time = 0;
 	info->is_mirror = 0;
+	info->is_checker = 0;
 	info->render_type = LOW_RENDER;
 	info->toggle_mode = TOGGLE_LOW;
 }

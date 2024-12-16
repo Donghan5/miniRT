@@ -6,7 +6,7 @@
 /*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:48:58 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/13 17:44:13 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/12/15 18:26:54 by pzinurov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,12 @@ int	key_pressed(int keycode, t_info *info)
 		else if (keycode == 51)
 			info->is_mirror = 1;
 		if (keycode == 51)
+			info->render_type = LOW_RENDER;
+		if (keycode == 52 && info->is_checker == 1)
+			info->is_checker = 0;
+		else if (keycode == 52)
+			info->is_checker = 1;
+		if (keycode == 52)
 			info->render_type = LOW_RENDER;
 		update_movement(info, keycode, 1);
 	}

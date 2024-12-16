@@ -6,7 +6,7 @@
 /*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 19:07:26 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/12 18:57:20 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/12/15 19:50:41 by pzinurov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	exit_error(char *line, t_scene *scene, char *message)
 {
-	if (line)
+	if (line && message)
 	{
 		ft_putstr_fd(line, 2);
 		ft_putstr_fd("\n", 2);
@@ -22,6 +22,8 @@ void	exit_error(char *line, t_scene *scene, char *message)
 	smart_free(line);
 	if (scene)
 		free_scene_safe(scene);
+	if (!message)
+		exit (1);
 	ft_putstr_fd("Error\n", 2);
 	ft_putstr_fd(message, 2);
 	if (!errno)

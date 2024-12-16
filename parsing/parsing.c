@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 17:39:31 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/15 19:13:16 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/15 19:50:02 by pzinurov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ char	*normalize_line(char **line)
 		fd: file discriptor of the map
 		scene: structure which want to stock it
 */
-static int	do_stock(int fd, t_scene *scene)
+static t_bool	do_stock(int fd, t_scene *scene)
 {
 	char		*map_line;
 	t_indices	indices;
@@ -78,19 +78,18 @@ static int	do_stock(int fd, t_scene *scene)
 	return (1);
 }
 
-
 /*
 	To check the validity of the line
 	@param
 		fd: file descriptor of the map
 */
-static int	validate(int fd)
+static t_bool	validate(int fd)
 {
 	char	*map_line;
 
 	map_line = get_next_line(fd);
 	if (!map_line)
-		return (free(map_line), 0);
+		return (0);
 	while (map_line != NULL)
 	{
 		if (!is_empty_or_comment(map_line))
@@ -117,7 +116,7 @@ static int	validate(int fd)
 */
 void	parse_scene(char *path, t_scene *scene)
 {
-	int		fd;
+	int	fd;
 
 	fd = open(path, O_RDONLY);
 	if (fd < 0 || !validate(fd))
@@ -134,5 +133,4 @@ void	parse_scene(char *path, t_scene *scene)
 		exit_error(NULL, scene, "Fail to open the file");
 	}
 	close(fd);
-	printf("Processing ended. Terminate the parsing session\n");
 }

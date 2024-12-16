@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   stock_cone.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 14:01:27 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/15 19:45:14 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/15 20:16:20 by pzinurov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,47 +33,6 @@ static void	stock_co(t_scene *scene, char **coord_info, \
 }
 
 /*
-	verify the validity of the RGB value
-	@param
-		scene: to render
-		rgb_infos: information of RGB
-		sep: separated information
-		info: information of the map
-*/
-static void	verify_rgb(t_scene *scene, char **rgb_infos, char **sep, char *info)
-{
-	if (ft_strchr(rgb_infos[0], '.')
-		|| ft_strchr(rgb_infos[1], '.')
-		|| ft_strchr(rgb_infos[2], '.'))
-	{
-		free_doub_array(rgb_infos);
-		free_doub_array(sep);
-		exit_error(info, scene, "Invalid rgb value type");
-	}
-	if (!check_range(rgb_infos))
-	{
-		free_doub_array(rgb_infos);
-		free_doub_array(sep);
-		exit_error(info, scene, "Out of range RGB value");
-	}
-}
-
-/*
-	helper funtion to stock rgb value
-
-	@param
-		scene: scene to render
-		rgb_infos: information of RGB value
-		co_idx: index of the cylinder
-*/
-static void	stock_rgb(t_scene *scene, char **rgb_infos, int co_idx)
-{
-	scene->cone[co_idx]->color.r = ft_atoi(rgb_infos[0]);
-	scene->cone[co_idx]->color.g = ft_atoi(rgb_infos[1]);
-	scene->cone[co_idx]->color.b = ft_atoi(rgb_infos[2]);
-}
-
-/*
 	helper function of diameter and height
 	@param
 		scene: to render
@@ -90,37 +49,37 @@ static void	stock_dia_hei(t_scene *scene, char **sep_info, int co_idx)
 	stock information of cone
 	@param
 		scene: scene to render
-		info_map: information of the map which read by gnl
-		sep_info: separated information
+		line: information of the map which read by gnl
+		sep: separated information
 		coord_info: coordinate information of cone
 		orient_info: normal vector information of cone
 		rgb_infos: RGB information of cone
 */
-void	stock_cone(t_scene *scene, char *info, int co_idx)
+void	stock_cone(t_scene *scene, char *line, int co_idx)
 {
 	char	**sep;
-	char	**coord_info;
+	char	**coords;
 	char	**orient_info;
 	char	**rgb_infos;
 
-	sep = ft_split(info, ' ');
+	sep = ft_split(line, ' ');
 	if (sep == NULL)
-		exit_error(info, scene, PARSE_ERR);
-	coord_info = ft_split(sep[1], ',');
-	if (coord_info == NULL)
-		return (free_doub_array(sep), exit_error(info, scene, COOR_ERR));
+		exit_error(line, scene, PARSE_ERR);
+	coords = ft_split(sep[1], ',');
+	if (coords == NULL)
+		return (free_doub_array(sep), exit_error(line, scene, COOR_ERR));
 	orient_info = ft_split((char *)sep[2], ',');
 	if (orient_info == NULL)
-		return (free_doub_array(sep), exit_error(info, scene, ORI_ERR));
-	stock_co(scene, coord_info, orient_info, co_idx);
-	free_doub_array(coord_info);
+		return (free_doub_array(sep), free_doub_array(coords),
+			exit_error(line, scene, ORI_ERR));
+	stock_co(scene, coords, orient_info, co_idx);
+	free_doub_array(coords);
 	free_doub_array(orient_info);
 	stock_dia_hei(scene, sep, co_idx);
 	rgb_infos = ft_split(sep[5], ',');
 	if (rgb_infos == NULL)
-		return (free_doub_array(sep), exit_error(info, scene, PARSE_RGB_ERR));
-	verify_rgb(scene, rgb_infos, sep, info);
-	stock_rgb(scene, rgb_infos, co_idx);
-	free_doub_array(rgb_infos);
-	free_doub_array(sep);
+		return (free_doub_array(sep), exit_error(line, scene, PARSE_RGB_ERR));
+	if (!stock_rgb(&scene->cone[co_idx]->color, rgb_infos))
+		return (free_doub_array(sep), exit_error(line, scene, NULL));
+	return (free_doub_array(rgb_infos), free_doub_array(sep));
 }

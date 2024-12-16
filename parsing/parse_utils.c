@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 16:06:16 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/15 19:49:50 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/15 16:50:36 by pzinurov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,14 @@ int	is_empty_or_comment(char *line)
 */
 void	handle_error(char *msg)
 {
-	printf("%s\n", msg);
-	exit(EXIT_FAILURE);
+	ft_putstr_fd("Error\n", 2);
+	ft_putstr_fd(msg, 2);
+	if (!errno)
+	{
+		ft_putstr_fd("\n", 2);
+		exit (1);
+	}
+	ft_putstr_fd(": ", 2);
+	perror(NULL);
+	exit (errno);
 }

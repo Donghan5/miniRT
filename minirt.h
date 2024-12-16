@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
+/*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:40:16 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/15 19:28:31 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/15 19:38:33 by pzinurov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@
 # include <fcntl.h>
 # include <errno.h>
 # include <float.h>
-# include <sys/time.h>
 # define M_PI 3.14159265358979323846
 # define SCREEN_HEIGHT 700
 # define SCREEN_WIDTH 900
@@ -30,6 +29,8 @@
 # define PARSE_RGB_ERR "Fail to parse RGB"
 # define COOR_ERR "Fail to coordinate parse"
 # define ORI_ERR "Fail to orientation parse"
+
+typedef char	t_bool;
 
 typedef struct s_indices
 {
@@ -184,11 +185,12 @@ typedef struct s_info
 	int		moving_origin_y;
 	int		text_x;
 	int		text_y;
-	int		is_input;
+	t_bool	is_input;
 	long	last_scroll_time;
 	int		render_type;
 	int		toggle_mode;
-	int		is_mirror;
+	t_bool	is_mirror;
+	t_bool	is_checker;
 }				t_info;
 
 typedef struct s_count
@@ -222,153 +224,134 @@ typedef struct s_intersection
 	double	denom;
 }				t_intersection;
 
-void	init_count(t_count *count);
+//	calc_intersections
+//		intersect_cylinder.c
+double	intersect_cylinder(t_ray ray, t_cylinder *cyl);
+//		intersect_sphere.c
+double	intersect_sphere(t_ray ray, t_sphere *sphere);
+//		intersect_plane.c
+double	intersect_plane(t_ray ray, t_plane *plane);
+//		intersect_cone.c
+double	intersect_cone(t_ray ray, t_cone *co);
 
-void	check_validity(char *map_info);
-void	handle_error_free(char *map_line, char *msg);
+//	calc_light
+//		calc_diffuse_spec.c
+t_color	multiply_colors(t_color a, t_color b, double factor);
+t_color	add_white_component(t_color base, double factor);
+void	calc_diffuse_spec(t_hit_material closest, t_info *info, t_ray ray,
+			t_color (*total_diff_spec)[2]);
+//		check_shadow.c
+double	check_shadow(t_info *info, t_vec3 hit_point, t_vec3 light_pos);
 
-// fill_material.c
-void	fill_material(t_hit_material *closest, t_info *info);
-
-// print_info_block.c
-void	print_info_block(t_info *info);
-
-// info_block.c
+//	info_block
+//		info_block.c
 void	print_mirr_refl(t_info *info, unsigned int gray, unsigned int green);
 void	print_low_res(t_info *info, unsigned int gray, unsigned int green);
 void	print_full_res(t_info *info, unsigned int gray, unsigned int green);
 void	print_camera_coord(t_info *info, unsigned int gray);
 void	print_camera_view(t_info *info, unsigned int gray);
+//		print_info_block.c
+void	print_info_block(t_info *info);
 
-// vector_operations.c
-t_vec3	vec3(double x, double y, double z);
-t_vec3	vec3_add(t_vec3 a, t_vec3 b);
-t_vec3	vec3_sub(t_vec3 a, t_vec3 b);
-t_vec3	vec3_mul(t_vec3 v, double t);
-t_vec3	vec3_hadamard(t_vec3 a, t_vec3 b);
-
-// extra_operations.c
-t_color	t_color_add(t_color a, t_color b);
-double	vec3_dot(t_vec3 a, t_vec3 b);
-t_vec3	vec3_normalize(t_vec3 v);
-t_vec3	vec3_reflect(t_vec3 v, t_vec3 n);
-t_vec3	vec3_cross(t_vec3 a, t_vec3 b);
-
-// calc_diffuse_spec.c
-t_color	multiply_colors(t_color a, t_color b, double factor);
-t_color	add_white_component(t_color base, double factor);
-void	calc_diffuse_spec(t_hit_material closest, t_info *info, t_ray ray,
-			t_color (*total_diff_spec)[2]);
-
-// intersect_cylinder.c
-double	intersect_cylinder(t_ray ray, t_cylinder *cyl);
-
-// intersect_sphere.c
-double	intersect_sphere(t_ray ray, t_sphere *sphere);
-
-// intersect_plane.c
-double	intersect_plane(t_ray ray, t_plane *plane);
-
-// intersect_cone.c
-double	intersect_cone(t_ray ray, t_cone *co);
-
-// check_shadow.c
-double	check_shadow(t_info *info, t_vec3 hit_point, t_vec3 light_pos);
-
-// trace_ray.c
-t_color	trace_ray(t_ray ray, t_info *info, int depth);
-
-// ft_atod.c
-double	ft_atod(const char *str);
-
-// tools.c
-t_color	normalize_color(t_color color);
-int		is_equal(double a, double b);
-void	ft_putstr_fd(char *s, int fd);
-
-// free_tools.c
-void	exit_error(char *line, t_scene *scene, char *message);
-void	smart_free(void *element);
-void	free_scene_safe(t_scene *scene);
-
-// mouse_actions.c
+//	io
+//		key_actions.c
+int		key_pressed(int keycode, t_info *info);
+int		key_off(int keycode, t_info *info);
+//		mouse_actions.c
 int		mouse_clicks(int keycode, int x, int y, t_info *info);
 int		mouse_off(int keycode, int x, int y, t_info *info);
 int		mouse_moves(int x, int y, t_info *info);
-
-// update_movement.c
+//		update_movement.c
 void	update_movement(t_info *info, int keycode, int is_pressed);
 
-// key_actions.c
-int		key_pressed(int keycode, t_info *info);
-int		key_off(int keycode, t_info *info);
-
-// parsing/parsing.c
+//	parsing
+//		process_parse.c
+void	handle_error_free(char *map_line, char *msg);
+//		parsing.c
 void	process_parse(char *map_line, t_scene *scene, t_indices *indices);
 void	parse_scene(char *path, t_scene *scene);
-
-// frame_render.c
-int		render_next_frame(t_info *info);
-
-// render_scene.c
-void	render_scene(t_info *info);
-
-int		close_window(t_info *info);
-
-void	handle_map_check(char *map_line, t_scene *scene, t_indices *indices);
-
-// parsing/init.c
+//		init.c
 void	init_scene(char *path, t_scene *scene);
 void	init_ambient(t_scene *scene);
 void	init_camera(t_scene *scene);
 void	init_light(t_scene *scene);
 void	init_indices(t_indices *indices);
-
+void	init_count(t_count *count);
 void	init_cone(t_scene *scene);
-
-// parsing/init_shape.c
+//		init_shape.c
 void	init_sphere(t_scene *scene);
 void	init_plane(t_scene *scene);
 void	init_cylinder(t_scene *scene);
-
-// parsing/parse_utils.c
+//		parse_utils.c
 void	free_scene(t_scene *scene);
-int		check_range(char **rgb_infos);
 void	handle_error(char *msg);
 int		ft_isspace(char c);
 int		is_empty_or_comment(char *line);
 void	free_doub_array(char **strs);
-
-// parsing/parse_tool.c
+//		parse_tool.c
 void	count_objs(char *path, t_scene *scene);
 int		get_type(char *map_info);
-
-// parsing/stock_basic.c
+//		stock_basic.c
+t_bool	stock_rgb(t_color *color, char **rgb_infos);
 void	stock_ambient(t_scene *scene, char *info_map);
 void	stock_sphere(t_scene *scene, char *info_map, int sp_idx);
 void	stock_cam(t_scene *scene, char *info_map);
 void	stock_light(t_scene *scene, char *info_map, int l_idx);
 void	stock_infos(int type, t_scene *scene, char *info_map);
-
 void	stock_cone(t_scene *scene, char *info_map, int co_idx);
-
-// parsing/stock_cylinder.c
+//		stock_cylinder.c
 void	stock_cylinder(t_scene *scene, char *info_map, int cy_idx);
-
-// parsing/stock_plane.c
-void	stock_plane(t_scene *scene, char *info, int pl_idx);
-
-// parsing/check.c
+//		stock_plane.c
+void	stock_plane(t_scene *scene, char *info_map, int pl_idx);
+//		check.c
 void	check_int(char *map_info, size_t *i);
 void	check_doub(char *map_info, size_t *i);
 void	check_three(char *map_info, size_t *i, char *type);
 void	check_validity(char *map_info);
-
-// parsing/valid.c
+//		valid.c
 void	validity_type_one(char *map_info, size_t *i);
 void	validity_type_two(char *map_info, size_t *i);
 void	validity_type_three(char *map_info, size_t *i);
 void	validity_type_four(char *map_info, size_t *i);
 void	validity_type_five(char *map_info, size_t *i);
+
+//	render
+//		fill_material.c
+void	fill_material(t_hit_material *closest, t_info *info);
+//		frame_render.c
+int		render_next_frame(t_info *info);
+//		get_checker_color.c
+t_color	get_checker_color(t_vec3 hit_point,
+			t_vec3 normal, t_color base_color);
+//		render_scene.c
+void	render_scene(t_info *info);
+int		close_window(t_info *info);
+void	handle_map_check(char *map_line, t_scene *scene, t_indices *indices);
+//		trace_ray.c
+t_color	trace_ray(t_ray ray, t_info *info, int depth);
+
+//	tools
+//		extra_operations.c
+t_color	t_color_add(t_color a, t_color b);
+double	vec3_dot(t_vec3 a, t_vec3 b);
+t_vec3	vec3_normalize(t_vec3 v);
+t_vec3	vec3_reflect(t_vec3 v, t_vec3 n);
+t_vec3	vec3_cross(t_vec3 a, t_vec3 b);
+//		free_tools.c
+void	exit_error(char *line, t_scene *scene, char *message);
+void	smart_free(void *element);
+void	free_scene_safe(t_scene *scene);
+//		ft_atod.c
+double	ft_atod(const char *str);
+//		tools.c
+t_color	normalize_color(t_color color);
+int		is_equal(double a, double b);
+void	ft_putstr_fd(char *s, int fd);
+//		vector_operations.c
+t_vec3	vec3(double x, double y, double z);
+t_vec3	vec3_add(t_vec3 a, t_vec3 b);
+t_vec3	vec3_sub(t_vec3 a, t_vec3 b);
+t_vec3	vec3_mul(t_vec3 v, double t);
+t_vec3	vec3_hadamard(t_vec3 a, t_vec3 b);
 
 #endif

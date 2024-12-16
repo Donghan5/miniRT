@@ -6,7 +6,7 @@
 /*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 18:32:31 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/13 18:09:09 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/12/15 18:29:48 by pzinurov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,11 @@ static void	fill_plane(t_hit_material *closest, t_info *info)
 
 	plane = info->scene.plane[closest->index];
 	closest->normal = vec3_normalize(plane->normal_vector);
-	closest->base_color.r = plane->color.r;
-	closest->base_color.g = plane->color.g;
-	closest->base_color.b = plane->color.b;
+	if (info->is_checker)
+		closest->base_color = get_checker_color(closest->hit_point,
+				closest->normal, plane->color);
+	else
+		closest->base_color = plane->color;
 	closest->shininess = 1.0;
 	closest->spec_intensity = 0.1;
 	closest->diffuse_strength = 0.8;
