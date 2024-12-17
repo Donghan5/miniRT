@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 22:30:21 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/17 12:53:52 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/17 14:50:16 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static void	stock_normal_vec(t_scene *scene, char **orient_info, int pl_idx)
 		orient_info: normal vector information of plane
 		rgb_infos: RGB information of plane
 */
-void	stock_plane(t_scene *scene, char *line, int pl_idx)
+void	stock_plane(t_scene *scene, char *line, t_indices *i)
 {
 	char	**sep;
 	char	**coord_info;
@@ -59,22 +59,22 @@ void	stock_plane(t_scene *scene, char *line, int pl_idx)
 
 	sep = ft_split(line, ' ');
 	if (sep == NULL)
-		handle_error(PARSE_ERR);
+		exit_error(i->fd, line, scene, PARSE_ERR);
 	coord_info = ft_split(sep[1], ',');
 	if (coord_info == NULL)
-		return (free_doub_array(sep), exit_error(line, scene, COOR_ERR));
-	stock_coordinate(scene, coord_info, pl_idx);
+		return (free_doub_array(sep), exit_error(i->fd, line, scene, COOR_ERR));
+	stock_coordinate(scene, coord_info, i->pl_idx);
 	free_doub_array(coord_info);
 	orient_info = ft_split(sep[2], ',');
 	if (orient_info == NULL)
-		return (free_doub_array(sep), exit_error(line, scene, ORI_ERR));
-	stock_normal_vec(scene, orient_info, pl_idx);
+		return (free_doub_array(sep), exit_error(i->fd, line, scene, ORI_ERR));
+	stock_normal_vec(scene, orient_info, i->pl_idx);
 	free_doub_array(orient_info);
 	rgb_infos = ft_split(sep[3], ',');
 	if (rgb_infos == NULL)
-		return (free_doub_array(sep), exit_error(line, scene, ORI_ERR));
-	if (!stock_rgb(&scene->plane[pl_idx]->color, rgb_infos))
-		return (free_doub_array(sep), exit_error(line, scene, NULL));
-	free_doub_array(rgb_infos);
-	free_doub_array(sep);
+		return (free_doub_array(sep),
+			exit_error(i->fd, line, scene, RGB));
+	if (!stock_rgb(&scene->plane[i->pl_idx]->color, rgb_infos))
+		return (free_doub_array(sep), exit_error(i->fd, line, scene, NULL));
+	return (free_doub_array(rgb_infos), free_doub_array(sep));
 }

@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 17:39:31 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/17 12:53:03 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/17 14:29:24 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ static t_bool	do_stock(int fd, t_scene *scene)
 	t_indices	indices;
 
 	init_indices(&indices);
+	indices.fd = fd;
 	map_line = get_next_line(fd);
 	if (!map_line)
 		return (0);
@@ -93,7 +94,7 @@ static t_bool	validate(int fd)
 	while (map_line != NULL)
 	{
 		if (!is_empty_or_comment(map_line))
-			check_validity(map_line);
+			check_validity(map_line, fd);
 		free(map_line);
 		map_line = get_next_line(fd);
 	}
@@ -126,9 +127,6 @@ void	parse_scene(char *path, t_scene *scene)
 	init_scene(path, scene);
 	fd = open(path, O_RDONLY);
 	if (fd < 0 || !do_stock(fd, scene))
-	{
-		close(fd);
-		exit_error(NULL, scene, "Fail to open the file");
-	}
+		exit_error(0, NULL, scene, "Fail to open the file");
 	close(fd);
 }

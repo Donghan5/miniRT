@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 12:12:42 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/16 15:55:15 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/17 13:56:44 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,4 +91,5 @@ void	init_indices(t_indices *indices)
 	indices->sp_idx = 0;
 	indices->l_idx = 0;
 	indices->co_idx = 0;
+	indices->fd = 0;
 }

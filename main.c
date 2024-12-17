@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:39:54 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/15 18:26:31 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/12/17 13:48:44 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	main(int argc, char **argv)
 	t_info	info;
 
 	if (argc != 2 || !is_rt_extension(argv[1]))
-		exit_error(NULL, NULL,
+		exit_error(0, NULL, NULL,
 			"Wrong arguments. Format: ./miniRT \"path_to_rt_scene.rt\"");
 	parse_scene(argv[1], &info.scene);
 	mlx = mlx_init();

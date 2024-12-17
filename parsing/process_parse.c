@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 15:01:06 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/17 12:43:01 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/17 14:10:00 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,14 +41,18 @@ static void	parse_obj(int type, char *map_line, \
 	if (type == 3)
 	{
 		if (indices->l_idx >= scene->light_n)
-			exit_error(map_line, scene, "Index is out of range in light");
-		stock_light(scene, map_line, indices->l_idx++);
+			exit_error(indices->fd, map_line, scene,
+				"Index is out of range in light");
+		stock_light(scene, map_line, indices);
+		indices->l_idx++;
 	}
 	else if (type == 4)
 	{
 		if (indices->pl_idx >= scene->plane_n)
-			exit_error(map_line, scene, "Index is out of range in plane");
-		stock_plane(scene, map_line, indices->pl_idx++);
+			exit_error(indices->fd, map_line, scene,
+				"Index is out of range in plane");
+		stock_plane(scene, map_line, indices);
+		indices->pl_idx++;
 	}
 }
 
@@ -66,20 +70,26 @@ static void	parse_obj_advance(int type, char *map_line, \
 	if (type == 5)
 	{
 		if (indices->sp_idx >= scene->sphere_n)
-			exit_error(map_line, scene, "Index is out of range in sphere");
-		stock_sphere(scene, map_line, indices->sp_idx++);
+			exit_error(indices->fd, map_line, scene,
+				"Index is out of range in sphere");
+		stock_sphere(scene, map_line, indices);
+		indices->sp_idx++;
 	}
 	else if (type == 6)
 	{
 		if (indices->cy_idx >= scene->cylinder_n)
-			exit_error(map_line, scene, "Index is out of range in cylinder");
-		stock_cylinder(scene, map_line, indices->cy_idx++);
+			exit_error(indices->fd, map_line, scene,
+				"Index is out of range in cylinder");
+		stock_cylinder(scene, map_line, indices);
+		indices->cy_idx++;
 	}
 	else if (type == 7)
 	{
 		if (indices->co_idx >= scene->cone_n)
-			exit_error(map_line, scene, "Index is out of range in cone");
-		stock_cone(scene, map_line, indices->co_idx++);
+			exit_error(indices->fd, map_line, scene,
+				"Index is out of range in cone");
+		stock_cone(scene, map_line, indices);
+		indices->co_idx++;
 	}
 }
 
@@ -91,20 +101,21 @@ static void	parse_obj_advance(int type, char *map_line, \
 		indices: structure which contain all index of sp, pl and cy
 		type: the type of the information (ambient, cam, light etc)
 */
-void	process_parse(char *map_line, t_scene *scene, t_indices *indices)
+void	process_parse(char *map_line, t_scene *scene,
+	t_indices *indices)
 {
 	int	type;
 
 	type = get_type(map_line);
 	if (type == 1 || type == 2)
-		stock_infos(type, scene, map_line);
+		stock_infos(indices->fd, type, scene, map_line);
 	else if (type >= 3 && type <= 7)
 	{
 		parse_obj(type, map_line, scene, indices);
 		parse_obj_advance(type, map_line, scene, indices);
 	}
 	else if (type == 0)
-		exit_error(map_line, scene, "Invalid type!");
+		exit_error(indices->fd, map_line, scene, "Invalid type!");
 }
 
 /*

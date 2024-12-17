@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 12:54:06 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/17 12:51:50 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/17 14:27:48 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,10 @@
 		map_info: information of the map
 		i: pointer index
 */
-void	validity_type_one(char *map_info, size_t *i)
+void	validity_type_one(char *map_info, size_t *i, int fd)
 {
-	check_doub(map_info, i);
-	check_three(map_info, i, "int");
+	check_doub(fd, map_info, i);
+	check_three(fd, map_info, i, "int");
 }
 
 /*
@@ -32,11 +32,11 @@ void	validity_type_one(char *map_info, size_t *i)
 		map_info: information of the map
 		i: pointer index
 */
-void	validity_type_two(char *map_info, size_t *i)
+void	validity_type_two(char *map_info, size_t *i, int fd)
 {
-	check_three(map_info, i, "int");
-	check_three(map_info, i, "double");
-	check_int(map_info, i);
+	check_three(fd, map_info, i, "int");
+	check_three(fd, map_info, i, "double");
+	check_int(fd, map_info, i);
 }
 
 /*
@@ -46,11 +46,11 @@ void	validity_type_two(char *map_info, size_t *i)
 		map_info: information of the map
 		i: pointer index
 */
-void	validity_type_three(char *map_info, size_t *i)
+void	validity_type_three(char *map_info, size_t *i, int fd)
 {
-	check_three(map_info, i, "double");
-	check_doub(map_info, i);
-	check_three(map_info, i, "int");
+	check_three(fd, map_info, i, "double");
+	check_doub(fd, map_info, i);
+	check_three(fd, map_info, i, "int");
 }
 
 /*
@@ -60,11 +60,11 @@ void	validity_type_three(char *map_info, size_t *i)
 		map_info: information of the map
 		i: pointer index
 */
-void	validity_type_four(char *map_info, size_t *i)
+void	validity_type_four(char *map_info, size_t *i, int fd)
 {
-	check_three(map_info, i, "double");
-	check_three(map_info, i, "double");
-	check_three(map_info, i, "int");
+	check_three(fd, map_info, i, "double");
+	check_three(fd, map_info, i, "double");
+	check_three(fd, map_info, i, "int");
 }
 
 /*
@@ -75,11 +75,11 @@ void	validity_type_four(char *map_info, size_t *i)
 		map_info: information of the map
 		i: pointer index
 */
-void	validity_type_five(char *map_info, size_t *i)
+void	validity_type_five(char *map_info, size_t *i, int fd)
 {
-	check_three(map_info, i, "double");
-	check_three(map_info, i, "double");
-	check_doub(map_info, i);
-	check_doub(map_info, i);
-	check_three(map_info, i, "int");
+	check_three(fd, map_info, i, "double");
+	check_three(fd, map_info, i, "double");
+	check_doub(fd, map_info, i);
+	check_doub(fd, map_info, i);
+	check_three(fd, map_info, i, "int");
 }

@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 14:01:27 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/17 12:44:12 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/17 14:52:45 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,31 +54,31 @@ static void	stock_dia_hei(t_scene *scene, char **sep_info, int co_idx)
 		orient_info: normal vector information of cone
 		rgb_infos: RGB information of cone
 */
-void	stock_cone(t_scene *scene, char *line, int co_idx)
+void	stock_cone(t_scene *scene, char *line, t_indices *i)
 {
-	char	**sep;
-	char	**coords;
+	char	**s;
+	char	**coord;
 	char	**orient_info;
 	char	**rgb_infos;
 
-	sep = ft_split(line, ' ');
-	if (sep == NULL)
-		exit_error(line, scene, PARSE_ERR);
-	coords = ft_split(sep[1], ',');
-	if (coords == NULL)
-		return (free_doub_array(sep), exit_error(line, scene, COOR_ERR));
-	orient_info = ft_split((char *)sep[2], ',');
+	s = ft_split(line, ' ');
+	if (s == NULL)
+		exit_error(i->fd, line, scene, PARSE_ERR);
+	coord = ft_split(s[1], ',');
+	if (coord == NULL)
+		return (free_doub_array(s), exit_error(i->fd, line, scene, COOR_ERR));
+	orient_info = ft_split((char *)s[2], ',');
 	if (orient_info == NULL)
-		return (free_doub_array(sep), free_doub_array(coords),
-			exit_error(line, scene, ORI_ERR));
-	stock_co(scene, coords, orient_info, co_idx);
-	free_doub_array(coords);
+		return (free_doub_array(s), free_doub_array(coord),
+			exit_error(i->fd, line, scene, ORI_ERR));
+	stock_co(scene, coord, orient_info, i->co_idx);
+	free_doub_array(coord);
 	free_doub_array(orient_info);
-	stock_dia_hei(scene, sep, co_idx);
-	rgb_infos = ft_split(sep[5], ',');
+	stock_dia_hei(scene, s, i->co_idx);
+	rgb_infos = ft_split(s[5], ',');
 	if (rgb_infos == NULL)
-		return (free_doub_array(sep), exit_error(line, scene, PARSE_RGB_ERR));
-	if (!stock_rgb(&scene->cone[co_idx]->color, rgb_infos))
-		return (free_doub_array(sep), exit_error(line, scene, NULL));
-	return (free_doub_array(rgb_infos), free_doub_array(sep));
+		return (free_doub_array(s), exit_error(i->fd, line, scene, RGB));
+	if (!stock_rgb(&scene->cone[i->co_idx]->color, rgb_infos))
+		return (free_doub_array(s), exit_error(i->fd, line, scene, NULL));
+	return (free_doub_array(rgb_infos), free_doub_array(s));
 }

@@ -3,17 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   free_tools.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 19:07:26 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/15 19:50:41 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/12/17 13:48:02 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
-void	exit_error(char *line, t_scene *scene, char *message)
+void	exit_error(int fd, char *line, t_scene *scene, char *message)
 {
+	if (fd > 2)
+		close (fd);
 	if (line && message)
 	{
 		ft_putstr_fd(line, 2);

@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 12:16:25 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/16 16:00:23 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/17 13:52:24 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,10 +68,10 @@ t_bool	stock_rgb(t_color *color, char **rgb_infos)
 		scene: structure to stock the infos
 		info_map: numeric information of the map
 */
-void	stock_infos(int type, t_scene *scene, char *info_map)
+void	stock_infos(int fd, int type, t_scene *scene, char *info_map)
 {
 	if (type == 1)
-		stock_ambient(scene, info_map);
+		stock_ambient(fd, scene, info_map);
 	else if (type == 2)
-		stock_cam(scene, info_map);
+		stock_cam(fd, scene, info_map);
 }

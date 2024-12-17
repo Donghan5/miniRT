@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 23:06:53 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/17 12:31:06 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/17 13:53:23 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static void	stock_orient(t_scene *scene, char **orient_info)
 		coord_info: coordination information of camera
 		orient_info: orientation vector information of camera
 */
-void	stock_cam(t_scene *scene, char *line)
+void	stock_cam(int fd, t_scene *scene, char *line)
 {
 	char	**sep_info;
 	char	**coord_info;
@@ -55,15 +55,17 @@ void	stock_cam(t_scene *scene, char *line)
 
 	sep_info = ft_split(line, ' ');
 	if (sep_info == NULL)
-		handle_error(PARSE_ERR);
+		exit_error(fd, line, scene, PARSE_ERR);
 	coord_info = ft_split((char *)sep_info[1], ',');
 	if (coord_info == NULL)
-		return (free_doub_array(sep_info), exit_error(line, scene, COOR_ERR));
+		return (free_doub_array(sep_info),
+			exit_error(fd, line, scene, COOR_ERR));
 	stock_coord(scene, coord_info);
 	free_doub_array(coord_info);
 	orient_info = ft_split((char *)sep_info[2], ',');
 	if (orient_info == NULL)
-		return (free_doub_array(sep_info), exit_error(line, scene, ORI_ERR));
+		return (free_doub_array(sep_info),
+			exit_error(fd, line, scene, ORI_ERR));
 	stock_orient(scene, orient_info);
 	scene->camera.c_view = ft_atod(sep_info[3]);
 	free_doub_array(orient_info);

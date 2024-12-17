@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 22:39:04 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/17 12:45:01 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/17 14:50:16 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static void	stock_dia_hei(t_scene *scene, char **sep_info, int cy_idx)
 		orient_info: normal vector information of cylinder
 		rgb_infos: RGB information of cylinder
 */
-void	stock_cylinder(t_scene *scene, char *line, int cy_idx)
+void	stock_cylinder(t_scene *scene, char *line, t_indices *i)
 {
 	char	**sep;
 	char	**coord;
@@ -63,22 +63,22 @@ void	stock_cylinder(t_scene *scene, char *line, int cy_idx)
 
 	sep = ft_split(line, ' ');
 	if (sep == NULL)
-		exit_error(line, scene, PARSE_ERR);
+		exit_error(i->fd, line, scene, PARSE_ERR);
 	coord = ft_split(sep[1], ',');
 	if (coord == NULL)
-		return (free_doub_array(sep), exit_error(line, scene, COOR_ERR));
+		return (free_doub_array(sep), exit_error(i->fd, line, scene, COOR_ERR));
 	orient_info = ft_split((char *)sep[2], ',');
 	if (orient_info == NULL)
 		return (free_doub_array(coord),
-			free_doub_array(sep), exit_error(line, scene, ORI_ERR));
-	stock_co(scene, coord, orient_info, cy_idx);
+			free_doub_array(sep), exit_error(i->fd, line, scene, ORI_ERR));
+	stock_co(scene, coord, orient_info, i->cy_idx);
 	free_doub_array(coord);
 	free_doub_array(orient_info);
-	stock_dia_hei(scene, sep, cy_idx);
+	stock_dia_hei(scene, sep, i->cy_idx);
 	rgb_infos = ft_split(sep[5], ',');
 	if (rgb_infos == NULL)
-		return (free_doub_array(sep), exit_error(line, scene, PARSE_RGB_ERR));
-	if (!stock_rgb(&scene->cylinder[cy_idx]->color, rgb_infos))
-		return (free_doub_array(sep), exit_error(line, scene, NULL));
+		return (free_doub_array(sep), exit_error(i->fd, line, scene, RGB));
+	if (!stock_rgb(&scene->cylinder[i->cy_idx]->color, rgb_infos))
+		return (free_doub_array(sep), exit_error(i->fd, line, scene, NULL));
 	return (free_doub_array(rgb_infos), free_doub_array(sep));
 }

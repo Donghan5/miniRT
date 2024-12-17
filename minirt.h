@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 20:40:16 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/15 20:24:33 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/12/17 14:50:54 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 # define MAX_DEPTH 3
 # define EPSILON 0.0001
 # define PARSE_ERR "Fail to parse"
-# define PARSE_RGB_ERR "Fail to parse RGB"
+# define RGB "Fail to parse RGB"
 # define COOR_ERR "Fail to coordinate parse"
 # define ORI_ERR "Fail to orientation parse"
 
@@ -39,6 +39,7 @@ typedef struct s_indices
 	int	cy_idx;
 	int	l_idx;
 	int	co_idx;
+	int	fd;
 }				t_indices;
 
 typedef struct s_vec3 {
@@ -266,10 +267,10 @@ void	update_movement(t_info *info, int keycode, int is_pressed);
 
 //	parsing
 //		check.c
-void	check_int(char *map_info, size_t *i);
-void	check_doub(char *map_info, size_t *i);
-void	check_three(char *map_info, size_t *i, char *type);
-void	check_validity(char *map_info);
+void	check_int(int fd, char *map_info, size_t *i);
+void	check_doub(int fd, char *map_info, size_t *i);
+void	check_three(int fd, char *map_info, size_t *i, char *type);
+void	check_validity(char *map_info, int fd);
 //		free.c
 void	free_doub_array(char **strs);
 //		init_shape.c
@@ -297,30 +298,30 @@ void	parse_scene(char *path, t_scene *scene);
 void	handle_error_free(char *map_line, char *msg);
 void	process_parse(char *map_line, t_scene *scene, t_indices *indices);
 //		stock_ambient.c
-void	stock_ambient(t_scene *scene, char *info_map);
+void	stock_ambient(int fd, t_scene *scene, char *info_map);
 //		stock_basic.c
 t_bool	stock_rgb(t_color *color, char **rgb_infos);
-void	stock_infos(int type, t_scene *scene, char *info_map);
+void	stock_infos(int fd, int type, t_scene *scene, char *info_map);
 //		stock_cam.c
-void	stock_cam(t_scene *scene, char *info_map);
+void	stock_cam(int fd, t_scene *scene, char *info_map);
 //		stock_cone.c
-void	stock_cone(t_scene *scene, char *info_map, int co_idx);
+void	stock_cone(t_scene *scene, char *info_map, t_indices *indices);
 //		stock_cylinder.c
-void	stock_cylinder(t_scene *scene, char *info_map, int cy_idx);
+void	stock_cylinder(t_scene *scene, char *info_map, t_indices *indices);
 //		stock_light.c
-void	stock_light(t_scene *scene, char *info_map, int l_idx);
+void	stock_light(t_scene *scene, char *info_map, t_indices *indices);
 //		stock_plane.c
-void	stock_plane(t_scene *scene, char *info_map, int pl_idx);
+void	stock_plane(t_scene *scene, char *info_map, t_indices *indices);
 //		stock_sphere.c
-void	stock_sphere(t_scene *scene, char *info_map, int sp_idx);
+void	stock_sphere(t_scene *scene, char *info_map, t_indices *indices);
 //		type.c
 int		get_type(char *map_info);
 //		valid.c
-void	validity_type_one(char *map_info, size_t *i);
-void	validity_type_two(char *map_info, size_t *i);
-void	validity_type_three(char *map_info, size_t *i);
-void	validity_type_four(char *map_info, size_t *i);
-void	validity_type_five(char *map_info, size_t *i);
+void	validity_type_one(char *map_info, size_t *i, int fd);
+void	validity_type_two(char *map_info, size_t *i, int fd);
+void	validity_type_three(char *map_info, size_t *i, int fd);
+void	validity_type_four(char *map_info, size_t *i, int fd);
+void	validity_type_five(char *map_info, size_t *i, int fd);
 
 //	render
 //		fill_material.c
@@ -345,7 +346,7 @@ t_vec3	vec3_normalize(t_vec3 v);
 t_vec3	vec3_reflect(t_vec3 v, t_vec3 n);
 t_vec3	vec3_cross(t_vec3 a, t_vec3 b);
 //		free_tools.c
-void	exit_error(char *line, t_scene *scene, char *message);
+void	exit_error(int fd, char *line, t_scene *scene, char *message);
 void	smart_free(void *element);
 void	free_scene_safe(t_scene *scene);
 //		ft_atod.c
