@@ -6,14 +6,14 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 12:55:24 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/15 01:22:44 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/17 12:58:50 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
 /*
-	check int value
+	check int type
 	@param
 		map_info: information of the map
 		i: index pointer
@@ -32,7 +32,7 @@ void	check_int(char *map_info, size_t *i)
 }
 
 /*
-	check double value
+	check double type
 	@param
 		map_info: information
 		i: index pointer

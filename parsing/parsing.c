@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 17:39:31 by pzinurov          #+#    #+#             */
-/*   Updated: 2024/12/17 00:07:41 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/17 12:53:03 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ static t_bool	validate(int fd)
 
 /*
 	parse and stock all informations
-	logic of this function
+	<general logic>
 	1. parsing the map_line (read by gnl) by separating white-space
 	2. verify element (map_infos[0] is char) the other have just comma(,) and num
 	3. separate the case --> stock each structures

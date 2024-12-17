@@ -6,14 +6,14 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 23:06:48 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/16 16:07:44 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/17 12:52:39 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
 /*
-	stock ambient values in structure
+	stock ambient information block
 	@param
 		scene: to render
 		info_map: information of the map which read by gnl

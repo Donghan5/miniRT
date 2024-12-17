@@ -6,14 +6,14 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 22:30:21 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/16 16:07:53 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/17 12:53:52 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
 /*
-	helper function to stock information of coordinate
+	helper function to stock information of coordinate block
 	@param
 		scene: scene to render
 		coord_info: information of coordination(x, y, z)
@@ -27,7 +27,7 @@ static void	stock_coordinate(t_scene *scene, char **coord_info, int pl_idx)
 }
 
 /*
-	helper function to stock the normal vector
+	helper function to stock the normal vector block
 	@param
 		scene: scene to render
 		orient_info: information of the normal vector
@@ -41,7 +41,7 @@ static void	stock_normal_vec(t_scene *scene, char **orient_info, int pl_idx)
 }
 
 /*
-	stock element of the plane to structure
+	stock element of the plane information blocks
 	@param
 		scene: scene to render
 		line: information of the map which read by gnl

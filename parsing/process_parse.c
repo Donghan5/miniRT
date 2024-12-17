@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/02 15:01:06 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/17 00:07:09 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/17 12:43:01 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	handle_error_free(char *map_line, char *msg)
 		type: the type of information
 		map_line: information of the map which read by gnl
 		scene: information to render
-		indices: the structure index
+		indices: the index structure
 */
 static void	parse_obj(int type, char *map_line, \
 				t_scene *scene, t_indices *indices)
@@ -58,7 +58,7 @@ static void	parse_obj(int type, char *map_line, \
 		type: the type of information
 		map_line: information of the map which read by gnl
 		scene: information to render
-		indices: the structure index
+		indices: the index structure
 */
 static void	parse_obj_advance(int type, char *map_line, \
 				t_scene *scene, t_indices *indices)

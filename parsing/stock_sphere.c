@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 23:07:02 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/16 16:04:05 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/17 12:50:00 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static void	stock_coord(t_scene *scene, char **coord_info, int sp_idx)
 }
 
 /*
-	stock element of stack
+	stock element of sphere
 	@param
 		scene: to render
 		line: information of the map read by gnl

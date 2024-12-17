@@ -6,14 +6,14 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/06 00:48:43 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/16 16:08:06 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/17 12:52:24 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
 /*
-	stock coordinate information
+	stock coordinate information block
 	@param
 		scene: to render
 		coord_info: information of coordinate
@@ -27,7 +27,7 @@ static void	stock_coord(t_scene *scene, char **coord_info, int l_idx)
 }
 
 /*
-	stock light element to structure
+	stock light information block
 	@param
 		scene: to render
 		info_map: information map read by gnl

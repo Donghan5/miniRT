@@ -6,15 +6,14 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/04 22:39:04 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/16 16:08:25 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/17 12:45:01 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
 /*
-	helper function of stock coordinate
-	helper function of stock axis vector
+	helper function of stock coordinate and axis vector
 	@param
 		scene: scene to render
 		coord_info: information of the coordinate (x, y, z)

@@ -3,18 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   stock_cone.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pzinurov <pzinurov@student.42.fr>          +#+  +:+       +#+        */
+/*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/09 14:01:27 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/15 20:17:05 by pzinurov         ###   ########.fr       */
+/*   Updated: 2024/12/17 12:44:12 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minirt.h"
 
 /*
-	helper function of stock coordinate
-	helper function of stock axis vector
+	helper function of stock coordinate and stock axis vector
 	@param
 		scene: scene to render
 		coord_info: information of the coordinate (x, y, z)

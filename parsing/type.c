@@ -6,7 +6,7 @@
 /*   By: donghank <donghank@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 13:43:21 by donghank          #+#    #+#             */
-/*   Updated: 2024/12/16 23:19:28 by donghank         ###   ########.fr       */
+/*   Updated: 2024/12/17 12:46:35 by donghank         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,11 +68,11 @@ static void	check_double_type(char **sep)
 }
 
 /*
-	set the type
+	set the value type
 	@param
 		sep: separated information of the map_info
 	@return
-		type: type value which correspond with char
+		type: type value which correspond each type
 */
 static int	set_type(char **sep)
 {
@@ -99,11 +99,11 @@ static int	set_type(char **sep)
 }
 
 /*
-	getter value of the type
+	get value type
 	@param
 		map_info: information of the map
 	@return
-		type (1 to 7): type value
+		type (1 to 7): type value which correspond each type
 		0: fail
 */
 int	get_type(char *map_info)
